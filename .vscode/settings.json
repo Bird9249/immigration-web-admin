@@ -1,0 +1,6 @@
+{
+  "material-icon-theme.files.associations": {
+    "*.jsx": "../../icons/solid",
+    "*.tsx": "../../icons/solid"
+  }
+}

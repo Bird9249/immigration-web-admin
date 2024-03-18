@@ -1,0 +1,19 @@
+[data-scope="menu"][data-part="trigger"]:focus-visible {
+  outline: none;
+}
+
+[data-scope="menu"][data-part="content"]:focus-visible {
+  outline: none;
+}
+
+[data-scope="select"][data-part="control"][data-state="open"] {
+  @apply ring-1 ring-primary-500 border-primary-500 dark:ring-primary-500 dark:border-primary-500
+} 
+
+[data-scope="select"][data-part="content"][data-state="open"] {
+  @apply animate-slide-in;
+}
+
+[data-scope="select"][data-part="content"][data-state="closed"] {
+  @apply animate-slide-out;
+}

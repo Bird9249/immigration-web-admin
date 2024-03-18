@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './components/button/Button.scss';
+@import './components/dropdown/Dropdown.scss';
+@import './components/modal/Modal.scss';
+@import './components/pagination/Pagination.scss';
+@import './components/table/Table.scss';
+
+@import "./assets/css/poppins.css";
+@import "./assets/css/noto-sans-lao.css";
+
+
+.sidebar-active {
+  @apply text-gray-900 bg-primary-100 dark:bg-primary-700 dark:text-white;
+
+  svg {
+    @apply text-primary-700 dark:text-white;
+  }
+
+  &:hover {
+    @apply bg-primary-100 dark:bg-primary-700;
+
+    svg {
+      @apply text-primary-900 dark:text-white;
+    }
+  }
+}
+
+.sidebar-inactive {
+  @apply text-gray-900 dark:text-white;
+
+  svg {
+    @apply text-gray-500 dark:text-gray-400;
+  }
+
+  &:hover {
+    @apply bg-gray-100 dark:bg-gray-700;
+
+    svg {
+      @apply text-gray-900 dark:text-white;
+    }
+  }
+}
+
+.sidebar-submenu-active {
+  @apply text-primary-700 dark:text-primary-500;
+
+  &:hover {
+    @apply bg-primary-100 dark:bg-gray-700;
+  }
+}
+
+
+ ::-webkit-scrollbar {
+  width: 8px; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}

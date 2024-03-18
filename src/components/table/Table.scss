@@ -1,0 +1,20 @@
+.table {
+  &-main {
+    @apply bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden;
+  }
+  
+  &-container {
+    @apply overflow-x-auto relative;
+  }
+
+  &-content {
+    @apply w-full text-sm text-left text-gray-500 dark:text-gray-400 relative;
+  }
+
+  &-thead {
+    @apply text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400;
+  }
+  &-tbody {
+    @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600;
+  }
+}

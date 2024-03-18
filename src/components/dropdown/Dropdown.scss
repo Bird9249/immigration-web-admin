@@ -1,0 +1,31 @@
+.dropdown {
+  @apply z-10 bg-white divide-y divide-gray-100 rounded-lg shadow min-w-44 w-full dark:bg-gray-700 dark:divide-gray-600;
+
+  &-content {
+    @apply py-2 text-sm text-gray-700 dark:text-gray-200;
+  }
+
+  &-item {
+    @apply block px-4 py-2 cursor-pointer;
+
+    &:hover {
+      @apply bg-gray-100 dark:bg-gray-600 dark:text-white;
+    }
+  }
+}
+
+[data-scope="menu"][data-part="trigger"]:focus-visible {
+  outline: none;
+}
+
+[data-scope="menu"][data-part="content"]:focus-visible {
+  outline: none;
+}
+
+[data-scope="menu"][data-part="content"][data-state="open"] {
+  @apply animate-slide-in;
+}
+
+[data-scope="menu"][data-part="content"][data-state="closed"] {
+  @apply animate-slide-out;
+}

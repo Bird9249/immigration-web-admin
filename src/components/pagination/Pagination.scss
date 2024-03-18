@@ -1,0 +1,27 @@
+.pagination {
+  @apply inline-flex items-stretch -space-x-px;
+
+  &-link {
+    @apply flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400;
+
+    &:hover {
+      @apply bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-white;
+    }
+
+    &-prev {
+      @apply ms-0 border-e-0 rounded-s-lg;
+    }
+
+    &-next {
+      @apply rounded-e-lg;
+    }
+  }
+
+  &-link-active {
+    @apply z-10 text-primary-600 border border-primary-300 bg-primary-50 dark:border-gray-700 dark:bg-gray-700 dark:text-white;
+
+    &:hover {
+      @apply bg-primary-100 text-primary-700;
+    }
+  }
+}
