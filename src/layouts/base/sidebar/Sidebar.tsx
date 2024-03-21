@@ -15,6 +15,8 @@ import HomeIcon from "../../../components/icons/HomeIcon";
 import UserIcon from "../../../components/icons/UserIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
+import Message from "../../../components/icons/Message";
+
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -41,6 +43,23 @@ export default function () {
         label: "ໜ້າຫຼັກ",
       },
     ],
+  });
+
+  createEffect(() => {
+    const bannerMenu: SidebarMenuType[] = [];
+      bannerMenu.push({
+        icon: <Message />,
+        href: "/banner",
+        label: "ຈັດການ",
+        subMenus: {
+          menus: [
+            { href: "/banner/list", label: "ຈັດການປ້າຍ" },
+            { href: "/banner/popup", label: "ຈັດການPOPUP" },
+          ],
+          isOpen: false,
+        },
+      });
+    setSidebarMenus("menus", (prev) => [...prev, ...bannerMenu]);
   });
 
   createEffect(() => {

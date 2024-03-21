@@ -25,7 +25,7 @@ export default (props: TableProps) => {
         <Show when={props.value()}>
           {(val) =>
             val().data[props.responseField].length <= 0 ? (
-              <TablePlaceholder ref={tablePlaceholder} />
+              <TablePlaceholder ref={tablePlaceholder}  />
             ) : undefined
           }
         </Show>
