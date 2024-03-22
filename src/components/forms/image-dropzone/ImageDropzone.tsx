@@ -6,11 +6,11 @@ interface Props extends ParentProps<JSX.InputHTMLAttributes<HTMLInputElement>> {
   helpMessage?: string;
   onSelectFile?: (file?: File) => void;
   imageAccept?: string;
+  previewImage?: string | undefined;
 }
 
 export default (props: Props) => {
-  const [previewImage, setPreviewImage] = createSignal<string>("");
-
+  const [previewImage, setPreviewImage] = createSignal<string>(props.previewImage ? props.previewImage : "");
   return (
     <div class="flex flex-col items-center justify-center w-full">
       <label

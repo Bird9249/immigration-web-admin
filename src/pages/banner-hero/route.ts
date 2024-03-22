@@ -14,10 +14,22 @@ const bannerRoutes: RouteDefinition[] = [
         path: "/create",
         component: lazy(() => import("./banners/CreateBanner")),
       },
-      // {
-      //   path: "/edit/:id",
-      //   component: lazy(() => import("./banners/EditBanner")),
-      // },
+      {
+        path: "/edit/:id",
+        component: lazy(() => import("./banners/EditBanner")),
+      },
+      {
+        path: "/popup",
+        component: lazy(() => import("./popups/Popup"))
+      },
+      {
+        path: "/popup/create",
+        component: lazy(() => import("./popups/CreatePopup"))
+      },
+      {
+        path: "/popup/edit/:id",
+        component: lazy(() => import("./popups/EditPopup"))
+      }
     ],
   },
 ];

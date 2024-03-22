@@ -15,73 +15,73 @@ import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import { fadeIn, fadeOut } from "../../../utils/transition-animation";
 import {
-    UpdateBannerSchema,
-    UpdateBannerForm,
-    BannerForm
-} from "./schemas/banner.schemas";
+    UpdatePopupSchema,
+    UpdatePopupForm,
+    PopupForm
+} from "./schemas/popup.schemas";
 import Button from "../../../components/button/Button";
 import LoadingIcon from "../../../components/icons/LoadingIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
-import { BannerTableState } from "./api/banner.interface";
-import getBannerApi from "./api/get-banner.api";
-import updateBannerApi from "./api/update-banner.api";
-import deleteBannerApi from "./api/delete-banner.api";
+import { PopupTableState } from "./api/popup.interface";
+import getPopupApi from "./api/get-popup.api";
+import updatePopupApi from "./api/update-popup.api";
+import deletePopupApi from "./api/delete-popup.api";
 import InputText from "../../../components/forms/input-text/InputText";
-import Accordion from "../../../components/Accordion/Accordion";
-import { initAccordions } from "flowbite";
+import Avatar from "../../../components/avatar/Avatar";
 export default () => {
+    const [previewImg, setPreviewImg] = createSignal<string>("");
     const param = useParams();
     const [, actionConfirm] = useConfirm();
     const [, actionMessage] = useMessage();
     const navigator = useNavigate();
     const auth = useAuth();
-    const [previewImg, setPreviewImg] = createSignal<string>("");
-
-    const [bannerForm, { Form, Field }] = createForm<UpdateBannerForm>({
-        validate: valiForm(UpdateBannerSchema),
+    // const [banner] createResource(id, getBannerDetailApi)
+    const [popupForm, { Form, Field }] = createForm<UpdatePopupForm>({
+        validate: valiForm(UpdatePopupSchema),
     });
 
-    const [bannerState] = createSignal<BannerTableState>({
+    const [bannerState] = createSignal<PopupTableState>({
         offset: undefined,
         limit: undefined,
     });
-    const [banner] = createResource(bannerState, getBannerApi);
-    const handleSubmit: SubmitHandler<UpdateBannerForm> = async (values) => {
+    const [popup] = createResource(bannerState, getPopupApi);
+    const [roleOptions, setRoleOptions] = createSignal<
+        { label: string; value: string }[]
+    >([]);
+    const handleSubmit: SubmitHandler<UpdatePopupForm> = async (values) => {
 
-        const res = await updateBannerApi(param.id, values);
+        const res = await updatePopupApi(param.id, values);
 
         actionMessage.showMessage({ level: "success", message: res.data.message });
 
         navigator("/banner/list", { resolve: false });
     };
-    onMount(() => {
-        initAccordions()
-    })
 
     return (
         <Form onSubmit={handleSubmit} class="relative">
             <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-                ອັບເດດປ້າຍ
+                ອັບເດດປ໋ອບອັບ
             </h2>
             <Field name="image" type="File">
                 {(field, props) => (
                     <ImageDropzone
                         {...props}
                         previewImage={
-                            previewImg()
-                        }
+                          previewImg()
+                          }
                         onSelectFile={(file) => {
                             if (file) {
                                 setPreviewImg(URL.createObjectURL(file));
-                                setValue(bannerForm, "image", file)
+                                setValue(popupForm, "image", file)
                             } else {
-                                reset(bannerForm, "image")
+                                reset(popupForm, "image")
                                 setPreviewImg("");
                             }
                         }}
                         error={field.error}
                         helpMessage="SVG, PNG, JPG, Webp, ຫຼື GIF (MAX. 400x400px)."
+                        
                     />
                 )}
             </Field><br />
@@ -128,16 +128,15 @@ export default () => {
                     )}
                 </Field>
             </div>
-            <Accordion /><br />
             <div class="flex items-center">
-                <Button type="submit" isLoading={bannerForm.submitting} class="mr-3">
-                    ອັບເດດປ້າຍ
+                <Button type="submit" isLoading={popupForm.submitting} class="mr-3">
+                    ອັບເດດປ໋ອບອັບ
                 </Button>
                 <Button
                     color="danger"
                     outlined
                     type="button"
-                    isLoading={bannerForm.submitting}
+                    isLoading={popupForm.submitting}
                     prefixIcon={<TrashIcon />}
                     onClick={() => {
                         actionConfirm.showConfirm({
@@ -146,7 +145,7 @@ export default () => {
                             ),
                             message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
                             onConfirm: async () => {
-                                const res = await deleteBannerApi(param.id);
+                                const res = await deletePopupApi(param.id);
 
                                 actionMessage.showMessage({
                                     level: "success",
@@ -163,7 +162,7 @@ export default () => {
             </div>
 
             <Transition onEnter={fadeIn} onExit={fadeOut}>
-                <Show when={banner.loading}>
+                <Show when={popup.loading}>
                     <div
                         class={`absolute z-10 top-0 left-0 bg-black/50 w-full h-full flex items-center justify-center`}
                     >

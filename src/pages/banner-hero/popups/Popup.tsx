@@ -8,9 +8,9 @@ import Table from "../../../components/table/Table";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
-import deleteBannerApi from "./api/delete-banner.api";
-import getBannerApi from "./api/get-banner.api";
-import { BannerResponse, BannerTableState } from "./api/banner.interface";
+import deletePopupApi from "./api/delete-popup.api";
+import getPopupApi from "./api/get-popup.api";
+import { PopupResponse, PopupTableState } from "./api/popup.interface";
 
 export default () => {
   const navigate = useNavigate();
@@ -18,12 +18,12 @@ export default () => {
   const [, actionMessage] = useMessage();
   const auth = useAuth();
 
-  const [state, setState] = createSignal<BannerTableState>({
+  const [state, setState] = createSignal<PopupTableState>({
     offset: 0,
     limit: 10,
   });
 
-  const [banner, { refetch }] = createResource(state, getBannerApi);
+  const [banner, { refetch }] = createResource(state, getPopupApi);
 
   const actionMenus = (id: number) => {
     const menus: {
@@ -33,7 +33,7 @@ export default () => {
 
     menus[0].push({
       onClick() {
-        navigate(`/banner/detail/${id}`);
+        navigate(`/popup/detail/${id}`);
       },
       label: "ລາຍລະອຽດ",
     });
@@ -41,7 +41,7 @@ export default () => {
 
     menus[0].push({
       onClick() {
-        navigate(`/banner/edit/${id}`);
+        navigate(`/popup/edit/${id}`);
       },
       label: "ແກ້ໄຂ",
     });
@@ -55,7 +55,7 @@ export default () => {
           ),
           message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
           onConfirm: async () => {
-            const res = await deleteBannerApi(String(id));
+            const res = await deletePopupApi(String(id));
             actionMessage.showMessage({
               level: "success",
               message: res.data.message,
@@ -74,7 +74,7 @@ export default () => {
       header={
         <div class="flex flex-col items-start justify-between border-b dark:border-gray-600 p-4 sm:flex-row sm:items-center">
           <h2 class="text-lg font-semibold mb-2 sm:mb-0 dark:text-white">
-            ຕາຕະລາງເກັບຮັກສາປ້າຍໂຄສະນາ
+          ຕາຕະລາງເກັບຮັກສາຂໍ້ມູນກ່ຽວກັບປ໊ອບອັບ
           </h2>
             <Button
               class="w-full sm:w-fit"
@@ -100,7 +100,7 @@ export default () => {
       {[
         {
           header: "ຮູບ",
-          body: ({}: BannerResponse) => (
+          body: ({}: PopupResponse) => (
             <div class="flex items-center">
 
             </div>
@@ -143,7 +143,7 @@ export default () => {
           ),
         },
         {
-          body: ({ id }: BannerResponse) => (
+          body: ({ id }: PopupResponse) => (
             <Dropdown
               triggerEl={
                 <button class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-1 inline-flex items-center justify-center">

@@ -11,9 +11,6 @@ export default () => {
   const handleSubmit: SubmitHandler<BannerForm> = async (values) => {
     console.log("Submit")
   };
-  const Submit = () =>{
-    console.log("Test")
-  }
   return (
     <>
       <Form onSubmit={handleSubmit}>
@@ -29,19 +26,19 @@ export default () => {
           <div id="accordion-collapse-body-1" class="hidden" aria-labelledby="accordion-collapse-heading-1">
             <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
               <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
-                <Field name="title">
+                <Field name="banners_translate" type="string[]">
                   {(field, props) => (
                     <InputText
                       required
                       label="ຫົວຂໍ້"
                       {...props}
-                      //  value={field.value}
+                       value={field.value}
                       error={field.error}
                       placeholder="ປ້ອນຫົວຂໍ້"
                     />
                   )}
                 </Field>
-                <Field name="description">
+                <Field name="banners_translate" type="string[]">
                   {(field, props) => (
                     <Textarea
                       required
@@ -54,7 +51,6 @@ export default () => {
                   )}
                 </Field>
               </div>
-              {/* <Button type="submit" isLoading={bannerForm.submitting}>Submit</Button> */}
             </div>
           </div>
           <h2 id="accordion-collapse-heading-2">
@@ -68,7 +64,7 @@ export default () => {
           <div id="accordion-collapse-body-2" class="hidden" aria-labelledby="accordion-collapse-heading-2">
             <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700">
               <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
-                <Field name="title">
+                <Field name="banners_translate" type="string[]">
                   {(field, props) => (
                     <InputText
                       required
@@ -80,7 +76,7 @@ export default () => {
                     />
                   )}
                 </Field>
-                <Field name="description">
+                <Field name="banners_translate" type="string[]">
                   {(field, props) => (
                     <Textarea
                       required
@@ -106,7 +102,7 @@ export default () => {
           <div id="accordion-collapse-body-3" class="hidden" aria-labelledby="accordion-collapse-heading-3">
             <div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700">
               <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
-                <Field name="title">
+                <Field name="banners_translate" type="string[]">
                   {(field, props) => (
                     <InputText
                       required
@@ -118,7 +114,7 @@ export default () => {
                     />
                   )}
                 </Field>
-                <Field name="description">
+                <Field name="banners_translate" type="string[]">
                   {(field, props) => (
                     <Textarea
                       required

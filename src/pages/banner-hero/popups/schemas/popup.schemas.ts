@@ -19,7 +19,7 @@ import {
   
   const isFile = (input: unknown) => input instanceof File ;
   
-  export const BannerSchema = object({
+  export const PopupSchema = object({
     image: special<File>(isFile, "ຮູບພາບບໍ່ຄວນຫວ່າງເປົ່າ", [
       mimeType(
         ["image/jpeg", "image/png", "image/webp"],
@@ -37,11 +37,10 @@ import {
     end_time:string([
       minLength(1, "ກະລຸນາປ້ອນວັນທີສິນສຸດ.")
     ]),
-    banners_translate:array(string()),
   });
   
-  export const UpdateBannerSchema = merge([
-    omit(BannerSchema, ["image"]),
+  export const UpdatePopupSchema = merge([
+    omit(PopupSchema, ["image"]),
     object({
       image: optional(
         special<File>(isFile, "ຮູບພາບບໍ່ຄວນຫວ່າງເປົ່າ", [
@@ -54,6 +53,6 @@ import {
       ),
     }),
   ]);
-  export type BannerForm = Input<typeof BannerSchema>;
-  export type UpdateBannerForm = Input<typeof UpdateBannerSchema>;
+  export type PopupForm = Input<typeof PopupSchema>;
+  export type UpdatePopupForm = Input<typeof UpdatePopupSchema>;
   
