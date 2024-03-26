@@ -11,6 +11,7 @@ import { useMessage } from "../../../contexts/message/MessageContext";
 import deletePopupApi from "./api/delete-popup.api";
 import getPopupApi from "./api/get-popup.api";
 import { PopupResponse, PopupTableState } from "./api/popup.interface";
+import Select from "../../../components/forms/select/Select";
 
 export default () => {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ export default () => {
   const [state, setState] = createSignal<PopupTableState>({
     offset: 0,
     limit: 10,
+    is_inactive: undefined,
+    is_private: undefined
   });
 
   const [banner, { refetch }] = createResource(state, getPopupApi);
@@ -74,17 +77,67 @@ export default () => {
       header={
         <div class="flex flex-col items-start justify-between border-b dark:border-gray-600 p-4 sm:flex-row sm:items-center">
           <h2 class="text-lg font-semibold mb-2 sm:mb-0 dark:text-white">
-          ຕາຕະລາງເກັບຮັກສາຂໍ້ມູນກ່ຽວກັບປ໊ອບອັບ
+            ຕາຕະລາງເກັບຮັກສາຂໍ້ມູນກ່ຽວກັບປ໊ອບອັບ
           </h2>
-            <Button
-              class="w-full sm:w-fit"
-              prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
-              onClick={() => {
-                navigate("/banner/create");
+          <div class="w-full sm:w-fit mt-2">
+            <Select
+              placeholder="ເລືອກສະຖານະ"
+              contentClass="w-44"
+              items={[{
+                label: "ຍົກເລີກ",
+                value: undefined,
+              },
+              {
+                label: "ສາທາລະນະ",
+                value: '0',
+
+              },
+              {
+                label: "ສວນຕົວ",
+                value: '1',
+              },
+              ]
+              }
+              onValueChange={({ value }) => {
+                setState((prev) => ({ ...prev, is_private: value[0] }))
+              }}
+            ></Select>
+          </div>
+          <div class="w-full sm:w-fit mt-2">
+            <Select
+              placeholder="ເລືອກສະຖານະ"
+              contentClass="w-44"
+              items={[{
+                label: "ຍົກເລີກ",
+                value: undefined,
+              },
+              {
+                label: "ສະແດງຢູ່",
+                value: '0',
+
+              },
+              {
+                label: "ບໍ່ສະແດງ",
+                value: '1',
+              },
+              ]
+              }
+              onValueChange={({ value }) => {
+                setState((prev) => ({ ...prev, is_inactive: value[0] }))
               }}
             >
-              ເພີ່ມຂໍ້ມູນ
-            </Button>
+            </Select>
+          </div>
+
+          <Button
+            class="w-full sm:w-fit"
+            prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
+            onClick={() => {
+              navigate("/banner/create");
+            }}
+          >
+            ເພີ່ມຂໍ້ມູນ
+          </Button>
         </div>
       }
       value={banner}
@@ -100,7 +153,7 @@ export default () => {
       {[
         {
           header: "ຮູບ",
-          body: ({}: PopupResponse) => (
+          body: ({ }: PopupResponse) => (
             <div class="flex items-center">
 
             </div>

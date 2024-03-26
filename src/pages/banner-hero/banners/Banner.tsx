@@ -1,5 +1,5 @@
 import { useNavigate } from "@solidjs/router";
-import { createResource, createSignal } from "solid-js";
+import { Show, createResource, createSignal } from "solid-js";
 import Button from "../../../components/button/Button";
 import Dropdown from "../../../components/dropdown/Dropdown";
 import PlusIcon from "../../../components/icons/PlusIcon";
@@ -11,18 +11,21 @@ import { useMessage } from "../../../contexts/message/MessageContext";
 import deleteBannerApi from "./api/delete-banner.api";
 import getBannerApi from "./api/get-banner.api";
 import { BannerResponse, BannerTableState } from "./api/banner.interface";
+import Select from "../../../components/forms/select/Select";
+import { Field, createForm, setValue, valiForm } from "@modular-forms/solid";
+import { UpdateBannerForm, UpdateBannerSchema } from "./schemas/banner.schemas";
 
 export default () => {
   const navigate = useNavigate();
   const [, actionConfirm] = useConfirm();
   const [, actionMessage] = useMessage();
   const auth = useAuth();
-
   const [state, setState] = createSignal<BannerTableState>({
     offset: 0,
     limit: 10,
+    is_inactive: undefined,
+    is_private: undefined
   });
-
   const [banner, { refetch }] = createResource(state, getBannerApi);
 
   const actionMenus = (id: number) => {
@@ -76,15 +79,66 @@ export default () => {
           <h2 class="text-lg font-semibold mb-2 sm:mb-0 dark:text-white">
             ຕາຕະລາງເກັບຮັກສາປ້າຍໂຄສະນາ
           </h2>
-            <Button
-              class="w-full sm:w-fit"
-              prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
-              onClick={() => {
-                navigate("/banner/create");
+          <div class="w-full sm:w-fit mt-2">
+            <Select
+              placeholder="ເລືອກສະຖານະ"
+              contentClass="w-44"
+              items={[{
+                label: "ຍົກເລີກ",
+                value: undefined,
+              },
+              {
+                label: "ສາທາລະນະ",
+                value: '0',
+
+              },
+              {
+                label: "ສວນຕົວ",
+                value: '1',
+              },
+              ]
+              }
+              onValueChange={({ value }) => {
+                setState((prev) => ({ ...prev, is_private: value[0] }))
               }}
-            >
-              ເພີ່ມຂໍ້ມູນ
-            </Button>
+            ></Select>
+
+          </div>
+          <div class="w-full sm:w-fit mt-2">
+          <Select
+            placeholder="ເລືອກສະຖານະ"
+            contentClass="w-44"
+            items={[{
+              label: "ຍົກເລີກ",
+              value: undefined,
+            },
+            {
+              label: "ສະແດງຢູ່",
+              value: '0',
+
+            },
+            {
+              label: "ບໍ່ສະແດງ",
+              value: '1',
+            },
+            ]
+            }
+            onValueChange={({ value }) => {
+              setState((prev) => ({ ...prev, is_inactive: value[0] }))
+            }}
+          >
+          </Select>
+          </div>
+
+          <Button
+            class="w-full sm:w-fit mt-2"
+            prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
+            onClick={() => {
+              navigate("/banner/create");
+            }}
+          >
+            ເພີ່ມຂໍ້ມູນ
+          </Button>
         </div>
       }
       value={banner}
@@ -100,18 +154,26 @@ export default () => {
       {[
         {
           header: "ຮູບ",
-          body: ({}: BannerResponse) => (
+          body: ({image}: BannerResponse) => (
             <div class="flex items-center">
-
+              <img src={import.meta.env.VITE_BASE_API_URL + image} alt="no image" class="h-20 rounded-lg"/>
             </div>
+          ),
+        },  
+        {
+          header: "ລິ້ງ",
+          body: ({link}: BannerResponse)  => (
+            <Show when={link } fallback={'ບໍ່ມີລິ້ງ'}>
+              <a href={link} class="font-medium text-primary-500 dark:text-primary-500 hover:underline">{link}</a>
+            </Show>
           ),
         },
         {
-          header: "ລິ້ງ",
+          header: "ສາທາລະນະ",
           body: () => (
             <div class="flex items-center">
               <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-              LINK
+              ສາທາລະນະ
             </div>
           ),
         },
@@ -120,25 +182,7 @@ export default () => {
           body: () => (
             <div class="flex items-center">
               <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-              is_private
-            </div>
-          ),
-        },
-        {
-          header: "ເວລາເລີມ",
-          body: () => (
-            <div class="flex items-center">
-              <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-              start_time
-            </div>
-          ),
-        },
-        {
-          header: "ເວລາສິນສຸດ",
-          body: () => (
-            <div class="flex items-center">
-              <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-              end_time
+              ສະຖານະ
             </div>
           ),
         },

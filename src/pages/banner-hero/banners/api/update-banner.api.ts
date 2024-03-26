@@ -10,5 +10,5 @@ export default async (id: string, form: UpdateBannerForm) => {
   formData.append("start_time", form.start_time);
   formData.append("end_time", form.end_time);
   
-  return axios.put<{ message: string }>(`/banner/${id}`, formData);
+  return axios.put<{ message: string }>(`/banner-hero/${id}`, formData);
 };

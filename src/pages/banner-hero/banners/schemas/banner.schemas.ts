@@ -15,7 +15,9 @@ import {
     regex,
     special,
     string,
+    tuple,
   } from "valibot";
+import { BannerTranslateSchemas } from "./banner-translate.schemas";
   
   const isFile = (input: unknown) => input instanceof File ;
   
@@ -31,13 +33,10 @@ import {
       minLength(1, "ກະລຸນາໃສ່Link.")
     ]),
     is_private:boolean(),
-    start_time:string([
-      minLength(1, "ກະລຸນາປ້ອນວັນທີກ່ອນ.")
-    ]),
-    end_time:string([
-      minLength(1, "ກະລຸນາປ້ອນວັນທີສິນສຸດ.")
-    ]),
-    banners_translate:array(string()),
+    duration:tuple([string(), string()]),
+    lo:BannerTranslateSchemas,
+    en:BannerTranslateSchemas,
+    zh_CN:BannerTranslateSchemas,
   });
   
   export const UpdateBannerSchema = merge([

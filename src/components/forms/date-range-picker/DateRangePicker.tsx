@@ -6,7 +6,7 @@ type DateRangePickerProps = {
   name: string;
   label: [string, string];
   placeholder?: [string, string];
-  value: [string, string] | undefined;
+  value: [string, string] | undefined | string;
   error: string;
   required?: boolean;
   form: FormStore<any, any>;
@@ -57,7 +57,7 @@ export default (props: DateRangePickerProps) => {
               }}
               placeholder={`${
                 props.placeholder ? props.placeholder[0] : ""
-              } (dd/mm/yyyy)`}
+              } (ວ/ດ/ປ)`}
             />
             <DatePicker.Trigger class="text-white transition absolute end-0 inset-y-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
               <svg
@@ -102,7 +102,7 @@ export default (props: DateRangePickerProps) => {
               }}
               placeholder={`${
                 props.placeholder ? props.placeholder[0] : ""
-              } (dd/mm/yyyy)`}
+              } (ວ/ດ/ປ)`}
             />
             <DatePicker.Trigger class="text-white transition absolute end-0 inset-y-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
               <svg

@@ -10,5 +10,5 @@ export default async (form: BannerForm) => {
   formData.append("start_time", form.start_time);
   formData.append("end_time", form.end_time);
   
-  return axios.post<{ message: string }>(`/banner`, formData);
+  return axios.post<{ message: string }>(`/banner-hero`, formData);
 };

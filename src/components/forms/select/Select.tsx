@@ -3,7 +3,7 @@ import { Index, Portal, Show } from "solid-js/web";
 import AngleIcon from "../../icons/AngleIcon";
 import "./Select.scss";
 
-interface Props extends SelectRootProps<{ label: string; value: string }> {
+interface Props extends SelectRootProps<{ label: string; value: string | undefined }> {
   placeholder?: string;
   label?: string;
   size?: "sm" | "md" | "lg";

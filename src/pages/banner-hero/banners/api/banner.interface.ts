@@ -3,7 +3,10 @@ import {
     IPaginated,
   } from "../../../../common/interface/pagination";
   
-  export type BannerTableState = IOffsetBasePaginate;
+  export type BannerTableState = IOffsetBasePaginate & {
+    is_private?:string,
+    is_inactive?:string
+  };
   
   export type BannerResponse = {
     id: number;

@@ -3,7 +3,10 @@ import {
     IPaginated,
   } from "../../../../common/interface/pagination";
   
-  export type PopupTableState = IOffsetBasePaginate;
+  export type PopupTableState = IOffsetBasePaginate & {
+    is_private?:string,
+    is_inactive?:string
+  };
   
   export type PopupResponse = {
     id: number;
