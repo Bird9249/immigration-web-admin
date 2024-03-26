@@ -2,6 +2,7 @@ import { createForm, valiForm } from "@modular-forms/solid";
 import { object, string, tuple } from "valibot";
 import Button from "../../components/button/Button";
 import DateRangePicker from "../../components/forms/date-range-picker/DateRangePicker";
+import Toggle from "../../components/forms/toggle/Toggle";
 
 const schema = object({
   date_range: tuple([string(), string()]),
@@ -37,6 +38,7 @@ export default () => {
           submit
         </Button>
       </Form>
+
     </div>
   );
 };

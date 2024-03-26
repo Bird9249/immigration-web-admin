@@ -6,7 +6,7 @@ type DateRangePickerProps = {
   name: string;
   label: [string, string];
   placeholder?: [string, string];
-  value: [string, string] | undefined | string;
+  value: [string, string] | undefined;
   error: string;
   required?: boolean;
   form: FormStore<any, any>;
