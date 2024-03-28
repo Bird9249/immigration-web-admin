@@ -21,6 +21,7 @@ import { fadeIn, fadeOut } from "../../../utils/transition-animation";
 import { BannerTableState } from "./api/banner.interface";
 import getBanner from "./api/get-banner.api";
 import { BannerForm, BannerSchema } from "./schemas/banner.schemas";
+import createBannerApi from "./api/create-banner.api";
 
 export default () => {
   const [previewImg, setPreviewImg] = createSignal<string>("");
@@ -35,10 +36,9 @@ export default () => {
   });
   const [banners] = createResource(bannerState, getBanner);
   const handleSubmit: SubmitHandler<BannerForm> = async (values) => {
-    // const res = await createBannerApi(values);
-    console.log(values);
-    // actionMessage.showMessage({ level: "success", message: res.data.message });
-    // navigator("banner/list", { resolve: false });
+    const res = await createBannerApi(values);
+    actionMessage.showMessage({ level: "success", message: res.data.message });
+    navigator("banner/list", { resolve: false });
   };
   onMount(() => {
     initAccordions();
@@ -52,6 +52,9 @@ export default () => {
         {(field, props) => (
           <ImageDropzone
             {...props}
+            previewImage={
+              [previewImg, setPreviewImg]
+          }
             onSelectFile={(file) => {
               if (file) {
                 setValue(bannerForm, "image", file);

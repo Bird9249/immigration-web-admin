@@ -14,6 +14,7 @@ import { BannerResponse, BannerTableState } from "./api/banner.interface";
 import Select from "../../../components/forms/select/Select";
 import { Field, createForm, setValue, valiForm } from "@modular-forms/solid";
 import { UpdateBannerForm, UpdateBannerSchema } from "./schemas/banner.schemas";
+import { format, isWithinInterval } from "date-fns";
 
 export default () => {
   const navigate = useNavigate();
@@ -40,7 +41,6 @@ export default () => {
       },
       label: "ລາຍລະອຽດ",
     });
-
 
     menus[0].push({
       onClick() {
@@ -85,7 +85,7 @@ export default () => {
               contentClass="w-44"
               items={[{
                 label: "ຍົກເລີກ",
-                value: undefined,
+                value: '-1',
               },
               {
                 label: "ສາທາລະນະ",
@@ -99,35 +99,35 @@ export default () => {
               ]
               }
               onValueChange={({ value }) => {
-                setState((prev) => ({ ...prev, is_private: value[0] }))
+                setState((prev) => ({ ...prev, is_private: value[0] === '-1' ? undefined : value[0] }))
               }}
             ></Select>
 
           </div>
           <div class="w-full sm:w-fit mt-2">
-          <Select
-            placeholder="ເລືອກສະຖານະ"
-            contentClass="w-44"
-            items={[{
-              label: "ຍົກເລີກ",
-              value: undefined,
-            },
-            {
-              label: "ສະແດງຢູ່",
-              value: '0',
+            <Select
+              placeholder="ເລືອກສະຖານະ"
+              contentClass="w-44"
+              items={[{
+                label: "ຍົກເລີກ",
+                value: '-1',
+              },
+              {
+                label: "ສະແດງຢູ່",
+                value: '0',
 
-            },
-            {
-              label: "ບໍ່ສະແດງ",
-              value: '1',
-            },
-            ]
-            }
-            onValueChange={({ value }) => {
-              setState((prev) => ({ ...prev, is_inactive: value[0] }))
-            }}
-          >
-          </Select>
+              },
+              {
+                label: "ບໍ່ສະແດງ",
+                value: '1',
+              },
+              ]
+              }
+              onValueChange={({ value }) => {
+                setState((prev) => ({ ...prev, is_inactive: value[0] === '-1' ? undefined : value[0] }))
+              }}
+            >
+            </Select>
           </div>
 
           <Button
@@ -154,16 +154,16 @@ export default () => {
       {[
         {
           header: "ຮູບ",
-          body: ({image}: BannerResponse) => (
-            <div class="flex items-center">
-              <img src={import.meta.env.VITE_BASE_API_URL + image} alt="no image" class="h-20 rounded-lg"/>
+          body: ({ image }: BannerResponse) => (
+            <div class="flex items-center w-60">
+              <img src={import.meta.env.VITE_IMG_URL + image} alt="no image" class="w-60 object-contain h-32 rounded-md" />
             </div>
           ),
-        },  
+        },
         {
           header: "ລິ້ງ",
-          body: ({link}: BannerResponse)  => (
-            <Show when={link } fallback={'ບໍ່ມີລິ້ງ'}>
+          body: ({ link }: BannerResponse) => (
+            <Show when={link} fallback={'ບໍ່ມີລິ້ງ'}>
               <a href={link} class="font-medium text-primary-500 dark:text-primary-500 hover:underline">{link}</a>
             </Show>
           ),
@@ -179,12 +179,31 @@ export default () => {
         },
         {
           header: "ສະຖານະ",
-          body: () => (
-            <div class="flex items-center">
-              <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-              ສະຖານະ
-            </div>
+          body: ({ start_time, end_time }: BannerResponse) => (
+            <Show when={isWithinInterval(new Date(), { start: start_time, end: end_time })} fallback={<span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ບໍ່ໄດ້ໃຊ້ງານ</span>}>
+              <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">ດຳເນີນການຢູ່</span>
+            </Show>
           ),
+        },
+        {
+          header: "ເວລາສ້າງ",
+          body: ({ created_at }: BannerResponse) => (
+
+            <Show when={created_at} fallback="...">
+              {format(created_at, 'dd-MM-yyyy HH:mm:ss')}
+            </Show>
+
+          )
+        },
+        {
+          header: "ເວລາອັບເດດ",
+          body: ({ updated_at }: BannerResponse) => (
+
+            <Show when={updated_at} fallback="...">
+              {format(updated_at, 'dd-MM-yyyy HH:mm:ss')}
+            </Show>
+
+          )
         },
         {
           body: ({ id }: BannerResponse) => (

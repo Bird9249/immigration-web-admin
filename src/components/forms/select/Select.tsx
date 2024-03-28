@@ -27,7 +27,7 @@ export default (props: Props) => {
       </Show>
 
       <Select.Control
-        class="border rounded-lg block transition "
+        class="border rounded-lg block transition"
         classList={{
           "p-2 text-sm": props.size === "sm",
           "p-2.5 text-sm": props.size === "md" || !props.size,

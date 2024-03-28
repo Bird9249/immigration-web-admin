@@ -15,6 +15,7 @@ import {
     regex,
     special,
     string,
+    tuple,
   } from "valibot";
   
   const isFile = (input: unknown) => input instanceof File ;
@@ -31,12 +32,7 @@ import {
       minLength(1, "ກະລຸນາໃສ່Link.")
     ]),
     is_private:boolean(),
-    start_time:string([
-      minLength(1, "ກະລຸນາປ້ອນວັນທີກ່ອນ.")
-    ]),
-    end_time:string([
-      minLength(1, "ກະລຸນາປ້ອນວັນທີສິນສຸດ.")
-    ]),
+    duration:tuple([string(), string()]),
   });
   
   export const UpdatePopupSchema = merge([

@@ -1,4 +1,4 @@
-import { maxBytes, maxLength, minLength, object, string } from "valibot";
+import { maxLength, minLength, object, string } from "valibot";
 
 export const BannerTranslateSchemas = object({
     title: string([minLength(1),maxLength(255)]),

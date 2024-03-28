@@ -1,23 +1,25 @@
 import { useNavigate } from "@solidjs/router";
-import { createResource, createSignal } from "solid-js";
+import { Show, createResource, createSignal } from "solid-js";
 import Button from "../../../components/button/Button";
 import Dropdown from "../../../components/dropdown/Dropdown";
 import PlusIcon from "../../../components/icons/PlusIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import Table from "../../../components/table/Table";
-import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import deletePopupApi from "./api/delete-popup.api";
 import getPopupApi from "./api/get-popup.api";
 import { PopupResponse, PopupTableState } from "./api/popup.interface";
 import Select from "../../../components/forms/select/Select";
+import { format, isWithinInterval } from "date-fns";
+import Toggle from "../../../components/forms/toggle/Toggle";
+import changeStatusApi from "./api/change-status.api";
 
 export default () => {
   const navigate = useNavigate();
   const [, actionConfirm] = useConfirm();
   const [, actionMessage] = useMessage();
-  const auth = useAuth();
+  const [statusLoading, setStatusLoading] = createSignal<boolean>(false)
 
   const [state, setState] = createSignal<PopupTableState>({
     offset: 0,
@@ -26,7 +28,7 @@ export default () => {
     is_private: undefined
   });
 
-  const [banner, { refetch }] = createResource(state, getPopupApi);
+  const [popup, { refetch }] = createResource(state, getPopupApi);
 
   const actionMenus = (id: number) => {
     const menus: {
@@ -36,15 +38,13 @@ export default () => {
 
     menus[0].push({
       onClick() {
-        navigate(`/popup/detail/${id}`);
+        navigate(`/banner/popup/detail/${id}`);
       },
       label: "ລາຍລະອຽດ",
     });
-
-
     menus[0].push({
       onClick() {
-        navigate(`/popup/edit/${id}`);
+        navigate(`/banner/popup/edit/${id}`);
       },
       label: "ແກ້ໄຂ",
     });
@@ -79,13 +79,16 @@ export default () => {
           <h2 class="text-lg font-semibold mb-2 sm:mb-0 dark:text-white">
             ຕາຕະລາງເກັບຮັກສາຂໍ້ມູນກ່ຽວກັບປ໊ອບອັບ
           </h2>
-          <div class="w-full sm:w-fit mt-2">
+
+          <div class=" flex items-center justify-end flex-col sm:flex-row gap-2 w-full">
+
             <Select
+              class="w-full sm:w-fit"
               placeholder="ເລືອກສະຖານະ"
               contentClass="w-44"
               items={[{
                 label: "ຍົກເລີກ",
-                value: undefined,
+                value: '-1',
               },
               {
                 label: "ສາທາລະນະ",
@@ -99,17 +102,19 @@ export default () => {
               ]
               }
               onValueChange={({ value }) => {
-                setState((prev) => ({ ...prev, is_private: value[0] }))
+
+                setState((prev) => ({ ...prev, is_private: value[0] === '-1' ? undefined : value[0] }))
+
               }}
             ></Select>
-          </div>
-          <div class="w-full sm:w-fit mt-2">
             <Select
+              class="w-full sm:w-fit"
+
               placeholder="ເລືອກສະຖານະ"
               contentClass="w-44"
               items={[{
                 label: "ຍົກເລີກ",
-                value: undefined,
+                value: '-1',
               },
               {
                 label: "ສະແດງຢູ່",
@@ -123,24 +128,24 @@ export default () => {
               ]
               }
               onValueChange={({ value }) => {
-                setState((prev) => ({ ...prev, is_inactive: value[0] }))
+                setState((prev) => ({ ...prev, is_inactive: value[0] === '-1' ? undefined : value[0] }))
               }}
             >
             </Select>
-          </div>
 
-          <Button
-            class="w-full sm:w-fit"
-            prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
-            onClick={() => {
-              navigate("/banner/create");
-            }}
-          >
-            ເພີ່ມຂໍ້ມູນ
-          </Button>
+            <Button
+              class="w-full sm:w-fit"
+              prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
+              onClick={() => {
+                navigate("/banner/popup/create");
+              }}
+            >
+              ເພີ່ມຂໍ້ມູນ
+            </Button>
+          </div>
         </div>
       }
-      value={banner}
+      value={popup}
       responseField="data"
       onChange={({ paginate }) => {
         setState((prev) => ({
@@ -153,47 +158,64 @@ export default () => {
       {[
         {
           header: "ຮູບ",
-          body: ({ }: PopupResponse) => (
-            <div class="flex items-center">
-
+          body: ({ image }: PopupResponse) => (
+            <div class="flex items-center w-60">
+              <img src={import.meta.env.VITE_IMG_URL + image} alt="no image" class=" w-60 object-contain h-32 rounded-md" />
             </div>
           ),
         },
         {
           header: "ລິ້ງ",
-          body: () => (
-            <div class="flex items-center">
-              <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-              LINK
-            </div>
+          body: ({ link }: PopupResponse) => (
+            <Show when={link} fallback={'ບໍ່ມີລິ້ງ'}>
+              <a href={link} class="font-medium text-primary-500 dark:text-primary-500 hover:underline">{link}</a>
+            </Show>
           ),
+        },
+        {
+          header: "ເປັນສ່ວນຕົວ",
+          body: ({ is_private, id }: PopupResponse) => (
+            <Show when={!statusLoading()} fallback={"..."}>
+              <Toggle
+                value={is_private} onValueChange={async (value) => {
+                  setStatusLoading(true)
+                  await changeStatusApi(id, !is_private)
+                  is_private = !is_private
+                  setStatusLoading(false)
+                }} />
+            </Show>
+          )
         },
         {
           header: "ສະຖານະ",
-          body: () => (
-            <div class="flex items-center">
-              <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-              is_private
-            </div>
+          body: ({ start_time, end_time }: PopupResponse) => (
+            <Show when={isWithinInterval(new Date(), { start: start_time, end: end_time })} fallback={<span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ບໍ່ໄດ້ໃຊ້ງານ</span>}>
+              <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">ດຳເນີນການຢູ່</span>
+            </Show>
           ),
         },
         {
-          header: "ເວລາເລີມ",
-          body: () => (
-            <div class="flex items-center">
-              <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-              start_time
-            </div>
-          ),
+          header: "ເວລາສ້າງ",
+          body: ({ created_at }: PopupResponse) => (
+
+            <Show when={created_at} fallback="...">
+              <span class="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">
+                {format(created_at, 'dd-MM-yyyy HH:mm:ss')}
+              </span>
+            </Show>
+
+          )
         },
         {
-          header: "ເວລາສິນສຸດ",
-          body: () => (
-            <div class="flex items-center">
-              <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-              end_time
-            </div>
-          ),
+          header: "ເວລາອັບເດດ",
+          body: ({ updated_at }: PopupResponse) => (
+            <Show when={updated_at} fallback="...">
+              <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                {format(updated_at, 'dd-MM-yyyy HH:mm:ss')}
+              </span>
+            </Show>
+
+          )
         },
         {
           body: ({ id }: PopupResponse) => (

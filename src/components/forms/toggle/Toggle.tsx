@@ -2,22 +2,25 @@ import { FormStore, setValue } from "@modular-forms/solid";
 import { createEffect, createSignal, on } from "solid-js";
 
 type ToggleProps = {
-  name: string;
+  name?: string;
   label?: string;
   value: boolean | undefined;
-  error: string;
-  form: FormStore<any, any>;
+  error?: string;
+  form?: FormStore<any, any>;
   onValueChange?: (value: boolean) => void;
 };
 
-export default (props: ToggleProps) => {
+export default (props: ToggleProps) => {  
   const [state, setState] = createSignal<boolean>(
     props.value ? props.value : false
   );
 
   createEffect(
     on(state, (input: boolean) => {
-      setValue(props.form, props.name, input);
+      if (props.form && props.name) {
+        
+        setValue(props.form, props.name, input);
+      }
     })
   );
 

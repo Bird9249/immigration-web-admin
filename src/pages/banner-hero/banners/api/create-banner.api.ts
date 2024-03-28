@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { useAxios } from "../../../../contexts/axios/AxiosContext";
 import { BannerForm } from "../schemas/banner.schemas";
 
@@ -7,8 +8,8 @@ export default async (form: BannerForm) => {
   const formData = new FormData();
   formData.append("image", form.image);
   formData.append("link", form.link);
-  formData.append("start_time", form.duration[0]);
-  formData.append("end_time", form.duration[1]);
+  formData.append("start_time",format(form.duration[0], 'MM-dd-yyyy'));
+  formData.append("end_time", format(form.duration[1],'MM-dd-yyyy'));
   formData.append("is_private", form.is_private ? "1" : "0");
   formData.append("lo_title", form.lo.title);
   formData.append("lo_description", form.lo.description);

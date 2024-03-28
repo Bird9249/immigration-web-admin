@@ -19,6 +19,10 @@ const bannerRoutes: RouteDefinition[] = [
         component: lazy(() => import("./banners/EditBanner")),
       },
       {
+        path: "/detail/:id",
+        component: lazy(() => import("./banners/DetailBanner")),
+      },
+      {
         path: "/popup",
         component: lazy(() => import("./popups/Popup"))
       },
@@ -29,6 +33,10 @@ const bannerRoutes: RouteDefinition[] = [
       {
         path: "/popup/edit/:id",
         component: lazy(() => import("./popups/EditPopup"))
+      },
+      {
+        path: "/popup/detail/:id",
+        component: lazy(() => import("./popups/DetailPopup"))
       }
     ],
   },

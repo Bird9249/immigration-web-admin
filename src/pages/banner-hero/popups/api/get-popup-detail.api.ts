@@ -1,7 +1,7 @@
 import { useAxios } from "../../../../contexts/axios/AxiosContext";
-import { BannerResponse } from "./banner.interface";
+import { PopupResponse} from "./popup.interface";
 
 export default async (id: string) => {
   const { axios } = useAxios();
-  return axios.get<BannerResponse>(`/banner-hero/${id}`);
+  return axios.get<PopupResponse>(`/popup/${id}`);
 };
