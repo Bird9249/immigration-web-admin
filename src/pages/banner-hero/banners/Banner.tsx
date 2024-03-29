@@ -79,12 +79,13 @@ export default () => {
           <h2 class="text-lg font-semibold mb-2 sm:mb-0 dark:text-white">
             ຕາຕະລາງເກັບຮັກສາປ້າຍໂຄສະນາ
           </h2>
-          <div class="w-full sm:w-fit mt-2">
+          <div class=" flex items-center justify-end flex-col sm:flex-row gap-2 w-full">
             <Select
+              class="w-full sm:w-fit"
               placeholder="ເລືອກສະຖານະ"
               contentClass="w-44"
               items={[{
-                label: "ຍົກເລີກ",
+                label: "ເລືອກສະຖານະ",
                 value: '-1',
               },
               {
@@ -102,14 +103,12 @@ export default () => {
                 setState((prev) => ({ ...prev, is_private: value[0] === '-1' ? undefined : value[0] }))
               }}
             ></Select>
-
-          </div>
-          <div class="w-full sm:w-fit mt-2">
             <Select
+              class="w-full sm:w-fit"
               placeholder="ເລືອກສະຖານະ"
               contentClass="w-44"
               items={[{
-                label: "ຍົກເລີກ",
+                label: "ເລືອກສະຖານະ",
                 value: '-1',
               },
               {
@@ -128,17 +127,17 @@ export default () => {
               }}
             >
             </Select>
-          </div>
+            <Button
+              class="w-full sm:w-fit"
+              prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
+              onClick={() => {
+                navigate("/banner/create");
+              }}
+            >
+              ເພີ່ມຂໍ້ມູນ
+            </Button>
 
-          <Button
-            class="w-full sm:w-fit mt-2"
-            prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
-            onClick={() => {
-              navigate("/banner/create");
-            }}
-          >
-            ເພີ່ມຂໍ້ມູນ
-          </Button>
+          </div>
         </div>
       }
       value={banner}

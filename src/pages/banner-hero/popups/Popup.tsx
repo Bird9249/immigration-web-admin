@@ -109,7 +109,6 @@ export default () => {
             ></Select>
             <Select
               class="w-full sm:w-fit"
-
               placeholder="ເລືອກສະຖານະ"
               contentClass="w-44"
               items={[{

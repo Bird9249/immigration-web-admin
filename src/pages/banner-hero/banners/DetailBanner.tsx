@@ -12,6 +12,8 @@ import { useMessage } from "../../../contexts/message/MessageContext";
 import { fadeIn, fadeOut } from "../../../utils/transition-animation";
 import deleteBannerApi from "./api/delete-banner.api";
 import getBannerDetailApi from "./api/get-banner-detail.api";
+import Tabs from "../../../components/tabs/Tabs";
+import { map } from "valibot";
 
 export default () => {
     const param = useParams();
@@ -26,19 +28,78 @@ export default () => {
 
     return (
         <div class="relative">
-            <h1 class="font-bold mb-6">ພາສາລາວ</h1>
-            <div class="px-4 mb-4 grid gap-4 sm:mb-5 sm:grid-cols-1 sm:gap-6 md:gap-12">
-                <dl>
-                    <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
-                        ຮູບພາບ
-                    </dt>
-                    <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-                        <Show when={banners()} fallback={"..."}>
-                            <img src={import.meta.env.VITE_IMG_URL + banners()?.data.image} alt="no mage" class=" w-full h-96" />
-                        </Show>
-                    </dd>
-                </dl>
-            </div>
+            <Tabs
+                items={[
+                    {
+                        key: "profile",
+                        label: "ພາສາລາວ",
+                        content: <>
+                            <h1 class="font-bold mb-6">ພາສາລາວ</h1>
+                            <div class="px-4 mb-4 grid gap-4 sm:mb-5 sm:grid-cols-1 sm:gap-6 md:gap-12">
+                                <dl>
+                                    <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+                                        ຮູບພາບ
+                                    </dt>
+                                    <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+                                        <Show when={banners()} fallback={"..."}>
+                                            <div>
+                                                <div class="flex justify-center">
+                                                    {/* <h1 class=" text-red-600">{banners()?.data.}</h1> */}
+                                                </div>
+                                                <img src={import.meta.env.VITE_IMG_URL + banners()?.data.image} alt="no mage" class=" w-full h-96" />
+                                            </div>
+                                        </Show>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </>
+                        ,
+                    },
+                    {
+                        key: "english",
+                        label: "English",
+                        content:
+                            <>
+                                <h1 class="font-bold mb-6">ພາສາອັງກິດ</h1>
+                                <div class="px-4 mb-4 grid gap-4 sm:mb-5 sm:grid-cols-1 sm:gap-6 md:gap-12">
+                                    <dl>
+                                        <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+                                            ຮູບພາບ
+                                        </dt>
+                                        <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+                                            <Show when={banners()} fallback={"..."}>
+                                                <img src={import.meta.env.VITE_IMG_URL + banners()?.data.image} alt="no mage" class=" w-full h-96" />
+                                            </Show>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </>
+                    },
+                    {
+                        key: "chinese",
+                        label: "中国人",
+                        content:
+                            <>
+                                <h1 class="font-bold mb-6">ພາສາຈີນ</h1>
+                                <div class="px-4 mb-4 grid gap-4 sm:mb-5 sm:grid-cols-1 sm:gap-6 md:gap-12">
+                                    <dl>
+                                        <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+                                            ຮູບພາບ
+                                        </dt>
+                                        <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+                                            <Show when={banners()} fallback={"..."}>
+                                                <img src={import.meta.env.VITE_IMG_URL + banners()?.data.image} alt="no mage" class=" w-full h-96" />
+                                            </Show>
+
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </>
+                    },
+                ]}
+            />
+
+
             <div>
                 <dl>
                     <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">

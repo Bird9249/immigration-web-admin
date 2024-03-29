@@ -34,6 +34,7 @@ import Toggle from "../../../components/forms/toggle/Toggle";
 import DateRangePicker from "../../../components/forms/date-range-picker/DateRangePicker";
 import Textarea from "../../../components/forms/textarea/Textarea";
 import { format } from "date-fns";
+import { BannerTranslateFormInput } from "./schemas/banner-translate.schemas";
 export default () => {
     const param = useParams();
     const [, actionConfirm] = useConfirm();
@@ -41,7 +42,7 @@ export default () => {
     const navigator = useNavigate();
     const [previewImg, setPreviewImg] = createSignal<string>("");
     const [id] = createSignal<string>(param.id)
-    const [banners] = createResource(id, getBannerDetailApi) 
+    const [banners] = createResource(id, getBannerDetailApi)
 
     const [bannerForm, { Form, Field }] = createForm<UpdateBannerForm>({
         validate: valiForm(UpdateBannerSchema),
@@ -59,23 +60,48 @@ export default () => {
 
     createEffect(
         on(
-          () => banners(),
-          (input) => {
-            if (input) {     
-              setValues(bannerForm, {
-                link:input.data.link,
-                is_private:input.data.is_private,
-                duration:[format(input.data.start_time, 'yyyy-MM-dd'), format(input.data.end_time, 'yyyy-MM-dd')],
-              });
-              setPreviewImg(
-                input.data.image
-                  ? import.meta.env.VITE_IMG_URL + input.data.image
-                  : ""
-              );
+            () => banners(),
+            (input) => {
+                if (input) {
+                    const en: BannerTranslateFormInput = { title: "", description: "" }
+                    const lo: BannerTranslateFormInput = { title: "", description: "" }
+                    const zh_CN: BannerTranslateFormInput = { title: "", description: "" }
+
+                    input.data.translates.forEach((val) => {
+                        switch (val.lang) {
+                            case 'lo':
+                                lo.title = val.title ?? ""
+                                lo.description = val.description
+                                break;
+                            case 'en':
+                                en.title = val.title ?? ""
+                                en.description = val.description
+                                break;
+                            case 'zh_cn':
+                                zh_CN.title = val.title ?? ""
+                                zh_CN.description = val.description
+                                break;
+
+                            default:
+                                break;
+                        }
+                    })
+
+                    setValues(bannerForm, {
+                        link: input.data.link,
+                        is_private: input.data.is_private,
+                        duration: [format(input.data.start_time, 'yyyy-MM-dd'), format(input.data.end_time, 'yyyy-MM-dd')],
+                        en, lo, zh_CN
+                    });
+                    setPreviewImg(
+                        input.data.image
+                            ? import.meta.env.VITE_IMG_URL + input.data.image
+                            : ""
+                    );
+                }
             }
-          }
         )
-      );
+    );
     const handleSubmit: SubmitHandler<UpdateBannerForm> = async (values) => {
 
         const res = await updateBannerApi(param.id, values);
@@ -84,7 +110,7 @@ export default () => {
 
         navigator("/banner/list", { resolve: false });
     };
-    
+
 
     return (
         <Form onSubmit={handleSubmit} class="relative">
@@ -128,13 +154,13 @@ export default () => {
                 <Field name="is_private" type="boolean">
                     {(field, props) => (
                         <Show when={field.value !== undefined}>
-                        <Toggle
-                            error={field.error}
-                            form={bannerForm}
-                            name={props.name}
-                            value={field.value}
-                            label="ການມອງເຫັນ"
-                        />
+                            <Toggle
+                                error={field.error}
+                                form={bannerForm}
+                                name={props.name}
+                                value={field.value}
+                                label="ການມອງເຫັນ"
+                            />
                         </Show>
                     )}
                 </Field>

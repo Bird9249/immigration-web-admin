@@ -17,7 +17,7 @@ import {
     end_time:string;
     created_at:string;
     updated_at:string;
-    banners_translate:{
+    translates:{
       id: number;
       banner_id:number;
       lang:string;
