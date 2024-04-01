@@ -45,6 +45,25 @@ export default function () {
 
   createEffect(() => {
     const preparedMenus: SidebarMenuType[] = [];
+    if (checkPermissionGroup(PermissionGroup.User, auth)) {
+      preparedMenus.push({
+        icon: <UserIcon />,
+        href: "/feedback",
+        label: "ຄຳຕິຊົມ",
+        subMenus: {
+          menus: [
+            { href: "/feedback/list", label: "ສະແດງຄຳຕິຊົມ" },
+            
+          ],
+          isOpen: false,
+        },
+      });
+    }
+
+    setSidebarMenus("menus", (prev) => [...prev, ...preparedMenus]);
+  });
+  createEffect(() => {
+    const preparedMenus: SidebarMenuType[] = [];
 
     if (checkPermissionGroup(PermissionGroup.User, auth)) {
       preparedMenus.push({
