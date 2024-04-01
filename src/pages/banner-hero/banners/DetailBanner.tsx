@@ -2,10 +2,15 @@ import { useNavigate, useParams } from "@solidjs/router";
 import { format } from "date-fns";
 import { Show, createResource, createSignal } from "solid-js";
 import { Transition } from "solid-transition-group";
+import {
+    Permission,
+    PermissionGroup,
+} from "../../../common/enum/permission.enum";
 import Button from "../../../components/button/Button";
 import EditIcon from "../../../components/icons/EditIcon";
 import LoadingIcon from "../../../components/icons/LoadingIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
+import checkPermission from "../../../common/utils/check-permission";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
@@ -13,7 +18,7 @@ import { fadeIn, fadeOut } from "../../../utils/transition-animation";
 import deleteBannerApi from "./api/delete-banner.api";
 import getBannerDetailApi from "./api/get-banner-detail.api";
 import Tabs from "../../../components/tabs/Tabs";
-import { map } from "valibot";
+
 
 export default () => {
     const param = useParams();
@@ -155,39 +160,45 @@ export default () => {
                 </dl>
             </div>
             <div class="p-4 flex items-center">
-                <Button
-                    class="mr-3"
-                    color="primary"
-                    prefixIcon={<EditIcon />}
-                    onClick={() => {
-                        navigator(`/banner/edit/${param.id}`);
-                    }}
+                <Show
+                    when={checkPermission(Permission.Write, PermissionGroup.User, auth)}
                 >
-                    ແກ້ໄຂ
-                </Button>
+                    <Button
+                        class="mr-3"
+                        color="primary"
+                        prefixIcon={<EditIcon />}
+                        onClick={() => {
+                            navigator(`/banner/edit/${param.id}`);
+                        }}
+                    >
+                        ແກ້ໄຂ
+                    </Button>
+                </Show>
 
-                <Button
-                    color="danger"
-                    prefixIcon={<TrashIcon />}
-                    onClick={() => {
-                        actionConfirm.showConfirm({
-                            icon: () => (
-                                <TrashIcon class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" />
-                            ),
-                            message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
-                            onConfirm: async () => {
-                                const res = await deleteBannerApi(param.id);
+                <Show when={checkPermission(Permission.Remove, PermissionGroup.User, auth)}>
+                    <Button
+                        color="danger"
+                        prefixIcon={<TrashIcon />}
+                        onClick={() => {
+                            actionConfirm.showConfirm({
+                                icon: () => (
+                                    <TrashIcon class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" />
+                                ),
+                                message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
+                                onConfirm: async () => {
+                                    const res = await deleteBannerApi(param.id);
 
-                                actionMessage.showMessage({
-                                    level: "success",
-                                    message: res.data.message,
-                                });
-                            },
-                        });
-                    }}
-                >
-                    ລຶບ
-                </Button>
+                                    actionMessage.showMessage({
+                                        level: "success",
+                                        message: res.data.message,
+                                    });
+                                },
+                            });
+                        }}
+                    >
+                        ລຶບ
+                    </Button>
+                </Show>
 
             </div>
 

@@ -12,21 +12,28 @@ import deleteBannerApi from "./api/delete-banner.api";
 import getBannerApi from "./api/get-banner.api";
 import { BannerResponse, BannerTableState } from "./api/banner.interface";
 import Select from "../../../components/forms/select/Select";
-import { Field, createForm, setValue, valiForm } from "@modular-forms/solid";
-import { UpdateBannerForm, UpdateBannerSchema } from "./schemas/banner.schemas";
 import { format, isWithinInterval } from "date-fns";
-
+import checkPermission from "../../../common/utils/check-permission";
+import {
+  Permission,
+  PermissionGroup,
+} from "../../../common/enum/permission.enum";
 export default () => {
   const navigate = useNavigate();
   const [, actionConfirm] = useConfirm();
   const [, actionMessage] = useMessage();
   const auth = useAuth();
+  if (!checkPermission(Permission.Read, PermissionGroup.User, auth))
+    navigate(-1);
+
+
   const [state, setState] = createSignal<BannerTableState>({
     offset: 0,
     limit: 10,
     is_inactive: undefined,
     is_private: undefined
   });
+
   const [banner, { refetch }] = createResource(state, getBannerApi);
 
   const actionMenus = (id: number) => {
@@ -35,40 +42,44 @@ export default () => {
       onClick: () => void;
     }[][] = [[]];
 
-    menus[0].push({
-      onClick() {
-        navigate(`/banner/detail/${id}`);
-      },
-      label: "ລາຍລະອຽດ",
-    });
+    if (checkPermission(Permission.Read, PermissionGroup.User, auth))
+      menus[0].push({
+        onClick() {
+          navigate(`/banner/detail/${id}`);
+        },
+        label: "ລາຍລະອຽດ",
+      });
+    if (checkPermission(Permission.Write, PermissionGroup.User, auth))
+      menus[0].push({
+        onClick() {
+          navigate(`/banner/edit/${id}`);
+        },
+        label: "ແກ້ໄຂ",
+      });
 
-    menus[0].push({
-      onClick() {
-        navigate(`/banner/edit/${id}`);
-      },
-      label: "ແກ້ໄຂ",
-    });
-    menus.push([]);
+    if (checkPermission(Permission.Remove, PermissionGroup.User, auth)) {
+      menus.push([]);
 
-    menus[1].push({
-      onClick() {
-        actionConfirm.showConfirm({
-          icon: () => (
-            <TrashIcon class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" />
-          ),
-          message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
-          onConfirm: async () => {
-            const res = await deleteBannerApi(String(id));
-            actionMessage.showMessage({
-              level: "success",
-              message: res.data.message,
-            });
-            refetch();
-          },
-        });
-      },
-      label: "ລຶບ",
-    });
+      menus[1].push({
+        onClick() {
+          actionConfirm.showConfirm({
+            icon: () => (
+              <TrashIcon class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" />
+            ),
+            message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
+            onConfirm: async () => {
+              const res = await deleteBannerApi(String(id));
+              actionMessage.showMessage({
+                level: "success",
+                message: res.data.message,
+              });
+              refetch();
+            },
+          });
+        },
+        label: "ລຶບ",
+      });
+    }
     return menus;
   };
 
@@ -79,65 +90,69 @@ export default () => {
           <h2 class="text-lg font-semibold mb-2 sm:mb-0 dark:text-white">
             ຕາຕະລາງເກັບຮັກສາປ້າຍໂຄສະນາ
           </h2>
-          <div class=" flex items-center justify-end flex-col sm:flex-row gap-2 w-full">
-            <Select
-              class="w-full sm:w-fit"
-              placeholder="ເລືອກສະຖານະ"
-              contentClass="w-44"
-              items={[{
-                label: "ເລືອກສະຖານະ",
-                value: '-1',
-              },
-              {
-                label: "ສາທາລະນະ",
-                value: '0',
+          <Show when={checkPermission(Permission.Write, PermissionGroup.User, auth)}>
+            <div class=" flex items-center justify-end flex-col sm:flex-row gap-2 w-full">
+              <Select
+                class="w-full sm:w-fit"
+                placeholder="ເລືອກສະຖານະ"
+                contentClass="w-44"
+                items={[{
+                  label: "ເລືອກສະຖານະ",
+                  value: '-1',
+                },
+                {
+                  label: "ສາທາລະນະ",
+                  value: '0',
 
-              },
-              {
-                label: "ສວນຕົວ",
-                value: '1',
-              },
-              ]
-              }
-              onValueChange={({ value }) => {
-                setState((prev) => ({ ...prev, is_private: value[0] === '-1' ? undefined : value[0] }))
-              }}
-            ></Select>
-            <Select
-              class="w-full sm:w-fit"
-              placeholder="ເລືອກສະຖານະ"
-              contentClass="w-44"
-              items={[{
-                label: "ເລືອກສະຖານະ",
-                value: '-1',
-              },
-              {
-                label: "ສະແດງຢູ່",
-                value: '0',
+                },
+                {
+                  label: "ສວນຕົວ",
+                  value: '1',
+                },
+                ]
+                }
+                onValueChange={({ value }) => {
+                  setState((prev) => ({ ...prev, is_private: value[0] === '-1' ? undefined : value[0] }))
+                }}
+              ></Select>
+              <Select
+                class="w-full sm:w-fit"
+                placeholder="ເລືອກສະຖານະ"
+                contentClass="w-44"
+                items={[{
+                  label: "ເລືອກສະຖານະ",
+                  value: '-1',
+                },
+                {
+                  label: "ສະແດງຢູ່",
+                  value: '0',
 
-              },
-              {
-                label: "ບໍ່ສະແດງ",
-                value: '1',
-              },
-              ]
-              }
-              onValueChange={({ value }) => {
-                setState((prev) => ({ ...prev, is_inactive: value[0] === '-1' ? undefined : value[0] }))
-              }}
-            >
-            </Select>
-            <Button
-              class="w-full sm:w-fit"
-              prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
-              onClick={() => {
-                navigate("/banner/create");
-              }}
-            >
-              ເພີ່ມຂໍ້ມູນ
-            </Button>
+                },
+                {
+                  label: "ບໍ່ໄດ້ໃຊ້ງານ",
+                  value: '1',
+                },
+                ]
+                }
+                onValueChange={({ value }) => {
+                  setState((prev) => ({ ...prev, is_inactive: value[0] === '-1' ? undefined : value[0] }))
+                }}
+              >
+              </Select>
+              <Button
+                class="w-full sm:w-fit"
+                prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
+                onClick={() => {
+                  navigate("/banner/create");
+                }}
+              >
+                ເພີ່ມຂໍ້ມູນ
+              </Button>
 
-          </div>
+            </div>
+
+          </Show>
+
         </div>
       }
       value={banner}
@@ -169,11 +184,18 @@ export default () => {
         },
         {
           header: "ສາທາລະນະ",
-          body: () => (
-            <div class="flex items-center">
-              <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-              ສາທາລະນະ
-            </div>
+          body: ({ is_private }: BannerResponse) => (
+            <Show
+              when={is_private}
+              fallback={<div class="flex items-center">
+                <div class="h-2.5 w-2.5 rounded-full bg-green-600 me-2"></div>
+                ສາທາລະນະ
+              </div>}>
+              <div class="flex items-center">
+                <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
+                ສວນຕົວ
+              </div>
+            </Show>
           ),
         },
         {

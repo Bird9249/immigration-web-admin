@@ -1,5 +1,4 @@
 import {
-    FormError,
     SubmitHandler,
     createForm,
     reset,
@@ -7,24 +6,26 @@ import {
     setValues,
     valiForm,
 } from "@modular-forms/solid";
+import {
+    Permission,
+    PermissionGroup,
+} from "../../../common/enum/permission.enum";
 import { useNavigate, useParams } from "@solidjs/router";
 import { Show, createEffect, createResource, createSignal, on, onMount } from "solid-js";
 import { Transition } from "solid-transition-group";
-import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import { fadeIn, fadeOut } from "../../../utils/transition-animation";
 import {
     UpdateBannerSchema,
     UpdateBannerForm,
-    BannerForm
 } from "./schemas/banner.schemas";
+import { useAuth } from "../../../contexts/authentication/AuthContext";
+
 import Button from "../../../components/button/Button";
 import LoadingIcon from "../../../components/icons/LoadingIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
-import { BannerTableState } from "./api/banner.interface";
-import getBannerApi from "./api/get-banner.api";
 import updateBannerApi from "./api/update-banner.api";
 import deleteBannerApi from "./api/delete-banner.api";
 import InputText from "../../../components/forms/input-text/InputText";
@@ -32,66 +33,54 @@ import getBannerDetailApi from "./api/get-banner-detail.api";
 import { initAccordions } from "flowbite";
 import Toggle from "../../../components/forms/toggle/Toggle";
 import DateRangePicker from "../../../components/forms/date-range-picker/DateRangePicker";
+import checkPermission from "../../../common/utils/check-permission";
+
 import Textarea from "../../../components/forms/textarea/Textarea";
 import { format } from "date-fns";
-import { BannerTranslateFormInput } from "./schemas/banner-translate.schemas";
+
 export default () => {
     const param = useParams();
     const [, actionConfirm] = useConfirm();
     const [, actionMessage] = useMessage();
     const navigator = useNavigate();
+    const auth = useAuth();
+
+    if (!checkPermission(Permission.Write, PermissionGroup.User, auth))
+        navigator(-1);
     const [previewImg, setPreviewImg] = createSignal<string>("");
     const [id] = createSignal<string>(param.id)
-    const [banners] = createResource(id, getBannerDetailApi)
+    const [banner] = createResource(id, getBannerDetailApi)
 
     const [bannerForm, { Form, Field }] = createForm<UpdateBannerForm>({
         validate: valiForm(UpdateBannerSchema),
     });
 
-    const [bannerState] = createSignal<BannerTableState>({
-        offset: undefined,
-        limit: undefined,
-    });
     onMount(() => {
         initAccordions()
     })
-    const [banner] = createResource(bannerState, getBannerApi);
-
 
     createEffect(
         on(
-            () => banners(),
+            () => banner(),
             (input) => {
                 if (input) {
-                    const en: BannerTranslateFormInput = { title: "", description: "" }
-                    const lo: BannerTranslateFormInput = { title: "", description: "" }
-                    const zh_CN: BannerTranslateFormInput = { title: "", description: "" }
-
-                    input.data.translates.forEach((val) => {
-                        switch (val.lang) {
-                            case 'lo':
-                                lo.title = val.title ?? ""
-                                lo.description = val.description
-                                break;
-                            case 'en':
-                                en.title = val.title ?? ""
-                                en.description = val.description
-                                break;
-                            case 'zh_cn':
-                                zh_CN.title = val.title ?? ""
-                                zh_CN.description = val.description
-                                break;
-
-                            default:
-                                break;
-                        }
-                    })
-
                     setValues(bannerForm, {
                         link: input.data.link,
                         is_private: input.data.is_private,
                         duration: [format(input.data.start_time, 'yyyy-MM-dd'), format(input.data.end_time, 'yyyy-MM-dd')],
-                        en, lo, zh_CN
+                        en: {
+                            title: input.data.translates[0].title,
+                            description: input.data.translates[0].description
+                        },
+                        lo: {
+                            title: input.data.translates[1].title,
+                            description: input.data.translates[1].description
+                        }
+                        ,
+                        zh_CN: {
+                            title: input.data.translates[2].title,
+                            description: input.data.translates[2].description
+                        }
                     });
                     setPreviewImg(
                         input.data.image
@@ -103,11 +92,10 @@ export default () => {
         )
     );
     const handleSubmit: SubmitHandler<UpdateBannerForm> = async (values) => {
-
-        const res = await updateBannerApi(param.id, values);
-
-        actionMessage.showMessage({ level: "success", message: res.data.message });
-
+        if (banner.state === 'ready') {
+            const res = await updateBannerApi(param.id, values, { loId: banner().data.translates[1].id, enId: banner().data.translates[0].id, zhCnId: banner().data.translates[2].id });
+            actionMessage.showMessage({ level: "success", message: res.data.message });
+        }
         navigator("/banner/list", { resolve: false });
     };
 

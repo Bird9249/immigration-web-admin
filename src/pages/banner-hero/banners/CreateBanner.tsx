@@ -5,6 +5,10 @@ import {
   setValue,
   valiForm,
 } from "@modular-forms/solid";
+import {
+  Permission,
+  PermissionGroup,
+} from "../../../common/enum/permission.enum";
 import { useNavigate } from "@solidjs/router";
 import { initAccordions } from "flowbite";
 import { Show, createResource, createSignal, onMount } from "solid-js";
@@ -21,12 +25,19 @@ import { fadeIn, fadeOut } from "../../../utils/transition-animation";
 import { BannerTableState } from "./api/banner.interface";
 import getBanner from "./api/get-banner.api";
 import { BannerForm, BannerSchema } from "./schemas/banner.schemas";
+import { useAuth } from "../../../contexts/authentication/AuthContext";
 import createBannerApi from "./api/create-banner.api";
+import checkPermission from "../../../common/utils/check-permission";
+
 
 export default () => {
   const [previewImg, setPreviewImg] = createSignal<string>("");
   const [, actionMessage] = useMessage();
   const navigator = useNavigate();
+  const auth = useAuth();
+  if (!checkPermission(Permission.Write, PermissionGroup.User, auth))
+  navigator(-1);
+
   const [bannerForm, { Form, Field }] = createForm<BannerForm>({
     validate: valiForm(BannerSchema),
   });
