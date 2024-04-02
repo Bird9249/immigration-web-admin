@@ -39,7 +39,7 @@ export default (props: TableProps) => {
             </tr>
           </thead>
 
-          <tbody>
+          <tbody class="text-nowrap">
             <Show
               when={props.value()}
               fallback={<tr style={{ height: "540px" }}></tr>}
@@ -97,7 +97,7 @@ export default (props: TableProps) => {
                   { label: "100", value: "100" },
                 ]}
                 value={["10"]}
-                size="sm"
+                size="xs"
                 contentClass="w-fit"
                 onValueChange={({ value }) => {
                   setTable("paginate", (prev) => ({

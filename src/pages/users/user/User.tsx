@@ -57,7 +57,10 @@ export default () => {
         label: "ແກ້ໄຂ",
       });
 
-    if (checkPermission(Permission.Remove, PermissionGroup.User, auth)) {
+    if (
+      checkPermission(Permission.Remove, PermissionGroup.User, auth) &&
+      id !== auth.id
+    ) {
       menus.push([]);
 
       menus[1].push({

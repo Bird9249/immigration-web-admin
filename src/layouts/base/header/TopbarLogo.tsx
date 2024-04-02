@@ -5,7 +5,7 @@ export default function () {
   return (
     <A href="/" class="flex items-center justify-between mr-4">
       <img src={logo} class="mr-3 h-8" alt="Flowbite Logo" />
-      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+      <span class="self-center text-xl hidden sm:block font-semibold whitespace-nowrap dark:text-white">
         DOI LPDR
       </span>
     </A>
