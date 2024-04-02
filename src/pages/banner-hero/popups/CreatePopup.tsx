@@ -6,34 +6,34 @@ import {
   valiForm,
 } from "@modular-forms/solid";
 import { useNavigate } from "@solidjs/router";
-import { Show, createResource, createSignal } from "solid-js";
-import { Transition } from "solid-transition-group";
+import { createSignal } from "solid-js";
+import {
+  Permission,
+  PermissionGroup,
+} from "../../../common/enum/permission.enum";
+import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
-import LoadingIcon from "../../../components/icons/LoadingIcon";
+import DateRangePicker from "../../../components/forms/date-range-picker/DateRangePicker";
+import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
+import InputText from "../../../components/forms/input-text/InputText";
+import Toggle from "../../../components/forms/toggle/Toggle";
+import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
-import { fadeIn, fadeOut } from "../../../utils/transition-animation";
 import createPopupApi from "./api/create-popup.api";
 import { PopupForm, PopupSchema } from "./schemas/popup.schemas";
-import getPopupApi from "./api/get-popup.api";
-import InputText from "../../../components/forms/input-text/InputText";
-import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
-import { PopupTableState } from "./api/popup.interface";
-import Toggle from "../../../components/forms/toggle/Toggle";
-import DateRangePicker from "../../../components/forms/date-range-picker/DateRangePicker";
 
 export default () => {
   const [previewImg, setPreviewImg] = createSignal<string>("");
   const [, actionMessage] = useMessage();
   const navigator = useNavigate();
+  const auth = useAuth();
   const [popupForm, { Form, Field }] = createForm<PopupForm>({
     validate: valiForm(PopupSchema),
   });
 
-  const [popupState] = createSignal<PopupTableState>({
-    offset: undefined,
-    limit: undefined,
-  });
-  const [popups] = createResource(popupState, getPopupApi);
+  if (!checkPermission(Permission.Write, PermissionGroup.Banner, auth))
+    navigator(-1);
+
   const handleSubmit: SubmitHandler<PopupForm> = async (values) => {
     const res = await createPopupApi(values);
     actionMessage.showMessage({ level: "success", message: res.data.message });
@@ -48,21 +48,20 @@ export default () => {
         {(field, props) => (
           <ImageDropzone
             {...props}
-            previewImage={
-              [previewImg, setPreviewImg]
-            }
+            previewImage={[previewImg, setPreviewImg]}
             onSelectFile={(file) => {
               if (file) {
-                setValue(popupForm, "image", file)
+                setValue(popupForm, "image", file);
               } else {
-                reset(popupForm, "image")
+                reset(popupForm, "image");
               }
             }}
             error={field.error}
-            helpMessage="SVG, PNG, JPG, Webp, ຫຼື GIF (MAX. 400x400px)."
+            helpMessage="SVG, PNG, JPG, Webp, ຫຼື GIF (MAX. 800x800px)."
           />
         )}
-      </Field><br />
+      </Field>
+      <br />
       <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
         <Field name="link">
           {(field, props) => (
@@ -108,17 +107,6 @@ export default () => {
           ເພີ່ມຂໍ້ມູນ
         </Button>
       </div>
-      <Transition onEnter={fadeIn} onExit={fadeOut}>
-        <Show when={popups.loading}>
-          <div
-            class={`absolute z-10 top-0 left-0 bg-black/50 w-full h-full flex items-center justify-center rounded-lg`}
-          >
-            <div>
-              <LoadingIcon class="animate-spin w-8 h-8" />
-            </div>
-          </div>
-        </Show>
-      </Transition>
     </Form>
   );
 };

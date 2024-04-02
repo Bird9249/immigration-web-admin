@@ -1,37 +1,37 @@
 import { useNavigate } from "@solidjs/router";
+import { format, isWithinInterval } from "date-fns";
 import { Show, createResource, createSignal } from "solid-js";
+import {
+  Permission,
+  PermissionGroup,
+} from "../../../common/enum/permission.enum";
+import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
 import Dropdown from "../../../components/dropdown/Dropdown";
+import Select from "../../../components/forms/select/Select";
 import PlusIcon from "../../../components/icons/PlusIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import Table from "../../../components/table/Table";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
+import { BannerResponse, BannerTableState } from "./api/banner.interface";
 import deleteBannerApi from "./api/delete-banner.api";
 import getBannerApi from "./api/get-banner.api";
-import { BannerResponse, BannerTableState } from "./api/banner.interface";
-import Select from "../../../components/forms/select/Select";
-import { format, isWithinInterval } from "date-fns";
-import checkPermission from "../../../common/utils/check-permission";
-import {
-  Permission,
-  PermissionGroup,
-} from "../../../common/enum/permission.enum";
 export default () => {
   const navigate = useNavigate();
   const [, actionConfirm] = useConfirm();
   const [, actionMessage] = useMessage();
   const auth = useAuth();
-  if (!checkPermission(Permission.Read, PermissionGroup.User, auth))
-    navigate(-1);
 
+  if (!checkPermission(Permission.Read, PermissionGroup.Banner, auth))
+    navigate(-1);
 
   const [state, setState] = createSignal<BannerTableState>({
     offset: 0,
     limit: 10,
     is_inactive: undefined,
-    is_private: undefined
+    is_private: undefined,
   });
 
   const [banner, { refetch }] = createResource(state, getBannerApi);
@@ -42,14 +42,14 @@ export default () => {
       onClick: () => void;
     }[][] = [[]];
 
-    if (checkPermission(Permission.Read, PermissionGroup.User, auth))
+    if (checkPermission(Permission.Read, PermissionGroup.Banner, auth))
       menus[0].push({
         onClick() {
           navigate(`/banner/detail/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });
-    if (checkPermission(Permission.Write, PermissionGroup.User, auth))
+    if (checkPermission(Permission.Write, PermissionGroup.Banner, auth))
       menus[0].push({
         onClick() {
           navigate(`/banner/edit/${id}`);
@@ -57,7 +57,7 @@ export default () => {
         label: "ແກ້ໄຂ",
       });
 
-    if (checkPermission(Permission.Remove, PermissionGroup.User, auth)) {
+    if (checkPermission(Permission.Remove, PermissionGroup.Banner, auth)) {
       menus.push([]);
 
       menus[1].push({
@@ -90,55 +90,65 @@ export default () => {
           <h2 class="text-lg font-semibold mb-2 sm:mb-0 dark:text-white">
             ຕາຕະລາງເກັບຮັກສາປ້າຍໂຄສະນາ
           </h2>
-          <Show when={checkPermission(Permission.Write, PermissionGroup.User, auth)}>
-            <div class=" flex items-center justify-end flex-col sm:flex-row gap-2 w-full">
-              <Select
-                class="w-full sm:w-fit"
-                placeholder="ເລືອກສະຖານະ"
-                contentClass="w-44"
-                items={[{
+
+          <div class=" flex items-center justify-end flex-col sm:flex-row gap-2 w-full sm:w-fit">
+            <Select
+              class="w-full sm:w-fit"
+              placeholder="ເລືອກສະຖານະ"
+              contentClass="w-44"
+              items={[
+                {
                   label: "ເລືອກສະຖານະ",
-                  value: '-1',
+                  value: "-1",
                 },
                 {
                   label: "ສາທາລະນະ",
-                  value: '0',
-
+                  value: "0",
                 },
                 {
                   label: "ສວນຕົວ",
-                  value: '1',
+                  value: "1",
                 },
-                ]
-                }
-                onValueChange={({ value }) => {
-                  setState((prev) => ({ ...prev, is_private: value[0] === '-1' ? undefined : value[0] }))
-                }}
-              ></Select>
-              <Select
-                class="w-full sm:w-fit"
-                placeholder="ເລືອກສະຖານະ"
-                contentClass="w-44"
-                items={[{
+              ]}
+              onValueChange={({ value }) => {
+                setState((prev) => ({
+                  ...prev,
+                  is_private: value[0] === "-1" ? undefined : value[0],
+                }));
+              }}
+            ></Select>
+            <Select
+              class="w-full sm:w-fit"
+              placeholder="ເລືອກສະຖານະ"
+              contentClass="w-44"
+              items={[
+                {
                   label: "ເລືອກສະຖານະ",
-                  value: '-1',
+                  value: "-1",
                 },
                 {
                   label: "ສະແດງຢູ່",
-                  value: '0',
-
+                  value: "0",
                 },
                 {
                   label: "ບໍ່ໄດ້ໃຊ້ງານ",
-                  value: '1',
+                  value: "1",
                 },
-                ]
-                }
-                onValueChange={({ value }) => {
-                  setState((prev) => ({ ...prev, is_inactive: value[0] === '-1' ? undefined : value[0] }))
-                }}
-              >
-              </Select>
+              ]}
+              onValueChange={({ value }) => {
+                setState((prev) => ({
+                  ...prev,
+                  is_inactive: value[0] === "-1" ? undefined : value[0],
+                }));
+              }}
+            ></Select>
+            <Show
+              when={checkPermission(
+                Permission.Write,
+                PermissionGroup.Banner,
+                auth
+              )}
+            >
               <Button
                 class="w-full sm:w-fit"
                 prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
@@ -148,11 +158,8 @@ export default () => {
               >
                 ເພີ່ມຂໍ້ມູນ
               </Button>
-
-            </div>
-
-          </Show>
-
+            </Show>
+          </div>
         </div>
       }
       value={banner}
@@ -170,15 +177,24 @@ export default () => {
           header: "ຮູບ",
           body: ({ image }: BannerResponse) => (
             <div class="flex items-center w-60">
-              <img src={import.meta.env.VITE_IMG_URL + image} alt="no image" class="w-60 object-contain h-32 rounded-md" />
+              <img
+                src={import.meta.env.VITE_IMG_URL + image}
+                alt="no image"
+                class="w-60 object-contain h-32 rounded-md"
+              />
             </div>
           ),
         },
         {
           header: "ລິ້ງ",
           body: ({ link }: BannerResponse) => (
-            <Show when={link} fallback={'ບໍ່ມີລິ້ງ'}>
-              <a href={link} class="font-medium text-primary-500 dark:text-primary-500 hover:underline">{link}</a>
+            <Show when={link} fallback={"ບໍ່ມີລິ້ງ"}>
+              <a
+                href={link}
+                class="font-medium text-primary-500 dark:text-primary-500 hover:underline"
+              >
+                {link}
+              </a>
             </Show>
           ),
         },
@@ -187,10 +203,13 @@ export default () => {
           body: ({ is_private }: BannerResponse) => (
             <Show
               when={is_private}
-              fallback={<div class="flex items-center">
-                <div class="h-2.5 w-2.5 rounded-full bg-green-600 me-2"></div>
-                ສາທາລະນະ
-              </div>}>
+              fallback={
+                <div class="flex items-center">
+                  <div class="h-2.5 w-2.5 rounded-full bg-green-600 me-2"></div>
+                  ສາທາລະນະ
+                </div>
+              }
+            >
               <div class="flex items-center">
                 <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
                 ສວນຕົວ
@@ -201,30 +220,38 @@ export default () => {
         {
           header: "ສະຖານະ",
           body: ({ start_time, end_time }: BannerResponse) => (
-            <Show when={isWithinInterval(new Date(), { start: start_time, end: end_time })} fallback={<span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ບໍ່ໄດ້ໃຊ້ງານ</span>}>
-              <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">ດຳເນີນການຢູ່</span>
+            <Show
+              when={isWithinInterval(new Date(), {
+                start: start_time,
+                end: end_time,
+              })}
+              fallback={
+                <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                  ບໍ່ໄດ້ໃຊ້ງານ
+                </span>
+              }
+            >
+              <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                ດຳເນີນການຢູ່
+              </span>
             </Show>
           ),
         },
         {
           header: "ເວລາສ້າງ",
           body: ({ created_at }: BannerResponse) => (
-
             <Show when={created_at} fallback="...">
-              {format(created_at, 'dd-MM-yyyy HH:mm:ss')}
+              {format(created_at, "dd/MM/yyyy HH:mm:ss")}
             </Show>
-
-          )
+          ),
         },
         {
           header: "ເວລາອັບເດດ",
           body: ({ updated_at }: BannerResponse) => (
-
             <Show when={updated_at} fallback="...">
-              {format(updated_at, 'dd-MM-yyyy HH:mm:ss')}
+              {format(updated_at, "dd/MM/yyyy HH:mm:ss")}
             </Show>
-
-          )
+          ),
         },
         {
           body: ({ id }: BannerResponse) => (

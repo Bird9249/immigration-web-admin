@@ -5,52 +5,43 @@ import {
   setValue,
   valiForm,
 } from "@modular-forms/solid";
+import { useNavigate } from "@solidjs/router";
+import { initAccordions } from "flowbite";
+import { createSignal, onMount } from "solid-js";
 import {
   Permission,
   PermissionGroup,
 } from "../../../common/enum/permission.enum";
-import { useNavigate } from "@solidjs/router";
-import { initAccordions } from "flowbite";
-import { Show, createResource, createSignal, onMount } from "solid-js";
-import { Transition } from "solid-transition-group";
+import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
 import DateRangePicker from "../../../components/forms/date-range-picker/DateRangePicker";
 import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
 import InputText from "../../../components/forms/input-text/InputText";
 import Textarea from "../../../components/forms/textarea/Textarea";
 import Toggle from "../../../components/forms/toggle/Toggle";
-import LoadingIcon from "../../../components/icons/LoadingIcon";
-import { useMessage } from "../../../contexts/message/MessageContext";
-import { fadeIn, fadeOut } from "../../../utils/transition-animation";
-import { BannerTableState } from "./api/banner.interface";
-import getBanner from "./api/get-banner.api";
-import { BannerForm, BannerSchema } from "./schemas/banner.schemas";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
+import { useMessage } from "../../../contexts/message/MessageContext";
 import createBannerApi from "./api/create-banner.api";
-import checkPermission from "../../../common/utils/check-permission";
-
+import { BannerForm, BannerSchema } from "./schemas/banner.schemas";
 
 export default () => {
   const [previewImg, setPreviewImg] = createSignal<string>("");
   const [, actionMessage] = useMessage();
   const navigator = useNavigate();
   const auth = useAuth();
-  if (!checkPermission(Permission.Write, PermissionGroup.User, auth))
-  navigator(-1);
+  if (!checkPermission(Permission.Write, PermissionGroup.Banner, auth))
+    navigator(-1);
 
   const [bannerForm, { Form, Field }] = createForm<BannerForm>({
     validate: valiForm(BannerSchema),
   });
-  const [bannerState] = createSignal<BannerTableState>({
-    offset: undefined,
-    limit: undefined,
-  });
-  const [banners] = createResource(bannerState, getBanner);
+
   const handleSubmit: SubmitHandler<BannerForm> = async (values) => {
     const res = await createBannerApi(values);
     actionMessage.showMessage({ level: "success", message: res.data.message });
     navigator("banner/list", { resolve: false });
   };
+
   onMount(() => {
     initAccordions();
   });
@@ -63,9 +54,7 @@ export default () => {
         {(field, props) => (
           <ImageDropzone
             {...props}
-            previewImage={
-              [previewImg, setPreviewImg]
-          }
+            previewImage={[previewImg, setPreviewImg]}
             onSelectFile={(file) => {
               if (file) {
                 setValue(bannerForm, "image", file);
@@ -74,7 +63,7 @@ export default () => {
               }
             }}
             error={field.error}
-            helpMessage="SVG, PNG, JPG, Webp, ຫຼື GIF (MAX. 400x400px)."
+            helpMessage="SVG, PNG, JPG, Webp, ຫຼື GIF (MAX. 1440x500px)."
           />
         )}
       </Field>
@@ -129,7 +118,7 @@ export default () => {
             aria-expanded="true"
             aria-controls="accordion-collapse-body-1"
           >
-            <span>LAO</span>
+            <span>ພາສາລາວ</span>
             <svg
               data-accordion-icon
               class="w-3 h-3 rotate-180 shrink-0"
@@ -190,7 +179,7 @@ export default () => {
             aria-expanded="false"
             aria-controls="accordion-collapse-body-2"
           >
-            <span>English</span>
+            <span>ພາສາອັງກິດ</span>
             <svg
               data-accordion-icon
               class="w-3 h-3 rotate-180 shrink-0"
@@ -220,11 +209,11 @@ export default () => {
                 {(field, props) => (
                   <InputText
                     required
-                    label="Title"
+                    label="ຫົວຂໍ້"
                     {...props}
                     value={field.value}
                     error={field.error}
-                    placeholder="Title"
+                    placeholder="ປ້ອນຫົວຂໍ້"
                   />
                 )}
               </Field>
@@ -232,11 +221,11 @@ export default () => {
                 {(field, props) => (
                   <Textarea
                     required
-                    label="Description"
+                    label="ຄຳອະທິບາຍ"
                     {...props}
                     value={field.value}
                     error={field.error}
-                    placeholder="Description"
+                    placeholder="ປ້ອນຄຳອະທິບາຍ"
                   />
                 )}
               </Field>
@@ -251,7 +240,7 @@ export default () => {
             aria-expanded="false"
             aria-controls="accordion-collapse-body-3"
           >
-            <span>Chinese</span>
+            <span>ພາສາຈີນ</span>
             <svg
               data-accordion-icon
               class="w-3 h-3 rotate-180 shrink-0"
@@ -281,11 +270,11 @@ export default () => {
                 {(field, props) => (
                   <InputText
                     required
-                    label="標題"
+                    label="ຫົວຂໍ້"
                     {...props}
                     value={field.value}
                     error={field.error}
-                    placeholder="標題"
+                    placeholder="ປ້ອນຫົວຂໍ້"
                   />
                 )}
               </Field>
@@ -293,11 +282,11 @@ export default () => {
                 {(field, props) => (
                   <Textarea
                     required
-                    label="描述"
+                    label="ຄຳອະທິບາຍ"
                     {...props}
                     value={field.value}
                     error={field.error}
-                    placeholder="描述"
+                    placeholder="ປ້ອນຄຳອະທິບາຍ"
                   />
                 )}
               </Field>
@@ -305,22 +294,12 @@ export default () => {
           </div>
         </div>
       </div>
+
       <div class="mt-2">
         <Button type="submit" isLoading={bannerForm.submitting}>
           ເພີ່ມຂໍ້ມູນ
         </Button>
       </div>
-      <Transition onEnter={fadeIn} onExit={fadeOut}>
-        <Show when={banners.loading}>
-          <div
-            class={`absolute z-10 top-0 left-0 bg-black/50 w-full h-full flex items-center justify-center rounded-lg`}
-          >
-            <div>
-              <LoadingIcon class="animate-spin w-8 h-8" />
-            </div>
-          </div>
-        </Show>
-      </Transition>
     </Form>
   );
 };

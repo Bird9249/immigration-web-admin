@@ -6,18 +6,18 @@ type TabsProps = {
 };
 
 export default (props: TabsProps) => {
-  const [value, setValue] = createSignal<string | null>("profile");
+  const [value, setValue] = createSignal<string | null>(props.items[0].key);
 
   return (
     <Tabs.Root
-      value="profile"
+      value={value()}
       lazyMount
       unmountOnExit
       onValueChange={(e) => {
         setValue(e.value);
       }}
     >
-      <Tabs.List class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+      <Tabs.List class="mb-6 text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
         <ul class="flex flex-wrap -mb-px">
           <For each={props.items}>
             {(item) => (

@@ -11,12 +11,11 @@ import {
 import { createStore } from "solid-js/store";
 import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
+import BullhornIcon from "../../../components/icons/BullhornIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
 import UserIcon from "../../../components/icons/UserIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
-import Message from "../../../components/icons/Message";
-
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -46,24 +45,22 @@ export default function () {
   });
 
   createEffect(() => {
-    const bannerMenu: SidebarMenuType[] = [];
-      bannerMenu.push({
-        icon: <Message />,
+    const preparedMenus: SidebarMenuType[] = [];
+
+    if (checkPermissionGroup(PermissionGroup.Banner, auth)) {
+      preparedMenus.push({
+        icon: <BullhornIcon />,
         href: "/banner",
-        label: "ຈັດການ",
+        label: "ຈັດການໂຄສະນາ",
         subMenus: {
           menus: [
             { href: "/banner/list", label: "ຈັດການປ້າຍ" },
-            { href: "/banner/popup", label: "ຈັດການPOPUP" },
+            { href: "/banner/popup", label: "ຈັດການ popup" },
           ],
           isOpen: false,
         },
       });
-    setSidebarMenus("menus", (prev) => [...prev, ...bannerMenu]);
-  });
-
-  createEffect(() => {
-    const preparedMenus: SidebarMenuType[] = [];
+    }
 
     if (checkPermissionGroup(PermissionGroup.User, auth)) {
       preparedMenus.push({
