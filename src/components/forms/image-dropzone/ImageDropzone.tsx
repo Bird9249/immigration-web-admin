@@ -1,4 +1,4 @@
-import { JSX, ParentProps, Show, createSignal } from "solid-js";
+import { Accessor, JSX, ParentProps, Show, Signal, createSignal } from "solid-js";
 
 interface Props extends ParentProps<JSX.InputHTMLAttributes<HTMLInputElement>> {
   error?: string;
@@ -6,11 +6,10 @@ interface Props extends ParentProps<JSX.InputHTMLAttributes<HTMLInputElement>> {
   helpMessage?: string;
   onSelectFile?: (file?: File) => void;
   imageAccept?: string;
+  previewImage: Signal<string>;
 }
 
 export default (props: Props) => {
-  const [previewImage, setPreviewImage] = createSignal<string>("");
-
   return (
     <div class="flex flex-col items-center justify-center w-full">
       <label
@@ -24,7 +23,7 @@ export default (props: Props) => {
         }}
       >
         <Show
-          when={previewImage()}
+          when={props.previewImage[0]()}
           fallback={
             <div class="flex flex-col items-center justify-center pt-5 pb-6">
               <svg
@@ -53,7 +52,7 @@ export default (props: Props) => {
           }
         >
           <img
-            src={previewImage()}
+            src={props.previewImage[0]()}
             alt="preview image"
             class="w-full h-full object-contain"
           />
@@ -67,10 +66,10 @@ export default (props: Props) => {
           onInput={(e) => {
             if (e.target.files) {
               if (e.target.files.length > 0) {
-                setPreviewImage(URL.createObjectURL(e.target.files[0]));
+                props.previewImage[1](URL.createObjectURL(e.target.files[0]));
                 if (props.onSelectFile) props.onSelectFile(e.target.files[0]);
               } else {
-                setPreviewImage("");
+                props.previewImage[1]("");
                 if (props.onSelectFile) props.onSelectFile(undefined);
               }
             }

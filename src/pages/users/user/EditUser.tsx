@@ -108,7 +108,6 @@ export default () => {
         confirmPassword: "ລະຫັດຜ່ານບໍ່ກົງກັນ",
       });
     }
-
     const res = await updateUserApi(param.id, values);
 
     actionMessage.showMessage({ level: "success", message: res.data.message });
