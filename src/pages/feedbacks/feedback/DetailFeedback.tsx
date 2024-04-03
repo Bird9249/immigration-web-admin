@@ -1,4 +1,4 @@
-import { useParams } from "@solidjs/router";
+import { useNavigate, useParams } from "@solidjs/router";
 import { Show, createResource, createSignal } from "solid-js";
 import { Transition } from "solid-transition-group";
 import {
@@ -21,6 +21,10 @@ export default () => {
   const [, actionConfirm] = useConfirm();
   const [, actionMessage] = useMessage();
   const auth = useAuth();
+  const navigate = useNavigate();
+
+  if (!checkPermission(Permission.Read, PermissionGroup.Feedback, auth))
+    navigate(-1);
 
   const [id] = createSignal<string>(param.id);
 
@@ -105,7 +109,11 @@ export default () => {
 
       <div class="flex items-center">
         <Show
-          when={checkPermission(Permission.Remove, PermissionGroup.User, auth)}
+          when={checkPermission(
+            Permission.Remove,
+            PermissionGroup.Feedback,
+            auth
+          )}
         >
           <Button
             color="danger"

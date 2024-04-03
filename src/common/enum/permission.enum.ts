@@ -7,4 +7,5 @@ export enum Permission {
 export enum PermissionGroup {
   User = "user",
   Banner = "banner",
+  Feedback = "feedback",
 }

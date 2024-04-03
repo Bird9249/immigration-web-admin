@@ -25,7 +25,7 @@ export default () => {
   const auth = useAuth();
   const [statusLoading, setStatusLoading] = createSignal<boolean>(false);
 
-  if (!checkPermission(Permission.Read, PermissionGroup.User, auth))
+  if (!checkPermission(Permission.Read, PermissionGroup.Feedback, auth))
     navigate(-1);
 
   const [state, setState] = createSignal<FeedbackTableState>({
@@ -41,7 +41,7 @@ export default () => {
       onClick: () => void;
     }[][] = [[]];
 
-    if (checkPermission(Permission.Read, PermissionGroup.User, auth))
+    if (checkPermission(Permission.Read, PermissionGroup.Feedback, auth))
       menus[0].push({
         onClick() {
           navigate(`/feedback/${id}`);
@@ -49,7 +49,7 @@ export default () => {
         label: "ລາຍລະອຽດ",
       });
 
-    if (checkPermission(Permission.Remove, PermissionGroup.User, auth)) {
+    if (checkPermission(Permission.Remove, PermissionGroup.Feedback, auth)) {
       menus.push([]);
 
       menus[1].push({

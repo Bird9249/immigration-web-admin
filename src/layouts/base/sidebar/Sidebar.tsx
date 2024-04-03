@@ -47,18 +47,6 @@ export default function () {
 
   createEffect(() => {
     const preparedMenus: SidebarMenuType[] = [];
-    if (checkPermissionGroup(PermissionGroup.User, auth)) {
-      preparedMenus.push({
-        icon: <Message />,
-        href: "/feedback",
-        label: "ຄຳຕິຊົມ",
-      });
-    }
-
-    setSidebarMenus("menus", (prev) => [...prev, ...preparedMenus]);
-  });
-  createEffect(() => {
-    const preparedMenus: SidebarMenuType[] = [];
 
     if (checkPermissionGroup(PermissionGroup.Banner, auth)) {
       preparedMenus.push({
@@ -72,6 +60,14 @@ export default function () {
           ],
           isOpen: false,
         },
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.Feedback, auth)) {
+      preparedMenus.push({
+        icon: <Message />,
+        href: "/feedback",
+        label: "ຄຳຕິຊົມ",
       });
     }
 
