@@ -13,6 +13,7 @@ import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
+import Message from "../../../components/icons/Message";
 import UserIcon from "../../../components/icons/UserIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
@@ -44,6 +45,18 @@ export default function () {
     ],
   });
 
+  createEffect(() => {
+    const preparedMenus: SidebarMenuType[] = [];
+    if (checkPermissionGroup(PermissionGroup.User, auth)) {
+      preparedMenus.push({
+        icon: <Message />,
+        href: "/feedback",
+        label: "ຄຳຕິຊົມ",
+      });
+    }
+
+    setSidebarMenus("menus", (prev) => [...prev, ...preparedMenus]);
+  });
   createEffect(() => {
     const preparedMenus: SidebarMenuType[] = [];
 
