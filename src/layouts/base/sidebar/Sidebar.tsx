@@ -12,10 +12,10 @@ import { createStore } from "solid-js/store";
 import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
 import HomeIcon from "../../../components/icons/HomeIcon";
+import Message from "../../../components/icons/Message";
 import UserIcon from "../../../components/icons/UserIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
-import Message from "../../../components/icons/Message";
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -51,13 +51,6 @@ export default function () {
         icon: <Message />,
         href: "/feedback",
         label: "ຄຳຕິຊົມ",
-        subMenus: {
-          menus: [
-            { href: "/feedback/list", label: "ສະແດງຄຳຕິຊົມ" },
-
-          ],
-          isOpen: false,
-        },
       });
     }
 

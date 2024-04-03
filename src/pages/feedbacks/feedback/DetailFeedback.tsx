@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "@solidjs/router";
+import { useParams } from "@solidjs/router";
 import { Show, createResource, createSignal } from "solid-js";
 import { Transition } from "solid-transition-group";
 import {
@@ -28,7 +28,7 @@ export default () => {
 
   return (
     <div class="relative">
-      <div class="px-4 mb-4 grid gap-4 sm:mb-5 sm:grid-cols-3 sm:gap-6 md:gap-12">
+      <div class="px-4 grid gap-4 sm:grid-cols-3 sm:gap-6 md:gap-12">
         <dl>
           <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
             ຊື
@@ -71,28 +71,39 @@ export default () => {
             <Show when={feedbacks()?.data.media} fallback={"ບໍ່ມີຂໍ້ມູນ"}>
               {(feedback_media) => {
                 if (feedback_media) {
-                  const mediaUrl = import.meta.env.VITE_IMG_URL + feedback_media();
-                  const fileExtension = feedback_media().split('.').pop()?.toLowerCase();
+                  const mediaUrl =
+                    import.meta.env.VITE_IMG_URL + feedback_media();
+                  const fileExtension = feedback_media()
+                    .split(".")
+                    .pop()
+                    ?.toLowerCase();
                   switch (fileExtension) {
-                    case 'mp4':
-                      return <video src={mediaUrl} controls class="rounded-md"></video>
-                    case 'png':
-                    case 'jpg':
-                      return <img src={mediaUrl} alt="no mage" class="rounded-md" />
+                    case "mp4":
+                      return (
+                        <video
+                          src={mediaUrl}
+                          controls
+                          class="rounded-md"
+                        ></video>
+                      );
+                    case "png":
+                    case "jpg":
+                      return (
+                        <img src={mediaUrl} alt="no mage" class="rounded-md" />
+                      );
                     default:
-                      return null
+                      return null;
                   }
                 } else {
                   return null;
                 }
-              }
-              }
+              }}
             </Show>
           </dd>
         </dl>
       </div>
 
-      <div class="p-4 flex items-center">
+      <div class="flex items-center">
         <Show
           when={checkPermission(Permission.Remove, PermissionGroup.User, auth)}
         >

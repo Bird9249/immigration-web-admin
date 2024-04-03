@@ -1,4 +1,5 @@
 import { useNavigate } from "@solidjs/router";
+import { format } from "date-fns";
 import { Show, createResource, createSignal } from "solid-js";
 import {
   Permission,
@@ -6,24 +7,23 @@ import {
 } from "../../../common/enum/permission.enum";
 import checkPermission from "../../../common/utils/check-permission";
 import Dropdown from "../../../components/dropdown/Dropdown";
+import Toggle from "../../../components/forms/toggle/Toggle";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import Table from "../../../components/table/Table";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import deleteFeedbackApi from "./api/delete-feedback.api";
-import getFeedbackApi from "./api/get-feedback.api";
 import { FeedbackResponse, FeedbackTableState } from "./api/feedback.inteface";
-import { format } from "date-fns";
 import getChangeStatusApi from "./api/get-change-status.api";
-import Toggle from "../../../components/forms/toggle/Toggle";
+import getFeedbackApi from "./api/get-feedback.api";
 
 export default () => {
   const navigate = useNavigate();
   const [, actionConfirm] = useConfirm();
   const [, actionMessage] = useMessage();
   const auth = useAuth();
-  const [statusLoading, setStatusLoading] = createSignal<boolean>(false)
+  const [statusLoading, setStatusLoading] = createSignal<boolean>(false);
 
   if (!checkPermission(Permission.Read, PermissionGroup.User, auth))
     navigate(-1);
@@ -44,11 +44,10 @@ export default () => {
     if (checkPermission(Permission.Read, PermissionGroup.User, auth))
       menus[0].push({
         onClick() {
-          navigate(`/feedback/detail/${id}`);
+          navigate(`/feedback/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });
-
 
     if (checkPermission(Permission.Remove, PermissionGroup.User, auth)) {
       menus.push([]);
@@ -103,10 +102,7 @@ export default () => {
           header: "ຊື",
           body: ({ name }: FeedbackResponse) => (
             <Show when={name} fallback="....">
-              <div>
-                {name}
-              </div>
-
+              <div>{name}</div>
             </Show>
           ),
         },
@@ -114,9 +110,7 @@ export default () => {
           header: "ເບີໂທ",
           body: ({ tel }: FeedbackResponse) => (
             <Show when={tel} fallback="....">
-              <div>
-                {tel}
-              </div>
+              <div>{tel}</div>
             </Show>
           ),
         },
@@ -129,23 +123,25 @@ export default () => {
           body: ({ is_published, id }: FeedbackResponse) => (
             <Show when={!statusLoading()} fallback={"..."}>
               <Toggle
-                value={is_published} onValueChange={async (value) => {
-                  setStatusLoading(true)
-                  await getChangeStatusApi(id, !is_published)
-                  is_published = !is_published
-                  setStatusLoading(false)
-                }} />
+                value={is_published}
+                onValueChange={async (value) => {
+                  setStatusLoading(true);
+                  await getChangeStatusApi(id, !is_published);
+                  is_published = !is_published;
+                  setStatusLoading(false);
+                }}
+              />
             </Show>
-          )
+          ),
         },
 
         {
           header: "ເວລາສ້າງ",
           body: ({ created_at }: FeedbackResponse) => (
             <Show when={created_at} fallback="...">
-              {format(created_at, 'dd/MM/yyyy HH:mm:ss')}
+              {format(created_at, "dd/MM/yyyy HH:mm:ss")}
             </Show>
-          )
+          ),
         },
         {
           body: ({ id }: FeedbackResponse) => (
