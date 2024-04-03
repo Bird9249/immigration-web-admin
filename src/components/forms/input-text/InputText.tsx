@@ -36,8 +36,8 @@ export default (props: TextInputProps) => {
           {...inputProps}
           type="text"
           required={false}
-          id={props.name}
           value={props.value || ""}
+          id={props.name}
           aria-invalid={!!props.error}
           aria-errormessage={`${props.name}-error`}
           class={`text-sm rounded-lg block w-full p-2.5 ${
