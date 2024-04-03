@@ -15,6 +15,7 @@ import HomeIcon from "../../../components/icons/HomeIcon";
 import UserIcon from "../../../components/icons/UserIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
+import Message from "../../../components/icons/Message";
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -47,13 +48,13 @@ export default function () {
     const preparedMenus: SidebarMenuType[] = [];
     if (checkPermissionGroup(PermissionGroup.User, auth)) {
       preparedMenus.push({
-        icon: <UserIcon />,
+        icon: <Message />,
         href: "/feedback",
         label: "ຄຳຕິຊົມ",
         subMenus: {
           menus: [
             { href: "/feedback/list", label: "ສະແດງຄຳຕິຊົມ" },
-            
+
           ],
           isOpen: false,
         },

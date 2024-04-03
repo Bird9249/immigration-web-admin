@@ -18,7 +18,6 @@ import getFeedbackDetailApi from "./api/get-feedback-detail.api";
 
 export default () => {
   const param = useParams();
-  const navigator = useNavigate();
   const [, actionConfirm] = useConfirm();
   const [, actionMessage] = useMessage();
   const auth = useAuth();
@@ -30,13 +29,12 @@ export default () => {
   return (
     <div class="relative">
       <div class="px-4 mb-4 grid gap-4 sm:mb-5 sm:grid-cols-3 sm:gap-6 md:gap-12">
-
         <dl>
           <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
             ຊື
           </dt>
           <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-            <Show when={feedbacks()} fallback={"..."}>
+            <Show when={feedbacks()} fallback={"ບໍ່ມີຂໍ້ມູນ"}>
               {(feedback_name) => feedback_name().data.name}
             </Show>
           </dd>
@@ -44,7 +42,7 @@ export default () => {
             ເບີໂທ
           </dt>
           <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-            <Show when={feedbacks()} fallback={"..."}>
+            <Show when={feedbacks()} fallback={"ບໍ່ມີຂໍ້ມູນ"}>
               {(feedback_tel) => feedback_tel().data.tel}
             </Show>
           </dd>
@@ -52,24 +50,43 @@ export default () => {
             ຄຳຕິຊົມ
           </dt>
           <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-            <Show when={feedbacks()} fallback={"..."}>
+            <Show when={feedbacks()} fallback={"ບໍ່ມີຂໍ້ມູນ"}>
               {(feedback_message) => feedback_message().data.message}
-            </Show>
-          </dd>
-          <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
-          URL ຂອງຮູບ ຫຼືວິດີໂອທີ່ຕິດຄັດມາກັບຄຳຕິຊົມ
-          </dt>
-          <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-            <Show when={feedbacks()} fallback={"..."}>
-              {(feedback_media) => feedback_media().data.media}
             </Show>
           </dd>
           <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
             ທີ່​ຢູ່​ອີ​ເມວ
           </dt>
           <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-            <Show when={feedbacks()} fallback={"..."}>
+            <Show when={feedbacks()} fallback={"ບໍ່ມີຂໍ້ມູນ"}>
               {(feedback_email) => feedback_email().data.email}
+            </Show>
+          </dd>
+        </dl>
+        <dl>
+          <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+            URLຂອງຮູບຫຼືວິດີໂອທີ່ຕິດຄັດມາກັບຄຳຕິຊົມ
+          </dt>
+          <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+            <Show when={feedbacks()?.data.media} fallback={"ບໍ່ມີຂໍ້ມູນ"}>
+              {(feedback_media) => {
+                if (feedback_media) {
+                  const mediaUrl = import.meta.env.VITE_IMG_URL + feedback_media();
+                  const fileExtension = feedback_media().split('.').pop()?.toLowerCase();
+                  switch (fileExtension) {
+                    case 'mp4':
+                      return <video src={mediaUrl} controls class="rounded-md"></video>
+                    case 'png':
+                    case 'jpg':
+                      return <img src={mediaUrl} alt="no mage" class="rounded-md" />
+                    default:
+                      return null
+                  }
+                } else {
+                  return null;
+                }
+              }
+              }
             </Show>
           </dd>
         </dl>

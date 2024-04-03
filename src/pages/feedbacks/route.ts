@@ -11,7 +11,7 @@ const feedbackRoutes: RouteDefinition[] = [
         component: lazy(() => import("./feedback/Feedback")),
       },
       {
-        path: "/detail",
+        path: "/detail/:id",
         component: lazy(() => import("./feedback/DetailFeedback")),
       },
     ],

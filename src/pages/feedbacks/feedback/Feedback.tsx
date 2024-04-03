@@ -1,15 +1,11 @@
 import { useNavigate } from "@solidjs/router";
-import { format } from "date-fns";
-import { For, Show, createResource, createSignal } from "solid-js";
+import { Show, createResource, createSignal } from "solid-js";
 import {
   Permission,
   PermissionGroup,
 } from "../../../common/enum/permission.enum";
 import checkPermission from "../../../common/utils/check-permission";
-import Avatar from "../../../components/avatar/Avatar";
-import Button from "../../../components/button/Button";
 import Dropdown from "../../../components/dropdown/Dropdown";
-import PlusIcon from "../../../components/icons/PlusIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import Table from "../../../components/table/Table";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
@@ -18,12 +14,16 @@ import { useMessage } from "../../../contexts/message/MessageContext";
 import deleteFeedbackApi from "./api/delete-feedback.api";
 import getFeedbackApi from "./api/get-feedback.api";
 import { FeedbackResponse, FeedbackTableState } from "./api/feedback.inteface";
+import { format } from "date-fns";
+import getChangeStatusApi from "./api/get-change-status.api";
+import Toggle from "../../../components/forms/toggle/Toggle";
 
 export default () => {
   const navigate = useNavigate();
   const [, actionConfirm] = useConfirm();
   const [, actionMessage] = useMessage();
   const auth = useAuth();
+  const [statusLoading, setStatusLoading] = createSignal<boolean>(false)
 
   if (!checkPermission(Permission.Read, PermissionGroup.User, auth))
     navigate(-1);
@@ -103,16 +103,49 @@ export default () => {
           header: "ຊື",
           body: ({ name }: FeedbackResponse) => (
             <Show when={name} fallback="....">
-                <div>
-                    {name}
-                </div>
+              <div>
+                {name}
+              </div>
 
+            </Show>
+          ),
+        },
+        {
+          header: "ເບີໂທ",
+          body: ({ tel }: FeedbackResponse) => (
+            <Show when={tel} fallback="....">
+              <div>
+                {tel}
+              </div>
             </Show>
           ),
         },
         {
           header: "ອີເມວ",
           body: ({ email }: FeedbackResponse) => email,
+        },
+        {
+          header: "ເປັນສ່ວນຕົວ",
+          body: ({ is_published, id }: FeedbackResponse) => (
+            <Show when={!statusLoading()} fallback={"..."}>
+              <Toggle
+                value={is_published} onValueChange={async (value) => {
+                  setStatusLoading(true)
+                  await getChangeStatusApi(id, !is_published)
+                  is_published = !is_published
+                  setStatusLoading(false)
+                }} />
+            </Show>
+          )
+        },
+
+        {
+          header: "ເວລາສ້າງ",
+          body: ({ created_at }: FeedbackResponse) => (
+            <Show when={created_at} fallback="...">
+              {format(created_at, 'dd/MM/yyyy HH:mm:ss')}
+            </Show>
+          )
         },
         {
           body: ({ id }: FeedbackResponse) => (
