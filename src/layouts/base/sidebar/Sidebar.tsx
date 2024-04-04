@@ -32,6 +32,7 @@ interface SidebarSubMenuType {
 export default function () {
   const auth = useAuth();
 
+
   const [sidebarMenus, setSidebarMenus] = createStore<{
     menus: SidebarMenuType[];
   }>({
@@ -42,26 +43,6 @@ export default function () {
         label: "ໜ້າຫຼັກ",
       },
     ],
-  });
-
-  createEffect(() => {
-    const preparedMenus: SidebarMenuType[] = [];
-
-    if (checkPermissionGroup(PermissionGroup.User, auth)) {
-      preparedMenus.push({
-        icon: <Building />,
-        href: "/hotels",
-        label: "ຈັດການໂຮງແຮມ",
-        subMenus: {
-          menus: [
-            { href: "/hotels/list", label: "ໂຮງແຮມ" },
-          ],
-          isOpen: false,
-        },
-      });
-    }
-
-    setSidebarMenus("menus", (prev) => [...prev, ...preparedMenus]);
   });
   createEffect(() => {
     const preparedMenus: SidebarMenuType[] = [];
@@ -81,9 +62,21 @@ export default function () {
         },
       });
     }
+    if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
+      preparedMenus.push({
+        icon: <Building />,
+        href: "/hotels",
+        label: "ຈັດການໂຮງແຮມ",
+      });
+    }
 
     setSidebarMenus("menus", (prev) => [...prev, ...preparedMenus]);
   });
+
+
+
+
+
 
   onMount(() => {
     initDrawers();

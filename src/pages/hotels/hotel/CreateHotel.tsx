@@ -32,7 +32,7 @@ export default () => {
     const auth = useAuth();
 
 
-    if (!checkPermission(Permission.Write, PermissionGroup.User, auth))
+    if (!checkPermission(Permission.Write, PermissionGroup.Hotel, auth))
         navigator(-1);
 
     const [previewImg, setPreviewImg] = createSignal<string>("");
@@ -49,7 +49,7 @@ export default () => {
 
         // actionMessage.showMessage({ level: "success", message: res.data.message });
 
-        // navigator("hotels/list", { resolve: false });
+        // navigator("hotels", { resolve: false });
     };
     onMount(() => {
         initAccordions();

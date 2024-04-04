@@ -29,7 +29,6 @@ import updateHotelApi from "./api/update-hotel.api";
 import {
     UpdateHotelForm,
     UpdateHotelSchema,
-    HotelForm,
 } from "./schemas/hotel.schemas";
 import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
 import Toggle from "../../../components/forms/toggle/Toggle";
@@ -41,7 +40,7 @@ export default () => {
     const navigator = useNavigate();
     const auth = useAuth();
 
-    if (!checkPermission(Permission.Write, PermissionGroup.User, auth))
+    if (!checkPermission(Permission.Write, PermissionGroup.Hotel, auth))
         navigator(-1);
 
     const [id] = createSignal<string>(param.id);
@@ -83,7 +82,7 @@ export default () => {
 
         actionMessage.showMessage({ level: "success", message: res.data.message });
 
-        navigator("/users/list", { resolve: false });
+        navigator("/hotels", { resolve: false });
     };
 
     return (

@@ -24,7 +24,7 @@ export default () => {
     const [, actionMessage] = useMessage();
     const auth = useAuth();
 
-    if (!checkPermission(Permission.Read, PermissionGroup.User, auth))
+    if (!checkPermission(Permission.Read, PermissionGroup.Hotel, auth))
         navigate(-1);
 
     const [state, setState] = createSignal<HotelTableState>({
@@ -40,7 +40,7 @@ export default () => {
             onClick: () => void;
         }[][] = [[]];
 
-        if (checkPermission(Permission.Read, PermissionGroup.User, auth))
+        if (checkPermission(Permission.Read, PermissionGroup.Hotel, auth))
             menus[0].push({
                 onClick() {
                     navigate(`/hotels/detail/${id}`);
@@ -48,7 +48,7 @@ export default () => {
                 label: "ລາຍລະອຽດ",
             });
 
-        if (checkPermission(Permission.Write, PermissionGroup.User, auth))
+        if (checkPermission(Permission.Write, PermissionGroup.Hotel, auth))
             menus[0].push({
                 onClick() {
                     navigate(`/hotels/edit/${id}`);
@@ -56,7 +56,7 @@ export default () => {
                 label: "ແກ້ໄຂ",
             });
 
-        if (checkPermission(Permission.Remove, PermissionGroup.User, auth)) {
+        if (checkPermission(Permission.Remove, PermissionGroup.Hotel, auth)) {
             menus.push([]);
 
             menus[1].push({
@@ -93,7 +93,7 @@ export default () => {
                         ຕາຕະລາງຂໍ້ມູນໂຮງແຮມ
                     </h2>
                     <Show
-                        when={checkPermission(Permission.Write, PermissionGroup.User, auth)}
+                        when={checkPermission(Permission.Write, PermissionGroup.Hotel, auth)}
                     >
                         <Button
                             class="w-full sm:w-fit"

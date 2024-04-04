@@ -158,7 +158,7 @@ export default () => {
             <Map />
             <div class="p-4 flex items-center">
                 <Show
-                    when={checkPermission(Permission.Write, PermissionGroup.User, auth)}
+                    when={checkPermission(Permission.Write, PermissionGroup.Hotel, auth)}
                 >
                     <Button
                         class="mr-3"
@@ -173,7 +173,7 @@ export default () => {
                 </Show>
 
                 <Show
-                    when={checkPermission(Permission.Remove, PermissionGroup.User, auth)}
+                    when={checkPermission(Permission.Remove, PermissionGroup.Hotel, auth)}
                 >
                     <Button
                         color="danger"
