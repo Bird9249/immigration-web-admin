@@ -15,6 +15,7 @@ import HomeIcon from "../../../components/icons/HomeIcon";
 import UserIcon from "../../../components/icons/UserIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
+import Building from "../../../components/icons/Building";
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -43,6 +44,25 @@ export default function () {
     ],
   });
 
+  createEffect(() => {
+    const preparedMenus: SidebarMenuType[] = [];
+
+    if (checkPermissionGroup(PermissionGroup.User, auth)) {
+      preparedMenus.push({
+        icon: <Building />,
+        href: "/hotels",
+        label: "ຈັດການໂຮງແຮມ",
+        subMenus: {
+          menus: [
+            { href: "/hotels/list", label: "ໂຮງແຮມ" },
+          ],
+          isOpen: false,
+        },
+      });
+    }
+
+    setSidebarMenus("menus", (prev) => [...prev, ...preparedMenus]);
+  });
   createEffect(() => {
     const preparedMenus: SidebarMenuType[] = [];
 
