@@ -6,4 +6,5 @@ export enum Permission {
 
 export enum PermissionGroup {
   User = "user",
+  AccommodationRequest = "accommodationRequest",
 }
