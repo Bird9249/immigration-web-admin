@@ -34,7 +34,7 @@
   "dependencies": {
     "@ark-ui/solid": "^2.1.1",
     "@modular-forms/solid": "^0.20.0",
-    "@solidjs/router": "^0.11.5",
+    "@solidjs/router": "^0.13.1",
     "axios": "^1.6.7",
     "babel-preset-solid": "^1.8.15",
     "date-fns": "^3.3.1",
@@ -44,6 +44,6 @@
     "solid-js": "^1.8.15",
     "solid-transition-group": "^0.2.3",
     "stack-typed": "^1.51.9",
-    "valibot": "^0.27.1"
+    "valibot": "^0.30.0"
   }
 }
