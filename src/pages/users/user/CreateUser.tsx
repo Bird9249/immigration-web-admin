@@ -178,7 +178,7 @@ export default () => {
               {...props}
               value={field.value}
               error={field.error}
-              placeholder="•••••••••"
+              placeholder="ປ້ອນລະຫັດຜ່ານ"
             />
           )}
         </Field>
@@ -191,7 +191,7 @@ export default () => {
               {...props}
               value={field.value}
               error={field.error}
-              placeholder="•••••••••"
+              placeholder="ຢືນຢັນລະຫັດຜ່ານ"
             />
           )}
         </Field>

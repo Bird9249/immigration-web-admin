@@ -94,7 +94,7 @@ export default () => {
           });
           setPreviewImg(
             input.data.profile.image
-              ? import.meta.env.VITE_BASE_API_URL + input.data.profile.image
+              ? import.meta.env.VITE_IMG_URL + input.data.profile.image
               : ""
           );
         }
@@ -213,7 +213,7 @@ export default () => {
               {...props}
               value={field.value}
               error={field.error}
-              placeholder="•••••••••"
+              placeholder="ປ້ອນລະຫັດຜ່ານ"
             />
           )}
         </Field>
@@ -226,7 +226,7 @@ export default () => {
               {...props}
               value={field.value}
               error={field.error}
-              placeholder="•••••••••"
+              placeholder="ຢືນຢັນລະຫັດຜ່ານ"
             />
           )}
         </Field>
