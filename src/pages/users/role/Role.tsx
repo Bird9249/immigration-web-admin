@@ -82,13 +82,15 @@ export default () => {
         {
           header: "ການອະນຸຍາດ",
           body: ({ permissions }: RoleResponse) => (
-            <For each={permissions}>
-              {({ name }) => (
-                <span class="bg-primary-100 text-primary-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-                  {name}
-                </span>
-              )}
-            </For>
+            <div class="flex gap-1 flex-wrap">
+              <For each={permissions}>
+                {({ name }) => (
+                  <span class="bg-primary-100 text-primary-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                    {name}
+                  </span>
+                )}
+              </For>
+            </div>
           ),
         },
         {

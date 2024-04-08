@@ -25,7 +25,6 @@ export default () => {
   const navigate = useNavigate();
   const [, actionConfirm] = useConfirm();
   const [, actionMessage] = useMessage();
-  const [statusLoading, setStatusLoading] = createSignal<boolean>(false);
   const auth = useAuth();
 
   if (!checkPermission(Permission.Write, PermissionGroup.Banner, auth))
@@ -199,17 +198,13 @@ export default () => {
         {
           header: "ເປັນສ່ວນຕົວ",
           body: ({ is_private, id }: PopupResponse) => (
-            <Show when={!statusLoading()} fallback={"..."}>
-              <Toggle
-                value={is_private}
-                onValueChange={async (value) => {
-                  setStatusLoading(true);
-                  await changeStatusApi(id, !is_private);
-                  is_private = !is_private;
-                  setStatusLoading(false);
-                }}
-              />
-            </Show>
+            <Toggle
+              value={is_private}
+              onValueChange={async () => {
+                await changeStatusApi(id, !is_private);
+                is_private = !is_private;
+              }}
+            />
           ),
         },
         {
