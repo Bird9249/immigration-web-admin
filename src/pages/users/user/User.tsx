@@ -126,9 +126,7 @@ export default () => {
           }: UserResponse) => (
             <div class="flex items-center">
               <Avatar
-                src={
-                  image ? import.meta.env.VITE_BASE_API_URL + image : undefined
-                }
+                src={image ? import.meta.env.VITE_IMG_URL + image : undefined}
                 alt="image"
                 size="sm"
                 class="mr-3"
