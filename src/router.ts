@@ -2,6 +2,8 @@ import { RouteDefinition } from "@solidjs/router";
 import { lazy } from "solid-js";
 import authenticationRoutes from "./pages/authentication/route";
 import userRoutes from "./pages/users/route";
+import feedbackRoutes from "./pages/feedbacks/route";
+import bannerRoutes from "./pages/banner-hero/route";
 
 const routes: RouteDefinition[] = [
   {
@@ -13,7 +15,8 @@ const routes: RouteDefinition[] = [
         component: lazy(() => import("./pages/dashboard/Dashboard")),
       },
       ...userRoutes,
-
+      ...feedbackRoutes,
+      ...bannerRoutes,
       {
         path: "/*all",
         component: lazy(() => import("./pages/errors/PageNotFound")),
