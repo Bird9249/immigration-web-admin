@@ -1,6 +1,6 @@
 import { useNavigate } from "@solidjs/router";
 import { format } from "date-fns";
-import { For, Show, createResource, createSignal } from "solid-js";
+import { Show, createResource, createSignal } from "solid-js";
 import {
   Permission,
   PermissionGroup,
@@ -137,18 +137,7 @@ export default () => {
             </div>
           ),
         },
-        {
-          header: "ບົດບາດ",
-          body: ({ roles }: UserResponse) => (
-            <For each={roles}>
-              {({ name }) => (
-                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                  {name}
-                </span>
-              )}
-            </For>
-          ),
-        },
+
         {
           header: "ອີເມວ",
           body: ({ email }: UserResponse) => email,
