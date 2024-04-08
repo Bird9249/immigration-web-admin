@@ -23,7 +23,6 @@ export default () => {
   const [, actionConfirm] = useConfirm();
   const [, actionMessage] = useMessage();
   const auth = useAuth();
-  const [statusLoading, setStatusLoading] = createSignal<boolean>(false);
 
   if (!checkPermission(Permission.Read, PermissionGroup.Feedback, auth))
     navigate(-1);
@@ -121,17 +120,13 @@ export default () => {
         {
           header: "ເປັນສ່ວນຕົວ",
           body: ({ is_published, id }: FeedbackResponse) => (
-            <Show when={!statusLoading()} fallback={"..."}>
-              <Toggle
-                value={is_published}
-                onValueChange={async (value) => {
-                  setStatusLoading(true);
-                  await getChangeStatusApi(id, !is_published);
-                  is_published = !is_published;
-                  setStatusLoading(false);
-                }}
-              />
-            </Show>
+            <Toggle
+              value={is_published}
+              onValueChange={async () => {
+                await getChangeStatusApi(id, !is_published);
+                is_published = !is_published;
+              }}
+            />
           ),
         },
 
