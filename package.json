@@ -43,6 +43,7 @@
     "scss": "^0.2.4",
     "solid-js": "^1.8.15",
     "solid-transition-group": "^0.2.3",
+    "stack-typed": "^1.51.9",
     "valibot": "^0.27.1"
   }
 }

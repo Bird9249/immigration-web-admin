@@ -8,14 +8,16 @@ interface DialogProps extends ParentProps<DialogRootProps> {
   footer?: JSX.Element;
   close?: boolean;
   size?: "sm" | "md" | "lg" | "xl";
+  modalClass?: string;
+  backdropClass?: string;
 }
 
 export default (props: DialogProps) => {
   return (
     <Dialog.Root {...props} lazyMount unmountOnExit>
       <Portal mount={document.getElementById("root") as HTMLElement}>
-        <Dialog.Backdrop class="modal-backdrop" />
-        <Dialog.Positioner class="modal">
+        <Dialog.Backdrop class={`modal-backdrop ${props.backdropClass}`} />
+        <Dialog.Positioner class={`modal ${props.modalClass}`}>
           <div class={`modal-container modal-${props.size || "md"}`}>
             <Dialog.Content class="modal-content">
               <Show when={props.header}>
