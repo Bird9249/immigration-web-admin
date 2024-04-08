@@ -18,14 +18,16 @@ export default (props: ParentProps<Props>) => {
   return (
     <>
       <div
-        class="flex flex-col gap-2 justify-center items-center min-h-[210px] border rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer"
+        class="flex flex-col gap-2 justify-center items-center min-h-[210px] border dark:border-gray-500 dark:hover:border-gray-300 rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer"
         onClick={() => setOpenCreate(true)}
       >
         <FolderIcon
           iconDirection="plus-line"
-          class="size-24 text-primary-600"
+          class="size-24 text-primary-600 dark:text-primary-400"
         />
-        <span class="text-sm text-gray-500">ເພີ່ມໄຟລ໌ ຫຼື ໂຟນເດີ </span>
+        <span class="text-sm text-gray-500 dark:text-gray-300">
+          ເພີ່ມໄຟລ໌ ຫຼື ໂຟນເດີ
+        </span>
       </div>
 
       <Modal

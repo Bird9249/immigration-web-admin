@@ -155,7 +155,7 @@ export const FileAndFolder = (props: ParentProps<Props>) => {
             <For each={fileAndFolder()?.data}>
               {({ id, name, type, size }) => (
                 <div
-                  class="flex flex-col gap-2 text-nowrap border rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer"
+                  class="flex flex-col gap-2 text-nowrap border dark:border-gray-500 dark:hover:border-gray-300 rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer dark:text-white"
                   onClick={() => {
                     const currentTime = new Date().getTime();
 
@@ -192,7 +192,7 @@ export const FileAndFolder = (props: ParentProps<Props>) => {
                       <div class="flex justify-center items-center size-full h-[160px] relative">
                         <FolderIcon
                           iconDirection="line"
-                          class="size-24 text-primary-600"
+                          class="size-24 text-primary-600 dark:text-primary-400"
                         />
                         <div class="absolute top-1 right-1 flex flex-col items-center">
                           <button
@@ -280,7 +280,7 @@ export const FileAndFolder = (props: ParentProps<Props>) => {
                   <div class="leading-4 px-2 pb-2">
                     <p class="text-ellipsis text-sm overflow-hidden">{name}</p>
 
-                    <span class="text-xs text-gray-500">
+                    <span class="text-xs text-gray-500 dark:text-gray-300">
                       ຂະໜາດ: {convertToByteUnit(size)}
                     </span>
                   </div>
