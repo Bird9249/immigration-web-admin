@@ -21,9 +21,9 @@ export default (props: TabsProps) => {
         <ul class="flex flex-wrap -mb-px">
           <For each={props.items}>
             {(item) => (
-              <li class="me-2">
+              <li class="me-2 ">
                 <Tabs.Trigger
-                  class="inline-block p-4 border-b-2 rounded-t-lg"
+                  class="inline-block p-4 border-b-2 rounded-t-lg transition"
                   value={item.key}
                   classList={{
                     "hover:text-gray-600 border-transparent hover:border-gray-300 dark:hover:text-gray-300":
