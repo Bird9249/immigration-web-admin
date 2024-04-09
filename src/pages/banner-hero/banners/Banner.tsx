@@ -9,6 +9,7 @@ import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
 import Dropdown from "../../../components/dropdown/Dropdown";
 import Select from "../../../components/forms/select/Select";
+import Toggle from "../../../components/forms/toggle/Toggle";
 import PlusIcon from "../../../components/icons/PlusIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import Table from "../../../components/table/Table";
@@ -16,6 +17,7 @@ import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import { BannerResponse, BannerTableState } from "./api/banner.interface";
+import changePrivateStatusBanner from "./api/change-private-status-banner";
 import deleteBannerApi from "./api/delete-banner.api";
 import getBannerApi from "./api/get-banner.api";
 export default () => {
@@ -94,11 +96,11 @@ export default () => {
           <div class=" flex items-center justify-end flex-col sm:flex-row gap-2 w-full sm:w-fit">
             <Select
               class="w-full sm:w-fit"
-              placeholder="ເລືອກສະຖານະ"
+              placeholder="ການເຜີຍແຜ່"
               contentClass="w-44"
               items={[
                 {
-                  label: "ເລືອກສະຖານະ",
+                  label: "ຍົກເລີກ",
                   value: "-1",
                 },
                 {
@@ -123,7 +125,7 @@ export default () => {
               contentClass="w-44"
               items={[
                 {
-                  label: "ເລືອກສະຖານະ",
+                  label: "ຍົກເລີກ",
                   value: "-1",
                 },
                 {
@@ -199,22 +201,15 @@ export default () => {
           ),
         },
         {
-          header: "ສາທາລະນະ",
-          body: ({ is_private }: BannerResponse) => (
-            <Show
-              when={is_private}
-              fallback={
-                <div class="flex items-center">
-                  <div class="h-2.5 w-2.5 rounded-full bg-green-600 me-2"></div>
-                  ສາທາລະນະ
-                </div>
-              }
-            >
-              <div class="flex items-center">
-                <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
-                ສວນຕົວ
-              </div>
-            </Show>
+          header: "ການເຜີຍແຜ່",
+          body: ({ id, is_private }: BannerResponse) => (
+            <Toggle
+              value={!is_private}
+              onValueChange={async () => {
+                await changePrivateStatusBanner(id, !is_private);
+                is_private = !is_private;
+              }}
+            />
           ),
         },
         {

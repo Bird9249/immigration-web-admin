@@ -35,7 +35,7 @@ export default () => {
   return (
     <div class="relative min-h-[90vh]">
       <h2 class="text-lg font-semibold mb-2 sm:mb-3 dark:text-white">
-        ຜູ້ໃຊ້ທັງໝົດ
+        ການອະນຸຍາດທັງໝົດ
       </h2>
       <ol class="text-gray-500 list-decimal list-inside dark:text-gray-400 grid gap-4 sm:grid-cols-2 sm:gap-6">
         <Suspense>

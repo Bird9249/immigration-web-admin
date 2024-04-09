@@ -11,8 +11,8 @@ import {
 import { createStore } from "solid-js/store";
 import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
-import FilePenIcon from "../../../components/icons/FilePenIcon";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
+import FilePenIcon from "../../../components/icons/FilePenIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
 import Message from "../../../components/icons/Message";
 import UserIcon from "../../../components/icons/UserIcon";
@@ -58,7 +58,12 @@ export default function () {
           menus: [
             { href: "/registrations/arrival", label: "ລົງທະບຽນເຂົ້າເມືອງ" },
             { href: "/registrations/departure", label: "ລົງທະບຽນອອກເມືອງ" },
-            
+          ],
+          isOpen: false,
+        },
+      });
+    }
+
     if (checkPermissionGroup(PermissionGroup.Banner, auth)) {
       preparedMenus.push({
         icon: <BullhornIcon />,

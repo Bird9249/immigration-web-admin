@@ -4,11 +4,13 @@ import {
   SubmitHandler,
   valiForm,
 } from "@modular-forms/solid";
-import { ParentProps, Signal } from "solid-js";
+import { ParentProps, Show, Signal } from "solid-js";
+import Alert from "../../../../components/alert/Alert";
 import Button from "../../../../components/button/Button";
 import InputText from "../../../../components/forms/input-text/InputText";
 import CloseIcon from "../../../../components/icons/CloseIcon";
 import Modal from "../../../../components/modal/Modal";
+import { useAxios } from "../../../../contexts/axios/AxiosContext";
 import { useMessage } from "../../../../contexts/message/MessageContext";
 import verifyDepartureCodeApi from "../api/verify-departure-code.api";
 import {
@@ -23,6 +25,9 @@ type Props = {
 
 export default ({ open: [open, setOpen], onSuccess }: ParentProps<Props>) => {
   const [, actionMessage] = useMessage();
+  const {
+    error: [error, setError],
+  } = useAxios();
 
   const [form, { Form, Field }] = createForm<VerifyDepartureCodeSchemaType>({
     validate: valiForm(VerifyDepartureCodeSchema),
@@ -70,7 +75,7 @@ export default ({ open: [open, setOpen], onSuccess }: ParentProps<Props>) => {
 
         <div class="p-4 md:p-5">
           <Form onSubmit={handleSubmit} class="relative">
-            {/* <Show when={error()}>
+            <Show when={error()}>
               {(err) => (
                 <Alert
                   level={err().level}
@@ -80,7 +85,7 @@ export default ({ open: [open, setOpen], onSuccess }: ParentProps<Props>) => {
                   }}
                 />
               )}
-            </Show> */}
+            </Show>
 
             <Field name="verification_code">
               {(field, props) => (
