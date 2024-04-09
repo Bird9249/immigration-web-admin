@@ -114,6 +114,17 @@ export default () => {
                 )}
               </Show>
             </dd>
+
+            <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+              ລົງທະບຽນເມືອ
+            </dt>
+            <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+              <Show when={arrival()} fallback={"..."}>
+                {(item) =>
+                  format(item().data.created_at, "dd/MM/yyyy HH:mm:ss")
+                }
+              </Show>
+            </dd>
           </dl>
 
           <dl>
@@ -178,7 +189,10 @@ export default () => {
                   item().data.verified_at ? (
                     <span class="text-green-500 font-medium flex gap-1 items-center">
                       <CheckIcon iconDirection="circle" class="size-4" />{" "}
-                      {format(item().data.verified_at as string, "dd/MM/yyyy")}
+                      {format(
+                        item().data.verified_at as string,
+                        "dd/MM/yyyy HH:mm:ss"
+                      )}
                     </span>
                   ) : (
                     "ຍັງບໍ່ມີການຢືນຢັນ"
