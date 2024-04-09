@@ -32,7 +32,7 @@ export default (props: TableProps) => {
 
         <table class="table-content">
           <thead class="table-thead">
-            <tr>
+            <tr class="text-nowrap">
               <For each={props.children}>
                 {(childProps) => <Dynamic component={Column} {...childProps} />}
               </For>
@@ -51,7 +51,7 @@ export default (props: TableProps) => {
                 >
                   <For each={value().data[props.responseField]}>
                     {(value) => (
-                      <tr class="table-tbody">
+                      <tr class="table-tbody text-nowrap">
                         <For each={props.children}>
                           {(childProps) => (
                             <td class="px-4 py-3">
