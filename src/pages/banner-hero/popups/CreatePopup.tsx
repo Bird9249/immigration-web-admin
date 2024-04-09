@@ -66,7 +66,6 @@ export default () => {
         <Field name="link">
           {(field, props) => (
             <InputText
-              required
               label="ລິ້ງ"
               {...props}
               value={field.value}
@@ -75,14 +74,14 @@ export default () => {
             />
           )}
         </Field>
-        <Field name="is_private" type="boolean">
+        <Field name="is_public" type="boolean">
           {(field, props) => (
             <Toggle
               error={field.error}
               form={popupForm}
               name={props.name}
               value={field.value}
-              label="ການມອງເຫັນ"
+              label="ການເຜີຍແຜ່"
             />
           )}
         </Field>
@@ -91,6 +90,7 @@ export default () => {
         <Field name="duration" type="string[]">
           {(field) => (
             <DateRangePicker
+              required
               error={field.error}
               label={["ເວລາເລີມຕົ້ນ", "ເວລາສິນສຸດ"]}
               placeholder={["ເວລາເລີມຕົ້ນ", "ເວລາສິນສຸດ"]}

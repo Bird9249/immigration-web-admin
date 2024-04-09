@@ -98,7 +98,7 @@ export default () => {
           <div class="flex items-center justify-end flex-col sm:flex-row gap-2 w-full sm:w-fit">
             <Select
               class="w-full sm:w-fit"
-              placeholder="ເລືອກສະຖານະ"
+              placeholder="ການເຜີຍແຜ່"
               contentClass="w-44"
               items={[
                 {
@@ -196,10 +196,10 @@ export default () => {
           ),
         },
         {
-          header: "ເປັນສ່ວນຕົວ",
+          header: "ການເຜີຍແຜ່",
           body: ({ is_private, id }: PopupResponse) => (
             <Toggle
-              value={is_private}
+              value={!is_private}
               onValueChange={async () => {
                 await changeStatusApi(id, !is_private);
                 is_private = !is_private;

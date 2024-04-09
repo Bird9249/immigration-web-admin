@@ -1,8 +1,8 @@
 import { useAxios } from "../../../../contexts/axios/AxiosContext";
-import { BannerResponse } from "./banner.interface";
+import { Arrival } from "./arrival.interface";
 
 export default async (id: string) => {
   const { axios } = useAxios();
 
-  return axios.put<BannerResponse>(`/banner-hero/${id}/public`);
+  return axios.get<Arrival>(`/arrival/${id}`);
 };

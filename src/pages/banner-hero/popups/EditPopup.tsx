@@ -62,7 +62,7 @@ export default () => {
         if (input) {
           setValues(popupForm, {
             link: input.data.link,
-            is_private: input.data.is_private,
+            is_public: !input.data.is_private,
             duration: [
               format(input.data.start_time, "yyyy-MM-dd"),
               format(input.data.end_time, "yyyy-MM-dd"),
@@ -115,7 +115,6 @@ export default () => {
         <Field name="link">
           {(field, props) => (
             <InputText
-              required
               label="ລິ້ງ"
               {...props}
               value={field.value}
@@ -124,7 +123,7 @@ export default () => {
             />
           )}
         </Field>
-        <Field name="is_private" type="boolean">
+        <Field name="is_public" type="boolean">
           {(field, props) => (
             <>
               <Show when={field.value !== undefined}>
@@ -133,7 +132,7 @@ export default () => {
                   form={popupForm}
                   name={props.name}
                   value={field.value}
-                  label="ການມອງເຫັນ"
+                  label="ການເຜີຍແຜ່"
                 />
               </Show>
             </>
@@ -144,6 +143,7 @@ export default () => {
         <Field name="duration" type="string[]">
           {(field) => (
             <DateRangePicker
+              required
               error={field.error}
               label={["ເວລາເລີມຕົ້ນ", "ເວລາສິນສຸດ"]}
               placeholder={["ເວລາເລີມຕົ້ນ", "ເວລາສິນສຸດ"]}

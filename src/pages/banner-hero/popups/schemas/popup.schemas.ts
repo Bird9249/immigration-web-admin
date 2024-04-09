@@ -23,8 +23,8 @@ export const PopupSchema = object({
     ),
     maxSize(1024 * 1024 * 10, "ກະລຸນາເລືອກໄຟລ໌ທີ່ນ້ອຍກວ່າ 10 MB."),
   ]),
-  link: string([minLength(1, "ກະລຸນາໃສ່ລິ້ງ.")]),
-  is_private: boolean(),
+  link: string(),
+  is_public: boolean(),
   duration: tuple(
     [
       string("ຕ້ອງເປັນ string", [minLength(1, "ກະລຸນາເລືອກວັນທີ")]),

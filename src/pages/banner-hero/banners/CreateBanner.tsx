@@ -72,7 +72,6 @@ export default () => {
         <Field name="link">
           {(field, props) => (
             <InputText
-              required
               label="ລິ້ງ"
               {...props}
               value={field.value}
@@ -97,6 +96,7 @@ export default () => {
         <Field name="duration" type="string[]">
           {(field) => (
             <DateRangePicker
+              required
               error={field.error}
               label={["ເວລາເລີມຕົ້ນ", "ເວລາສິນສຸດ"]}
               placeholder={["ເວລາເລີມຕົ້ນ", "ເວລາສິນສຸດ"]}

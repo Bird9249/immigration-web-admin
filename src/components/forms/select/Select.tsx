@@ -6,7 +6,7 @@ import "./Select.scss";
 interface Props extends SelectRootProps<{ label: string; value: string | undefined }> {
   placeholder?: string;
   label?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   contentClass?: string;
   error?: string;
   required?: boolean;
@@ -29,6 +29,7 @@ export default (props: Props) => {
       <Select.Control
         class="border rounded-lg block transition"
         classList={{
+          "p-2 text-xs": props.size === "xs",
           "p-2 text-sm": props.size === "sm",
           "p-2.5 text-sm": props.size === "md" || !props.size,
           "p-2.5 px-4 py-3": props.size === "lg",
