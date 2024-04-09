@@ -11,7 +11,10 @@ import {
 import { createStore } from "solid-js/store";
 import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
+import BullhornIcon from "../../../components/icons/BullhornIcon";
+import FilePenIcon from "../../../components/icons/FilePenIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
+import Message from "../../../components/icons/Message";
 import UserIcon from "../../../components/icons/UserIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
@@ -53,6 +56,45 @@ export default function () {
         label: "ຕາຕະລາງນີ້ເກັບຮັກສາຂໍ້ມູນ",
       });
     }
+
+    if (checkPermissionGroup(PermissionGroup.Registration, auth)) {
+      preparedMenus.push({
+        icon: <FilePenIcon />,
+        href: "/registrations",
+        label: "ການລົງທະບຽນ",
+        subMenus: {
+          menus: [
+            { href: "/registrations/arrival", label: "ລົງທະບຽນເຂົ້າເມືອງ" },
+            { href: "/registrations/departure", label: "ລົງທະບຽນອອກເມືອງ" },
+          ],
+          isOpen: false,
+        },
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.Banner, auth)) {
+      preparedMenus.push({
+        icon: <BullhornIcon />,
+        href: "/banner",
+        label: "ຈັດການໂຄສະນາ",
+        subMenus: {
+          menus: [
+            { href: "/banner/list", label: "ຈັດການປ້າຍ" },
+            { href: "/banner/popup", label: "ຈັດການ popup" },
+          ],
+          isOpen: false,
+        },
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.Feedback, auth)) {
+      preparedMenus.push({
+        icon: <Message />,
+        href: "/feedback",
+        label: "ຄຳຕິຊົມ",
+      });
+    }
+
     if (checkPermissionGroup(PermissionGroup.User, auth)) {
       preparedMenus.push({
         icon: <UserIcon />,
@@ -78,7 +120,7 @@ export default function () {
 
   return (
     <aside
-      class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+      class="fixed top-0 left-0 z-30 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
       aria-label="Sidenav"
       id="drawer-navigation"
     >

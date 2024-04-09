@@ -15,7 +15,7 @@
 }
 
 .modal {
-  @apply z-50 h-screen w-screen fixed inset-0 flex justify-center items-center;
+  @apply z-40 h-screen overflow-y-auto w-screen fixed inset-0 flex justify-center items-center;
 
   &-container {
     @apply relative p-4 w-full max-h-full;
@@ -46,7 +46,7 @@
   }
 
   &-backdrop {
-    @apply bg-black/50 fixed inset-0 z-50;
+    @apply bg-black/50 fixed inset-0 z-40;
   }
 
   &-sm {
