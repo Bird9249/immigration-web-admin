@@ -115,7 +115,10 @@ export default () => {
         </Show>
 
         <Show
-          when={checkPermission(Permission.Remove, PermissionGroup.User, auth)}
+          when={
+            checkPermission(Permission.Remove, PermissionGroup.User, auth) &&
+            user()?.data.id !== auth.id
+          }
         >
           <Button
             color="danger"

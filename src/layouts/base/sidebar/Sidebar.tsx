@@ -11,6 +11,7 @@ import {
 import { createStore } from "solid-js/store";
 import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
+import FilePenIcon from "../../../components/icons/FilePenIcon";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
 import Message from "../../../components/icons/Message";
@@ -48,6 +49,16 @@ export default function () {
   createEffect(() => {
     const preparedMenus: SidebarMenuType[] = [];
 
+    if (checkPermissionGroup(PermissionGroup.Registration, auth)) {
+      preparedMenus.push({
+        icon: <FilePenIcon />,
+        href: "/registrations",
+        label: "ການລົງທະບຽນ",
+        subMenus: {
+          menus: [
+            { href: "/registrations/arrival", label: "ລົງທະບຽນເຂົ້າເມືອງ" },
+            { href: "/registrations/departure", label: "ລົງທະບຽນອອກເມືອງ" },
+            
     if (checkPermissionGroup(PermissionGroup.Banner, auth)) {
       preparedMenus.push({
         icon: <BullhornIcon />,
