@@ -49,6 +49,14 @@ export default function () {
   createEffect(() => {
     const preparedMenus: SidebarMenuType[] = [];
 
+    if (checkPermissionGroup(PermissionGroup.AccommodationRequest, auth)) {
+      preparedMenus.push({
+        icon: <UserIcon />,
+        href: "/accommodation-request",
+        label: "ຕາຕະລາງນີ້ເກັບຮັກສາຂໍ້ມູນ",
+      });
+    }
+
     if (checkPermissionGroup(PermissionGroup.Registration, auth)) {
       preparedMenus.push({
         icon: <FilePenIcon />,
