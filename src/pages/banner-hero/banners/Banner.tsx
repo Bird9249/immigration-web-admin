@@ -1,5 +1,5 @@
 import { useNavigate } from "@solidjs/router";
-import { format, isWithinInterval } from "date-fns";
+import { isWithinInterval } from "date-fns";
 import { Show, createResource, createSignal } from "solid-js";
 import {
   Permission,
@@ -200,18 +200,7 @@ export default () => {
             </Show>
           ),
         },
-        {
-          header: "ການເຜີຍແຜ່",
-          body: ({ id, is_private }: BannerResponse) => (
-            <Toggle
-              value={!is_private}
-              onValueChange={async () => {
-                await changePrivateStatusBanner(id, !is_private);
-                is_private = !is_private;
-              }}
-            />
-          ),
-        },
+
         {
           header: "ສະຖານະ",
           body: ({ start_time, end_time }: BannerResponse) => (
@@ -233,19 +222,15 @@ export default () => {
           ),
         },
         {
-          header: "ເວລາສ້າງ",
-          body: ({ created_at }: BannerResponse) => (
-            <Show when={created_at} fallback="...">
-              {format(created_at, "dd/MM/yyyy HH:mm:ss")}
-            </Show>
-          ),
-        },
-        {
-          header: "ເວລາອັບເດດ",
-          body: ({ updated_at }: BannerResponse) => (
-            <Show when={updated_at} fallback="...">
-              {format(updated_at, "dd/MM/yyyy HH:mm:ss")}
-            </Show>
+          header: "ການເຜີຍແຜ່",
+          body: ({ id, is_private }: BannerResponse) => (
+            <Toggle
+              value={!is_private}
+              onValueChange={async () => {
+                await changePrivateStatusBanner(id, !is_private);
+                is_private = !is_private;
+              }}
+            />
           ),
         },
         {

@@ -5,6 +5,11 @@ const accommodationRequestRoutes: RouteDefinition[] = [
   {
     path: "/accommodation-request",
     component: lazy(() => import("./Accommodation-Requests")),
+    children: {
+      component: lazy(
+        () => import("./accommodation-request/AccommodationRequest")
+      ),
+    },
   },
   {
     path: "/accommodation-request/create",
@@ -16,12 +21,6 @@ const accommodationRequestRoutes: RouteDefinition[] = [
     path: "/accommodation-request/edit/:id",
     component: lazy(
       () => import("./accommodation-request/EditAccommodationRequest")
-    ),
-  },
-  {
-    path: "/accommodation-request/detail/:id",
-    component: lazy(
-      () => import("./accommodation-request/DetailAccommodationRequest")
     ),
   },
 ];

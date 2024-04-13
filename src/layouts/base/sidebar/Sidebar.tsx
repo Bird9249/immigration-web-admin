@@ -49,14 +49,6 @@ export default function () {
   createEffect(() => {
     const preparedMenus: SidebarMenuType[] = [];
 
-    if (checkPermissionGroup(PermissionGroup.AccommodationRequest, auth)) {
-      preparedMenus.push({
-        icon: <UserIcon />,
-        href: "/accommodation-request",
-        label: "ຕາຕະລາງນີ້ເກັບຮັກສາຂໍ້ມູນ",
-      });
-    }
-
     if (checkPermissionGroup(PermissionGroup.Registration, auth)) {
       preparedMenus.push({
         icon: <FilePenIcon />,
@@ -69,6 +61,14 @@ export default function () {
           ],
           isOpen: false,
         },
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.AccommodationRequest, auth)) {
+      preparedMenus.push({
+        icon: <HomeIcon />,
+        href: "/accommodation-request",
+        label: "ການຮ້ອງຂໍທີ່ພັກ",
       });
     }
 

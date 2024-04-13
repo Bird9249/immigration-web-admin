@@ -1,23 +1,45 @@
+import { Content } from "@tiptap/core";
 import {
-  IOffsetBasePaginate,
+  ICursorBasePaginate,
   IPaginated,
 } from "../../../../common/interface/pagination";
 
-export type AccommodationRequestTableState = IOffsetBasePaginate;
+export type AccommodationRequestTableState = ICursorBasePaginate & {
+  lang: "lo" | "en" | "zh_cn";
+};
+
+export type AccommodationRequestState = {
+  id: string;
+  lang: "lo" | "en" | "zh_cn";
+};
+
+export type AccommodationRequestDetailResponse = {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  lang_id: number;
+  title: string;
+  content: Content;
+};
 
 export type AccommodationRequestResponse = {
   id: number;
   created_at: string;
   updated_at: string;
-  accommodation_request_translate: {
+  translates: {
     id: number;
-    accommodation_request_id: number;
     title: string;
-    content: string;
-    lang: string;
+    content: object;
+    lang: "lo" | "en" | "zh_cn";
   }[];
 };
 
 export interface AccommodationRequestsResponse extends IPaginated {
-  accommodation_requests: AccommodationRequestResponse[];
+  data: {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    lang_id: number;
+    title: string;
+  }[];
 }

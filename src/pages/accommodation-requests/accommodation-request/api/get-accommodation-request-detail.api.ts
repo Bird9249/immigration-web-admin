@@ -1,9 +1,18 @@
 import { useAxios } from "../../../../contexts/axios/AxiosContext";
-import { AccommodationRequestResponse } from "./accommodation-request.interface";
+import {
+  AccommodationRequestDetailResponse,
+  AccommodationRequestState,
+} from "./accommodation-request.interface";
 
-export default async (id: string) => {
+export default async ({ id, lang }: AccommodationRequestState) => {
   const { axios } = useAxios();
-  return axios.get<AccommodationRequestResponse>(
-    `/accommodation-request/${id}`
+
+  const res = await axios.get<AccommodationRequestDetailResponse>(
+    `/accommodation-request/${id}/detail`,
+    { params: { lang } }
   );
+
+  return {
+    ...res,
+  };
 };

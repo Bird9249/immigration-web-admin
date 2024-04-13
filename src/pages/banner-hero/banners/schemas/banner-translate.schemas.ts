@@ -1,6 +1,7 @@
-import { Input, maxLength, minLength, object, string } from "valibot";
+import { Input, maxLength, minLength, number, object, string } from "valibot";
 
 export const BannerTranslateSchemas = object({
+  id: number(),
   title: string([
     minLength(1, "ກະລຸນາປ້ອນຫົວຂໍ້."),
     maxLength(255, "ຫົວຂໍ້ຍາວເກີນໄປ."),
