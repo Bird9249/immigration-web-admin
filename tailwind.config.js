@@ -94,6 +94,22 @@ module.exports = {
             transform: "translateY(-10px)",
           },
         },
+        slideDown: {
+          from: {
+            height: "0"
+          },
+          to: {
+            height: "var(--height)"
+          }
+        },
+        slideUp: {
+          from: {
+            height: "var(--height)"
+          },
+          to: {
+            height: "0"
+          }
+        }
       },
       animation: {
         "fade-in": "fadeIn 0.25s ease-out",
@@ -102,6 +118,8 @@ module.exports = {
         "scale-out": "scaleOut 0.20s ease-in",
         "slide-in": "slideIn 0.25s ease-out",
         "slide-out": "slideOut 0.25s ease-in",
+        "slide-down": "slideDown 0.25s ease-out",
+        "slide-up": "slideUp 0.2s ease-in"
       },
     },
     fontFamily: {

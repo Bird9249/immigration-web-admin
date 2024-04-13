@@ -64,6 +64,14 @@ export default function () {
       });
     }
 
+    if (checkPermissionGroup(PermissionGroup.AccommodationRequest, auth)) {
+      preparedMenus.push({
+        icon: <HomeIcon />,
+        href: "/accommodation-request",
+        label: "ການຮ້ອງຂໍທີ່ພັກ",
+      });
+    }
+
     if (checkPermissionGroup(PermissionGroup.Banner, auth)) {
       preparedMenus.push({
         icon: <BullhornIcon />,

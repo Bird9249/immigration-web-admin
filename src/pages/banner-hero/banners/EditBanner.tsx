@@ -1,20 +1,14 @@
 import {
   SubmitHandler,
   createForm,
+  getErrors,
   reset,
   setValue,
   setValues,
   valiForm,
 } from "@modular-forms/solid";
 import { useNavigate, useParams } from "@solidjs/router";
-import {
-  Show,
-  createEffect,
-  createResource,
-  createSignal,
-  on,
-  onMount,
-} from "solid-js";
+import { Show, createEffect, createResource, createSignal, on } from "solid-js";
 import { Transition } from "solid-transition-group";
 import {
   Permission,
@@ -26,7 +20,6 @@ import { useMessage } from "../../../contexts/message/MessageContext";
 import { fadeIn, fadeOut } from "../../../utils/transition-animation";
 import { UpdateBannerForm, UpdateBannerSchema } from "./schemas/banner.schemas";
 
-import { initAccordions } from "flowbite";
 import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
 import DateRangePicker from "../../../components/forms/date-range-picker/DateRangePicker";
@@ -40,7 +33,9 @@ import getBannerDetailApi from "./api/get-banner-detail.api";
 import updateBannerApi from "./api/update-banner.api";
 
 import { format } from "date-fns";
+import { createStore } from "solid-js/store";
 import Textarea from "../../../components/forms/textarea/Textarea";
+import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
 
 export default () => {
   const param = useParams();
@@ -49,45 +44,64 @@ export default () => {
   const navigator = useNavigate();
   const auth = useAuth();
 
+  const [tabsItems, setTabsItems] = createStore<TabsItems>([
+    { label: "ພາສາລາວ", key: "lo" },
+    { label: "ພາສາອັງກິດ", key: "en" },
+    { label: "ພາສາຈີນ", key: "zh_cn" },
+  ]);
+
   if (!checkPermission(Permission.Write, PermissionGroup.Banner, auth))
     navigator(-1);
+
   const [previewImg, setPreviewImg] = createSignal<string>("");
   const [id] = createSignal<string>(param.id);
   const [banner] = createResource(id, getBannerDetailApi);
 
-  const [bannerForm, { Form, Field }] = createForm<UpdateBannerForm>({
-    validate: valiForm(UpdateBannerSchema),
-  });
-
-  onMount(() => {
-    initAccordions();
-  });
+  const [bannerForm, { Form, Field, FieldArray }] =
+    createForm<UpdateBannerForm>({
+      validate: valiForm(UpdateBannerSchema),
+      initialValues: {
+        translates: [
+          { id: 0, title: "", description: "" },
+          { id: 0, title: "", description: "" },
+          { id: 0, title: "", description: "" },
+        ],
+      },
+    });
 
   createEffect(
     on(
       () => banner(),
       (input) => {
         if (input) {
-          setValues(bannerForm, {
+          const data: UpdateBannerForm = {
             link: input.data.link,
             is_private: input.data.is_private,
             duration: [
               format(input.data.start_time, "yyyy-MM-dd"),
               format(input.data.end_time, "yyyy-MM-dd"),
             ],
-            en: {
-              title: input.data.translates[0].title,
-              description: input.data.translates[0].description,
-            },
-            lo: {
-              title: input.data.translates[1].title,
-              description: input.data.translates[1].description,
-            },
-            zh_CN: {
-              title: input.data.translates[2].title,
-              description: input.data.translates[2].description,
-            },
-          });
+            translates: [
+              {
+                id: input.data.translates[0].id,
+                title: input.data.translates[0].title,
+                description: input.data.translates[0].description,
+              },
+              {
+                id: input.data.translates[1].id,
+                title: input.data.translates[1].title,
+                description: input.data.translates[1].description,
+              },
+              {
+                id: input.data.translates[2].id,
+                title: input.data.translates[2].title,
+                description: input.data.translates[2].description,
+              },
+            ],
+          };
+
+          setValues(bannerForm, data);
+
           setPreviewImg(
             input.data.image
               ? import.meta.env.VITE_IMG_URL + input.data.image
@@ -97,13 +111,25 @@ export default () => {
       }
     )
   );
+
+  createEffect(() => {
+    const errors = getErrors(bannerForm);
+
+    bannerForm.internal.initialValues.translates?.map((_, idx) => {
+      if (
+        errors[`translates.${idx as 0 | 1 | 2}.title`] ||
+        errors[`translates.${idx as 0 | 1 | 2}.description`]
+      ) {
+        setTabsItems(idx, "alert", true);
+      } else {
+        setTabsItems(idx, "alert", false);
+      }
+    });
+  });
+
   const handleSubmit: SubmitHandler<UpdateBannerForm> = async (values) => {
     if (banner.state === "ready") {
-      const res = await updateBannerApi(param.id, values, {
-        loId: banner().data.translates[1].id,
-        enId: banner().data.translates[0].id,
-        zhCnId: banner().data.translates[2].id,
-      });
+      const res = await updateBannerApi(param.id, values);
       actionMessage.showMessage({
         level: "success",
         message: res.data.message,
@@ -117,6 +143,64 @@ export default () => {
       <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
         ອັບເດດປ້າຍ
       </h2>
+
+      <FieldArray name="translates">
+        {(fieldArray) => (
+          <Tabs
+            items={tabsItems}
+            contents={[{ key: "lo" }, { key: "en" }, { key: "zh_cn" }].map(
+              (val, idx) => ({
+                ...val,
+                content: (
+                  <div class="my-4 flex flex-col gap-4">
+                    <Field
+                      name={`${fieldArray.name}.${
+                        idx as unknown as 0 | 1 | 2
+                      }.id`}
+                      type="number"
+                    >
+                      {() => <></>}
+                    </Field>
+                    <Field
+                      name={`${fieldArray.name}.${
+                        idx as unknown as 0 | 1 | 2
+                      }.title`}
+                    >
+                      {(field, props) => (
+                        <InputText
+                          label="ຫົວຂໍ້"
+                          required
+                          {...props}
+                          value={field.value}
+                          error={field.error}
+                          placeholder="ປ້ອນຫົວຂໍ້"
+                        />
+                      )}
+                    </Field>
+                    <Field
+                      name={`${fieldArray.name}.${
+                        idx as unknown as 0 | 1 | 2
+                      }.description`}
+                    >
+                      {(field, props) => (
+                        <Textarea
+                          required
+                          label="ຄຳອະທິບາຍ"
+                          {...props}
+                          value={field.value}
+                          error={field.error}
+                          placeholder="ປ້ອນຄຳອະທິບາຍ"
+                        />
+                      )}
+                    </Field>
+                  </div>
+                ),
+              })
+            )}
+          />
+        )}
+      </FieldArray>
+
       <Field name="image" type="File">
         {(field, props) => (
           <ImageDropzone
@@ -179,191 +263,7 @@ export default () => {
           )}
         </Field>
       </div>
-      <div id="accordion-collapse" data-accordion="collapse">
-        <h2 id="accordion-collapse-heading-1">
-          <button
-            type="button"
-            class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-            data-accordion-target="#accordion-collapse-body-1"
-            aria-expanded="true"
-            aria-controls="accordion-collapse-body-1"
-          >
-            <span>ພາສາລາວ</span>
-            <svg
-              data-accordion-icon
-              class="w-3 h-3 rotate-180 shrink-0"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 10 6"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5 5 1 1 5"
-              />
-            </svg>
-          </button>
-        </h2>
-        <div
-          id="accordion-collapse-body-1"
-          class="hidden"
-          aria-labelledby="accordion-collapse-heading-1"
-        >
-          <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
-            <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
-              <Field name="lo.title" type="string">
-                {(field, props) => (
-                  <InputText
-                    required
-                    label="ຫົວຂໍ້"
-                    {...props}
-                    value={field.value}
-                    error={field.error}
-                    placeholder="ປ້ອນຫົວຂໍ້"
-                  />
-                )}
-              </Field>
-              <Field name="lo.description" type="string">
-                {(field, props) => (
-                  <Textarea
-                    required
-                    label="ຄຳອະທິບາຍ"
-                    {...props}
-                    value={field.value}
-                    error={field.error}
-                    placeholder="ປ້ອນຄຳອະທິບາຍ"
-                  />
-                )}
-              </Field>
-            </div>
-          </div>
-        </div>
-        <h2 id="accordion-collapse-heading-2">
-          <button
-            type="button"
-            class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-            data-accordion-target="#accordion-collapse-body-2"
-            aria-expanded="false"
-            aria-controls="accordion-collapse-body-2"
-          >
-            <span>ພາສາອັງກິດ</span>
-            <svg
-              data-accordion-icon
-              class="w-3 h-3 rotate-180 shrink-0"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 10 6"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5 5 1 1 5"
-              />
-            </svg>
-          </button>
-        </h2>
-        <div
-          id="accordion-collapse-body-2"
-          class="hidden"
-          aria-labelledby="accordion-collapse-heading-2"
-        >
-          <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700">
-            <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
-              <Field name="en.title" type="string">
-                {(field, props) => (
-                  <InputText
-                    required
-                    label="ຫົວຂໍ້"
-                    {...props}
-                    value={field.value}
-                    error={field.error}
-                    placeholder="ປ້ອນຫົວຂໍ້"
-                  />
-                )}
-              </Field>
-              <Field name="en.description" type="string">
-                {(field, props) => (
-                  <Textarea
-                    required
-                    label="ຄຳອະທິບາຍ"
-                    {...props}
-                    value={field.value}
-                    error={field.error}
-                    placeholder="ປ້ອນຄຳອະທິບາຍ"
-                  />
-                )}
-              </Field>
-            </div>
-          </div>
-        </div>
-        <h2 id="accordion-collapse-heading-3">
-          <button
-            type="button"
-            class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-            data-accordion-target="#accordion-collapse-body-3"
-            aria-expanded="false"
-            aria-controls="accordion-collapse-body-3"
-          >
-            <span>ພາສາຈີນ</span>
-            <svg
-              data-accordion-icon
-              class="w-3 h-3 rotate-180 shrink-0"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 10 6"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5 5 1 1 5"
-              />
-            </svg>
-          </button>
-        </h2>
-        <div
-          id="accordion-collapse-body-3"
-          class="hidden"
-          aria-labelledby="accordion-collapse-heading-3"
-        >
-          <div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700">
-            <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
-              <Field name="zh_CN.title" type="string">
-                {(field, props) => (
-                  <InputText
-                    required
-                    label="ຫົວຂໍ້"
-                    {...props}
-                    value={field.value}
-                    error={field.error}
-                    placeholder="ປ້ອນຫົວຂໍ້"
-                  />
-                )}
-              </Field>
-              <Field name="zh_CN.description" type="string">
-                {(field, props) => (
-                  <Textarea
-                    required
-                    label="ຄຳອະທິບາຍ"
-                    {...props}
-                    value={field.value}
-                    error={field.error}
-                    placeholder="ປ້ອນຄຳອະທິບາຍ"
-                  />
-                )}
-              </Field>
-            </div>
-          </div>
-        </div>
-      </div>
+
       <div class="flex items-center mt-4">
         <Button type="submit" isLoading={bannerForm.submitting} class="mr-3">
           ອັບເດດປ້າຍ

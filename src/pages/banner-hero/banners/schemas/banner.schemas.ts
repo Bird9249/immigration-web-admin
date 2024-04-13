@@ -26,13 +26,15 @@ export const BannerSchema = object({
   link: string(),
   is_private: boolean(),
   duration: tuple([string(), string()], "ກະລຸນາເລືອກວັນທີ່"),
-  lo: BannerTranslateSchemas,
-  en: BannerTranslateSchemas,
-  zh_CN: BannerTranslateSchemas,
+  translates: tuple([
+    omit(BannerTranslateSchemas, ["id"]),
+    omit(BannerTranslateSchemas, ["id"]),
+    omit(BannerTranslateSchemas, ["id"]),
+  ]),
 });
 
 export const UpdateBannerSchema = merge([
-  omit(BannerSchema, ["image"]),
+  omit(BannerSchema, ["image", "translates"]),
   object({
     image: optional(
       special<File>(isFile, "ຮູບພາບບໍ່ຄວນຫວ່າງເປົ່າ", [
@@ -43,7 +45,13 @@ export const UpdateBannerSchema = merge([
         maxSize(1024 * 1024 * 10, "ກະລຸນາເລືອກໄຟລ໌ທີ່ນ້ອຍກວ່າ 10 MB."),
       ])
     ),
+    translates: tuple([
+      BannerTranslateSchemas,
+      BannerTranslateSchemas,
+      BannerTranslateSchemas,
+    ]),
   }),
 ]);
+
 export type BannerForm = Input<typeof BannerSchema>;
 export type UpdateBannerForm = Input<typeof UpdateBannerSchema>;
