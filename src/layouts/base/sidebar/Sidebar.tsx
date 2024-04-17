@@ -16,6 +16,7 @@ import FilePenIcon from "../../../components/icons/FilePenIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
 import Message from "../../../components/icons/Message";
 import UserIcon from "../../../components/icons/UserIcon";
+import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
 
@@ -69,6 +70,14 @@ export default function () {
         icon: <HomeIcon />,
         href: "/accommodation-request",
         label: "ການຮ້ອງຂໍທີ່ພັກ",
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.VisaCategory, auth)) {
+      preparedMenus.push({
+        icon: <VisaIcon />,
+        href: "/visa-category",
+        label: "ປະເພດວີຊາ",
       });
     }
 

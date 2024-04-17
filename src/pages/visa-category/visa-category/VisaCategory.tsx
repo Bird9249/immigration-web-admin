@@ -26,13 +26,14 @@ import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import { fadeIn, fadeOut } from "../../../utils/transition-animation";
+
+import deleteVisaCategoryApi from "./api/delete-visa-category.api";
+import getVisaCategoryDetailApi from "./api/get-visa-category-detail.api";
+import getVisaCategoryApi from "./api/get-visa-category.api";
 import {
-  AccommodationRequestDetailResponse,
-  AccommodationRequestTableState,
-} from "./api/accommodation-request.interface";
-import deleteAccommodationRequestApi from "./api/delete-accommodation-request.api";
-import getAccommodationRequestDetailApi from "./api/get-accommodation-request-detail.api";
-import getAccommodationRequestApi from "./api/get-accommodation-request.api";
+  VisaCategoryDetailResponse,
+  VisaCategoryTableState,
+} from "./api/visa-category.interface";
 
 export default () => {
   const navigate = useNavigate();
@@ -40,19 +41,12 @@ export default () => {
   const [, actionMessage] = useMessage();
   const auth = useAuth();
 
-  if (
-    !checkPermission(
-      Permission.Read,
-      PermissionGroup.AccommodationRequest,
-      auth
-    )
-  )
+  if (!checkPermission(Permission.Read, PermissionGroup.VisaCategory, auth))
     navigate(-1);
 
   const [accordionValue, setAccordionValue] = createSignal<string>("");
-  const [responseLength, setResponseLength] = createSignal<number>(0);
 
-  const [state, setState] = createSignal<AccommodationRequestTableState>({
+  const [state, setState] = createSignal<VisaCategoryTableState>({
     data: [],
     total: 0,
     cursor: "",
@@ -65,7 +59,7 @@ export default () => {
   onMount(async () => {
     setLoading(true);
 
-    const res = await getAccommodationRequestApi(state());
+    const res = await getVisaCategoryApi(state());
 
     setState((prev) => ({
       ...prev,
@@ -80,7 +74,7 @@ export default () => {
   const [ele, setEle] = createSignal<HTMLDivElement>();
   const [detail, setDetail] = createStore<{
     loading: boolean;
-    detail?: AccommodationRequestDetailResponse;
+    detail?: VisaCategoryDetailResponse;
   }>({ loading: false });
 
   createEffect(
@@ -88,7 +82,7 @@ export default () => {
       if (input) {
         setDetail("loading", true);
 
-        const res = await getAccommodationRequestDetailApi({
+        const res = await getVisaCategoryDetailApi({
           id: accordionValue(),
           lang: state().lang,
         });
@@ -152,14 +146,14 @@ export default () => {
     <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <div class="flex flex-col items-start justify-between dark:border-gray-600 p-4 sm:flex-row sm:items-center">
         <h2 class="text-lg font-semibold mb-2 sm:mb-0 dark:text-white">
-          ລາຍການຂໍ້ມູນການຮ້ອງຂໍທີ່ພັກ
+          ລາຍການປະເພດວີຊາ
         </h2>
 
         <div class=" flex items-center justify-end flex-col sm:flex-row gap-2 w-full sm:w-fit">
           <Show
             when={checkPermission(
               Permission.Write,
-              PermissionGroup.AccommodationRequest,
+              PermissionGroup.VisaCategory,
               auth
             )}
           >
@@ -167,7 +161,7 @@ export default () => {
               class="w-full sm:w-fit"
               prefixIcon={<PlusIcon class="size-4" />}
               onClick={() => {
-                navigate("/accommodation-request/create");
+                navigate("/visa-category/create");
               }}
             >
               ເພີ່ມຂໍ້ມູນ
@@ -200,7 +194,7 @@ export default () => {
                 >
                   <Show when={state().data}>
                     {(res) => (
-                      <Index each={state().data}>
+                      <Index each={res()}>
                         {(item, idx) => (
                           <Accordion.Item value={String(item().id)}>
                             <Accordion.ItemTrigger
@@ -209,7 +203,7 @@ export default () => {
                                 "border-b-0": idx !== state().data.length - 1,
                               }}
                             >
-                              <span>{item().title}</span>
+                              <span>{item().name}</span>
                               <Accordion.ItemIndicator>
                                 <AngleIcon
                                   iconDirection={
@@ -233,9 +227,7 @@ export default () => {
                                   <button
                                     onClick={() => {
                                       navigate(
-                                        `/accommodation-request/edit/${
-                                          item().id
-                                        }`
+                                        `/visa-category/edit/${item().id}`
                                       );
                                     }}
                                     type="button"
@@ -255,7 +247,7 @@ export default () => {
                                           "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
                                         onConfirm: async () => {
                                           const res =
-                                            await deleteAccommodationRequestApi(
+                                            await deleteVisaCategoryApi(
                                               String(item().id)
                                             );
                                           actionMessage.showMessage({
@@ -322,7 +314,7 @@ export default () => {
               length: 0,
             }));
 
-            const res = await getAccommodationRequestApi(state());
+            const res = await getVisaCategoryApi(state());
             setState((prev) => ({
               ...prev,
               data: res.data.data,
@@ -355,7 +347,7 @@ export default () => {
                   cursor: format(cursor, "yyyy-MM-dd HH:mm:ss.SSS"),
                 }));
 
-                const res = await getAccommodationRequestApi(state());
+                const res = await getVisaCategoryApi(state());
                 setState((prev) => ({
                   ...prev,
                   length: res.data.data.length,

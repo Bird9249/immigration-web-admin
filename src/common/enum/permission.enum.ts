@@ -10,4 +10,5 @@ export enum PermissionGroup {
   Registration = "registration",
   Banner = "banner",
   Feedback = "feedback",
+  VisaCategory = "visa-category",
 }
