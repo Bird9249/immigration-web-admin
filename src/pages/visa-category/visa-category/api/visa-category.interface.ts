@@ -4,42 +4,42 @@ import {
   IPaginated,
 } from "../../../../common/interface/pagination";
 
-export type AccommodationRequestTableState = ICursorBasePaginate & {
+export type VisaCategoryTableState = ICursorBasePaginate & {
   lang: "lo" | "en" | "zh_cn";
-} & AccommodationRequestsResponse;
+} & VisaCategoriesResponse;
 
-export type AccommodationRequestState = {
+export type VisaCategoryState = {
   id: string;
   lang: "lo" | "en" | "zh_cn";
 };
 
-export type AccommodationRequestDetailResponse = {
+export type VisaCategoryDetailResponse = {
   id: number;
   created_at: string;
   updated_at: string;
   lang_id: number;
-  title: string;
+  name: string;
   content: Content;
 };
 
-export type AccommodationRequestResponse = {
+export type VisaCategoryResponse = {
   id: number;
   created_at: string;
   updated_at: string;
   translates: {
     id: number;
-    title: string;
+    name: string;
     content: object;
     lang: "lo" | "en" | "zh_cn";
   }[];
 };
 
-export interface AccommodationRequestsResponse extends IPaginated {
+export interface VisaCategoriesResponse extends IPaginated {
   data: {
     id: number;
     created_at: string;
     updated_at: string;
     lang_id: number;
-    title: string;
+    name: string;
   }[];
 }

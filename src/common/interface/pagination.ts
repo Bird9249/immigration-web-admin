@@ -8,6 +8,7 @@ export interface IOffsetBasePaginate extends IOrderBy {
 export interface ICursorBasePaginate {
   cursor: string;
   limit: number;
+  length: number;
 }
 
 export interface IPaginated {

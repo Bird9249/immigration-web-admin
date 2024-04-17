@@ -11,7 +11,10 @@ export default async ({
 }: AccommodationRequestTableState) => {
   const { axios } = useAxios();
 
-  return axios.get<AccommodationRequestsResponse>("/accommodation-request", {
-    params: { limit, cursor, lang },
-  });
+  return await axios.get<AccommodationRequestsResponse>(
+    "/accommodation-request",
+    {
+      params: { limit, cursor, lang },
+    }
+  );
 };
