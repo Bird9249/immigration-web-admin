@@ -10,6 +10,7 @@ import {
   optional,
   special,
   string,
+  tuple,
 } from "valibot";
 import { HotelTranslateSchemas } from "./hotel-translate.schemas";
 
@@ -23,18 +24,19 @@ export const HotelSchema = object({
     ),
     maxSize(1024 * 1024 * 10, "ກະລຸນາເລືອກໄຟລ໌ທີ່ນ້ອຍກວ່າ 10 MB."),
   ]),
-  latitude: string([minLength(1, "ກະລຸນາປ້ອນຂໍ້ມູນ.")]),
-  longitude: string([minLength(1, "ກະລຸນາປ້ອນຂໍ້ມູນ.")]),
   link: string([minLength(1, "ກະລຸນາໃສ່ລິ້ງ.")]),
+  map_link: string([minLength(1, "ກະລຸນາໃສ່ລິ້ງ.")]),
   phone_number: string([minLength(1, "ກະລຸນາປ້ອນເບີໂທກ່ອນ")]),
   is_published: boolean(),
-  lo: HotelTranslateSchemas,
-  en: HotelTranslateSchemas,
-  zn_CN: HotelTranslateSchemas,
+  translates: tuple([
+    omit(HotelTranslateSchemas, ["id"]),
+    omit(HotelTranslateSchemas, ["id"]),
+    omit(HotelTranslateSchemas, ["id"]),
+  ]),
 });
 
 export const UpdateHotelSchema = merge([
-  omit(HotelSchema, ["image"]),
+  omit(HotelSchema, ["image", "translates"]),
   object({
     image: optional(
       special<File>(isFile, "ຮູບພາບບໍ່ຄວນຫວ່າງເປົ່າ", [
@@ -45,6 +47,11 @@ export const UpdateHotelSchema = merge([
         maxSize(1024 * 1024 * 10, "ກະລຸນາເລືອກໄຟລ໌ທີ່ນ້ອຍກວ່າ 10 MB."),
       ])
     ),
+    translates: tuple([
+      HotelTranslateSchemas,
+      HotelTranslateSchemas,
+      HotelTranslateSchemas,
+    ]),
   }),
 ]);
 

@@ -16,7 +16,9 @@ import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import deleteHotelApi from "./api/delete-hotel.api";
 import getHotelApi from "./api/get-hotel.api";
+import changeStatusHotel from "./api/get-status.api"
 import { HotelResponse, HotelTableState } from "./api/hotel.interface";
+import Toggle from "../../../components/forms/toggle/Toggle";
 
 export default () => {
     const navigate = useNavigate();
@@ -30,6 +32,7 @@ export default () => {
     const [state, setState] = createSignal<HotelTableState>({
         offset: 0,
         limit: 10,
+        is_published: undefined
     });
 
     const [hotels, { refetch }] = createResource(state, getHotelApi);
@@ -121,16 +124,20 @@ export default () => {
                 {
                     header: "ຮູບ",
                     body: ({ image }: HotelResponse) => (
-                        <Show when={image} fallback="ບໍ່ມີຮູບ">
-                            {image}
-                        </Show>
+                        <div class="flex items-center w-60">
+                            <img
+                                src={import.meta.env.VITE_IMG_URL + image}
+                                alt="no image"
+                                class="w-60 object-contain h-32 rounded-md"
+                            />
+                        </div>
                     ),
                 },
                 {
                     header: "ລິ້ງ",
                     body: ({ link }: HotelResponse) => (
                         <Show when={link} fallback="ບໍ່ມີລິ້ງ">
-                            <a href={link} class="font-medium text-primary-600 dark:text-primary-500 hover:underline"></a>
+                            <a href={link} class="font-medium text-primary-600 dark:text-primary-500 hover:underline">{link}</a>
                         </Show>
                     ),
                 },
@@ -144,10 +151,14 @@ export default () => {
                 },
                 {
                     header: "ສະຖານະ",
-                    body: ({ is_published }: HotelResponse) => (
-                        <Show when={is_published} fallback="ບໍ່ມີຂໍ້ມູນ">
-                            {is_published}
-                        </Show>
+                    body: ({ id, is_published }: HotelResponse) => (
+                        <Toggle
+                            value={is_published}
+                            onValueChange={async () => {
+                                await changeStatusHotel(id, is_published);
+                                is_published = !is_published;
+                            }}
+                        />
                     ),
                 },
                 {

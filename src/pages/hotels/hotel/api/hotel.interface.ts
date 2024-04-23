@@ -3,14 +3,13 @@ import {
   IPaginated,
 } from "../../../../common/interface/pagination";
 
-export type HotelTableState = IOffsetBasePaginate;
+export type HotelTableState = IOffsetBasePaginate & { is_published?: string };
 
 export type HotelResponse = {
   id: number;
-  latitude: string;
-  longitude: string;
   image: string;
   link: string;
+  link_map: string;
   phone_number: string;
   is_published: boolean;
   created_at: string;

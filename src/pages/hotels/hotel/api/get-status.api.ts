@@ -1,8 +1,10 @@
 import { useAxios } from "../../../../contexts/axios/AxiosContext";
-import { HotelResponse } from "./hotel.interface";
 
-export default async (id: string) => {
+export default async (id: number, isStatus: boolean) => {
   const { axios } = useAxios();
-
-  return axios.put<HotelResponse>(`/hotel/${id}/private`);
+  if (!isStatus) {
+    return await axios.put<{ message: string }>(`/hotel/${id}/public`);
+  } else {
+    return await axios.put<{ message: string }>(`/hotel/${id}/private`);
+  }
 };
