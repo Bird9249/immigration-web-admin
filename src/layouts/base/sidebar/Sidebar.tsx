@@ -19,6 +19,7 @@ import UserIcon from "../../../components/icons/UserIcon";
 import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
+import Building from "../../../components/icons/Building";
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -35,6 +36,7 @@ interface SidebarSubMenuType {
 export default function () {
   const auth = useAuth();
 
+
   const [sidebarMenus, setSidebarMenus] = createStore<{
     menus: SidebarMenuType[];
   }>({
@@ -46,7 +48,6 @@ export default function () {
       },
     ],
   });
-
   createEffect(() => {
     const preparedMenus: SidebarMenuType[] = [];
 
@@ -119,9 +120,21 @@ export default function () {
         },
       });
     }
+    if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
+      preparedMenus.push({
+        icon: <Building />,
+        href: "/hotels",
+        label: "ຈັດການໂຮງແຮມ",
+      });
+    }
 
     setSidebarMenus("menus", (prev) => [...prev, ...preparedMenus]);
   });
+
+
+
+
+
 
   onMount(() => {
     initDrawers();

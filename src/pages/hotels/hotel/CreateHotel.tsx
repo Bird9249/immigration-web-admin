@@ -1,0 +1,201 @@
+import {
+    SubmitHandler,
+    createForm,
+    getErrors,
+    reset,
+    setValue,
+    valiForm,
+} from "@modular-forms/solid";
+import { useNavigate } from "@solidjs/router";
+import { createEffect, createSignal } from "solid-js";
+import {
+    Permission,
+    PermissionGroup,
+} from "../../../common/enum/permission.enum";
+import checkPermission from "../../../common/utils/check-permission";
+import Button from "../../../components/button/Button";
+import InputText from "../../../components/forms/input-text/InputText";
+import { useAuth } from "../../../contexts/authentication/AuthContext";
+import { useMessage } from "../../../contexts/message/MessageContext";
+import createHetelApi from "./api/create-hetel.api";
+import { HotelForm, HotelSchema } from "./schemas/hotel.schemas";
+import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
+import Toggle from "../../../components/forms/toggle/Toggle";
+import Textarea from "../../../components/forms/textarea/Textarea";
+import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
+import { createStore } from "solid-js/store";
+
+export default () => {
+    const [, actionMessage] = useMessage();
+    const navigator = useNavigate();
+    const auth = useAuth();
+    const [tabsItems, setTabsItems] = createStore<TabsItems>([
+        { label: "ພາສາລາວ", key: "lo" },
+        { label: "ພາສາອັງກິດ", key: "en" },
+        { label: "ພາສາຈີນ", key: "zh_cn" },
+    ]);
+
+
+    if (!checkPermission(Permission.Write, PermissionGroup.Hotel, auth))
+        navigator(-1);
+
+    const [previewImg, setPreviewImg] = createSignal<string>("");
+
+    const [hotelForm, { Form, Field, FieldArray }] = createForm<HotelForm>({
+        validate: valiForm(HotelSchema),
+        initialValues: {
+            translates: [
+                { name: "", address: "" },
+                { name: "", address: "" },
+                { name: "", address: "" },
+            ],
+        },
+    });
+    createEffect(() => {
+        const errors = getErrors(hotelForm);
+
+        hotelForm.internal.initialValues.translates?.map((_, idx) => {
+            if (
+                errors[`translates.${idx as 0 | 1 | 2}.name`] ||
+                errors[`translates.${idx as 0 | 1 | 2}.address`]
+            ) {
+                setTabsItems(idx, "alert", true);
+            } else {
+                setTabsItems(idx, "alert", false);
+            }
+        });
+    });
+
+
+    const handleSubmit: SubmitHandler<HotelForm> = async (values) => {
+        const res = await createHetelApi(values);
+
+        actionMessage.showMessage({ level: "success", message: res.data.message });
+
+        navigator("hotels", { resolve: false });
+    };
+    return (
+        <Form onSubmit={handleSubmit} class="relative">
+            <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+                ເພີ່ມໂຮງແຮມ
+            </h2>
+            <FieldArray name="translates">
+                {(fieldArray) => (
+                    <Tabs
+                        items={tabsItems}
+                        contents={[{ key: "lo" }, { key: "en" }, { key: "zh_cn" }].map(
+                            (val, idx) => ({
+                                ...val,
+                                content: (
+                                    <div class="my-4 flex flex-col gap-4">
+                                        <Field
+                                            name={`${fieldArray.name}.${idx as unknown as 0 | 1 | 2
+                                                }.name`}
+                                        >
+                                            {(field, props) => (
+                                                <InputText
+                                                    label="ຊື່ຂອງໂຮງແຮມ"
+                                                    required
+                                                    {...props}
+                                                    value={field.value}
+                                                    error={field.error}
+                                                    placeholder="ປ້ອນຊື່ຂອງໂຮງແຮມ"
+                                                />
+                                            )}
+                                        </Field>
+                                        <Field
+                                            name={`${fieldArray.name}.${idx as unknown as 0 | 1 | 2
+                                                }.address`}
+                                        >
+                                            {(field, props) => (
+                                                <Textarea
+                                                    required
+                                                    label="ທີ່ຢູ່ຂອງໂຮງແຮມ"
+                                                    {...props}
+                                                    value={field.value}
+                                                    error={field.error}
+                                                    placeholder="ປ້ອນທີ່ຢູ່ຂອງໂຮງແຮມ"
+                                                />
+                                            )}
+                                        </Field>
+                                    </div>
+                                ),
+                            })
+                        )}
+                    />
+                )}
+            </FieldArray>
+            <Field name="image" type="File">
+                {(field, props) => (
+                    <ImageDropzone
+                        {...props}
+                        previewImage={[previewImg, setPreviewImg]}
+                        onSelectFile={(file) => {
+                            if (file) {
+                                setValue(hotelForm, "image", file);
+                            } else {
+                                reset(hotelForm, "image");
+                            }
+                        }}
+                        error={field.error}
+                        helpMessage="SVG, PNG, JPG, Webp, ຫຼື GIF (MAX. 1440x500px)."
+                    />
+                )}
+            </Field><br />
+            <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
+                <Field name="link">
+                    {(field, props) => (
+                        <InputText
+                            required
+                            label="ລິ້ງໂຮງແຮມ"
+                            {...props}
+                            value={field.value}
+                            error={field.error}
+                            placeholder="ກະລຸນາໃສ່ປ້ອນລິ້ງ"
+                        />
+                    )}
+                </Field>
+
+                <Field name="is_published" type="boolean">
+                    {(field, props) => (
+                        <Toggle
+                            error={field.error}
+                            form={hotelForm}
+                            name={props.name}
+                            value={field.value}
+                            label="ການມອງເຫັນ"
+                        />
+                    )}
+                </Field>
+                <Field name="map_link">
+                    {(field, props) => (
+                        <InputText
+                            required
+                            label="ລິ້ງແຜນທີຂອງໂຮງແຮມ"
+                            {...props}
+                            value={field.value}
+                            error={field.error}
+                            placeholder="ກະລຸນາໃສ່ປ້ອນລິ້ງ"
+                        />
+                    )}
+                </Field>
+                <Field name="phone_number">
+                    {(field, props) => (
+                        <InputText
+                            required
+                            label="ເບີໂທ"
+                            {...props}
+                            value={field.value}
+                            error={field.error}
+                            placeholder="ປ້ອນເບີໂທ"
+                        />
+                    )}
+                </Field>
+            </div>
+
+            <Button type="submit" isLoading={hotelForm.submitting}>
+                ເພີ່ມໂຮງແຮມ
+            </Button>
+        </Form>
+    );
+};
