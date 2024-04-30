@@ -6,7 +6,9 @@ export const HotelTranslateSchemas = object({
     minLength(1, "ກະລຸນາປ້ອນຫົວຂໍ້."),
     maxLength(255, "ຫົວຂໍ້ຍາວເກີນໄປ."),
   ]),
-  address: string([minLength(1, "ກະລຸນາປ້ອນທີຢູ່ກ່ອນ"), maxLength(1000)]),
+  province: string("ຈະຕ້ອງເປັນ string.", [maxLength(255, "ຫົວຂໍ້ຍາວເກີນໄປ")]),
+  district: string("ຈະຕ້ອງເປັນ string.", [maxLength(255, "ຫົວຂໍ້ຍາວເກີນໄປ")]),
+  village: string("ຈະຕ້ອງເປັນ string.", [maxLength(255, "ຫົວຂໍ້ຍາວເກີນໄປ")]),
 });
 
-export type HotleTranslateFormInput = Input<typeof HotelTranslateSchemas>;
+export type HotelTranslateFormInput = Input<typeof HotelTranslateSchemas>;

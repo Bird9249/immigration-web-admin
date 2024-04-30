@@ -11,6 +11,7 @@ import {
 import { createStore } from "solid-js/store";
 import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
+import Building from "../../../components/icons/Building";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
 import FilePenIcon from "../../../components/icons/FilePenIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
@@ -19,7 +20,6 @@ import UserIcon from "../../../components/icons/UserIcon";
 import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
-import Building from "../../../components/icons/Building";
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -35,7 +35,6 @@ interface SidebarSubMenuType {
 
 export default function () {
   const auth = useAuth();
-
 
   const [sidebarMenus, setSidebarMenus] = createStore<{
     menus: SidebarMenuType[];
@@ -131,18 +130,13 @@ export default function () {
     setSidebarMenus("menus", (prev) => [...prev, ...preparedMenus]);
   });
 
-
-
-
-
-
   onMount(() => {
     initDrawers();
   });
 
   return (
     <aside
-      class="fixed top-0 left-0 z-30 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+      class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
       aria-label="Sidenav"
       id="drawer-navigation"
     >

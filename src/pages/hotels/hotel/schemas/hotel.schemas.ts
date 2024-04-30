@@ -25,7 +25,6 @@ export const HotelSchema = object({
     maxSize(1024 * 1024 * 10, "ກະລຸນາເລືອກໄຟລ໌ທີ່ນ້ອຍກວ່າ 10 MB."),
   ]),
   link: string([minLength(1, "ກະລຸນາໃສ່ລິ້ງ.")]),
-  map_link: string([minLength(1, "ກະລຸນາໃສ່ລິ້ງ.")]),
   phone_number: string([minLength(1, "ກະລຸນາປ້ອນເບີໂທກ່ອນ")]),
   is_published: boolean(),
   translates: tuple([

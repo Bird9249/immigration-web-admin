@@ -19,7 +19,9 @@ export type HotelResponse = {
     hotel_id: number;
     lang: string;
     name: string;
-    address: string;
+    province: string;
+    district: string;
+    village: string;
   }[];
 };
 
