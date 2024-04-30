@@ -5,6 +5,12 @@ export interface IOffsetBasePaginate extends IOrderBy {
   limit?: number;
 }
 
+export interface ICursorBasePaginate {
+  cursor: string;
+  limit: number;
+  length: number;
+}
+
 export interface IPaginated {
   total: number;
 }

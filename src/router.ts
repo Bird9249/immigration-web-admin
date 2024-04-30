@@ -1,8 +1,13 @@
 import { RouteDefinition } from "@solidjs/router";
 import { lazy } from "solid-js";
+import accommodationRequestRoutes from "./pages/accommodation-requests/route";
 import authenticationRoutes from "./pages/authentication/route";
+import bannerRoutes from "./pages/banner-hero/route";
+import feedbackRoutes from "./pages/feedbacks/route";
+import registrationRoutes from "./pages/registrations/route";
 import userRoutes from "./pages/users/route";
 import hotelRoutes from "./pages/hotels/route";
+import visaCategoryRoutes from "./pages/visa-category/route";
 
 const routes: RouteDefinition[] = [
   {
@@ -15,7 +20,11 @@ const routes: RouteDefinition[] = [
       },
       ...userRoutes,
       ...hotelRoutes,
-
+      ...accommodationRequestRoutes,
+      ...registrationRoutes,
+      ...feedbackRoutes,
+      ...bannerRoutes,
+      ...visaCategoryRoutes,
       {
         path: "/*all",
         component: lazy(() => import("./pages/errors/PageNotFound")),
