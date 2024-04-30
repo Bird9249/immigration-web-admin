@@ -71,6 +71,15 @@ export default (props: ParentProps<Props>) => {
               {
                 key: "file",
                 label: "ໄຟລ໌",
+              },
+              {
+                key: "folder",
+                label: "ໂຟນເດີ",
+              },
+            ]}
+            contents={[
+              {
+                key: "file",
                 content: (
                   <CreateFile
                     folderId={props.folderId}
@@ -83,7 +92,6 @@ export default (props: ParentProps<Props>) => {
               },
               {
                 key: "folder",
-                label: "ໂຟນເດີ",
                 content: (
                   <CreateFolder
                     folderId={props.folderId}
