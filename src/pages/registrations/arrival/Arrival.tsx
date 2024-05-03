@@ -70,6 +70,7 @@ export default () => {
                 </Show>
               </div>
             </div>
+            
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 py-3 mx-4">
               <InputSearch
                 placeholder="ຈຸດເຂົ້າ..."

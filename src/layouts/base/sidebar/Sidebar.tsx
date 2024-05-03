@@ -39,16 +39,19 @@ export default function () {
   const [sidebarMenus, setSidebarMenus] = createStore<{
     menus: SidebarMenuType[];
   }>({
-    menus: [
-      {
+    menus: [],
+  });
+
+  createEffect(() => {
+    const preparedMenus: SidebarMenuType[] = [];
+
+    if (!auth.roles.includes("admin-hotel") || !auth.hotel_id) {
+      preparedMenus.push({
         icon: <HomeIcon />,
         href: "/dashboard",
         label: "ໜ້າຫຼັກ",
-      },
-    ],
-  });
-  createEffect(() => {
-    const preparedMenus: SidebarMenuType[] = [];
+      });
+    }
 
     if (checkPermissionGroup(PermissionGroup.Registration, auth)) {
       preparedMenus.push({
@@ -119,11 +122,20 @@ export default function () {
         },
       });
     }
+
     if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
       preparedMenus.push({
         icon: <Building />,
         href: "/hotels",
         label: "ຈັດການໂຮງແຮມ",
+      });
+    }
+
+    if (auth.roles.includes("admin-hotel") && auth.hotel_id) {
+      preparedMenus.push({
+        icon: <HomeIcon />,
+        href: "/admin-hotels",
+        label: "ໜ້າຫຼັກ",
       });
     }
 

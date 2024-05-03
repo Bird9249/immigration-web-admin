@@ -118,7 +118,7 @@ export default () => {
           body: ({ email }: FeedbackResponse) => email,
         },
         {
-          header: "ເປັນສ່ວນຕົວ",
+          header: "ການເຜີຍແຜ່",
           body: ({ is_published, id }: FeedbackResponse) => (
             <Toggle
               value={is_published}
