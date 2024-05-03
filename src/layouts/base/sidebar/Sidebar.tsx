@@ -15,6 +15,7 @@ import HomeIcon from "../../../components/icons/HomeIcon";
 import UserIcon from "../../../components/icons/UserIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
+import Contacts from "../../../components/icons/Contacts";
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -59,6 +60,13 @@ export default function () {
           ],
           isOpen: false,
         },
+      });
+    }
+    if (checkPermissionGroup(PermissionGroup.Contacts, auth)) {
+      preparedMenus.push({
+        icon: <Contacts />,
+        href: "/contacts",
+        label: "ຂໍ້ມູນຕິດຕໍ່",
       });
     }
 
