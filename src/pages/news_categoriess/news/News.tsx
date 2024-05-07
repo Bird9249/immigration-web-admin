@@ -43,7 +43,7 @@ export default () => {
         if (checkPermission(Permission.Read, PermissionGroup.News, auth))
             menus[0].push({
                 onClick() {
-                    navigate(`/news/detail/${id}`);
+                    navigate(`/newsCategoriess/news/detail/${id}`);
                 },
                 label: "ລາຍລະອຽດ",
             });
@@ -51,7 +51,7 @@ export default () => {
         if (checkPermission(Permission.Write, PermissionGroup.News, auth))
             menus[0].push({
                 onClick() {
-                    navigate(`/news/edit/${id}`);
+                    navigate(`/newsCategoriess/news/edit/${id}`);
                 },
                 label: "ແກ້ໄຂ",
             });
@@ -99,7 +99,7 @@ export default () => {
                             class="w-full sm:w-fit"
                             prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
                             onClick={() => {
-                                navigate("/news/create");
+                                navigate("/newsCategoriess/news/create");
                             }}
                         >
                             ເພີ່ມຂໍ້ມູນ
@@ -119,29 +119,26 @@ export default () => {
         >
             {[
                 {
-                    header: "ຊືພາສາລາວ",
-                    body: ({ translates }: NewResponse) => (
-                        <div>
-                            <p>test</p>
+                    header: "ຮູບ",
+                    body: ({ thumbnail }: NewResponse) => (
+                        <div class="flex items-center w-60">
+                            <img
+                                src={import.meta.env.VITE_IMG_URL + thumbnail}
+                                alt="no image"
+                                class="w-60 object-contain h-32 rounded-md"
+                            />
                         </div>
                     ),
                 },
                 {
-                    header: "ພາສາອັງກິດ",
-                    body: ({ translates }: NewResponse) => (
+                    header: "ສະຖານະ",
+                    body: ({ status }: NewResponse) => (
                         <div>
-                            test
+                            {status}
                         </div>
                     ),
                 },
-                {
-                    header: "ພາສາຈີນ",
-                    body: ({ translates }: NewResponse) => (
-                        <div>
-                            test
-                        </div>
-                    ),
-                },
+
                 {
                     header: "ເວລາສ້າງ",
                     body: ({ created_at }: NewResponse) => (

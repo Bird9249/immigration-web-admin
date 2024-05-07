@@ -23,6 +23,8 @@ import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzon
 import Textarea from "../../../components/forms/textarea/Textarea";
 import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
 import { createStore } from "solid-js/store";
+import { NewTableState } from "./api/news.interface";
+import Select from "../../../components/forms/select/Select";
 
 export default () => {
     const [, actionMessage] = useMessage();
@@ -34,6 +36,7 @@ export default () => {
         { label: "ພາສາຈີນ", key: "zh_cn" },
     ]);
 
+    const [setState] = createSignal<NewTableState>()
 
     if (!checkPermission(Permission.Write, PermissionGroup.News, auth))
         navigator(-1);
@@ -158,28 +161,31 @@ export default () => {
                 )}
             </Field><br />
             <div class="grid gap-4 my-4 md:grid-cols-2 md:gap-6">
-                <Field name="status">
-                    {(field, props) => (
-                        <InputText
-                            label="ສະຖານະ"
-                            {...props}
-                            value={field.value}
-                            error={field.error}
-                            placeholder="ປ້ອນສະຖານະ"
-                        />
-                    )}
-                </Field>
-                <Field name="public_at">
-                    {(field, props) => (
-                        <InputText
-                            label="ສະແຕມເວລາຊີ້ບອກເວລາເຜີຍແຜ່ສາທາລະນະ"
-                            {...props}
-                            value={field.value}
-                            error={field.error}
-                            placeholder="ປ້ອນສະແຕມເວລາຊີ້ບອກເວລາເຜີຍແຜ່ສາທາລະນະ"
-                        />
-                    )}
-                </Field>
+                <Select
+                    class="w-full"
+                    placeholder="ເລືອກສະຖານະ"
+                    contentClass="w-44"
+                    items={[
+                        {
+                            label: "draft",
+                            value: "draft",
+                        },
+                        {
+                            label: "published",
+                            value: "published",
+                        },
+                        {
+                            label: "private",
+                            value: "private",
+                        },
+                    ]}
+                // onValueChange={({ value }) => {
+                //     setState((prev) => ({
+                //         ...prev,
+                //         status: value[0] === "-1" ? undefined : value[0],
+                //     }));
+                // }}
+                ></Select>
             </div>
             <Button type="submit" isLoading={newsForm.submitting}>
                 ເພີ່ມຂ່າວ

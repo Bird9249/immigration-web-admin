@@ -5,9 +5,9 @@ export default async (form: NewsForm) => {
   const { axios } = useAxios();
 
   const formData = new FormData();
+  formData.append("category_id", form.category_id);
   formData.append("thumbnail", form.thumbnail);
   formData.append("status", form.status);
-  formData.append("public_at", form.public_at);
   formData.append("lo_title", form.translates[0].title);
   formData.append("lo_description", form.translates[0].description);
   formData.append("lo_content", form.translates[0].content);

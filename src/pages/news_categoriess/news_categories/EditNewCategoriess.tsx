@@ -109,7 +109,7 @@ export default () => {
 
             actionMessage.showMessage({ level: "success", message: res.data.message });
         }
-        navigator("/newsCategoriess", { resolve: false });
+        navigator("/newsCategoriess/list", { resolve: false });
     };
 
     return (

@@ -218,7 +218,7 @@ export default () => {
                         />
                     )}
                 </Field>
-                <Field name="public_at">
+                {/* <Field name="public_at">
                     {(field, props) => (
                         <InputText
                             label="ສະແຕມເວລາຊີ້ບອກເວລາເຜີຍແຜ່ສາທາລະນະ"
@@ -228,7 +228,7 @@ export default () => {
                             placeholder="ປ້ອນສະແຕມເວລາຊີ້ບອກເວລາເຜີຍແຜ່ສາທາລະນະ"
                         />
                     )}
-                </Field>
+                </Field> */}
             </div>
             <div class="flex items-center">
                 <Button type="submit" isLoading={newsForm.submitting} class="mr-3">

@@ -19,10 +19,6 @@ const newCategoriessRoutes: RouteDefinition[] = [
         component: lazy(() => import("./news_categories/EditNewCategoriess")),
       },
       {
-        path: "/detail/:id",
-        component: lazy(() => import("./news_categories/DetailNewCategoriess")),
-      },
-      {
         path: "/news",
         component: lazy(() => import("./news/News")),
       },

@@ -22,11 +22,8 @@ export const NewSchema = object({
     ),
     maxSize(1024 * 1024 * 10, "ກະລຸນາເລືອກໄຟລ໌ທີ່ນ້ອຍກວ່າ 10 MB."),
   ]),
+  category_id: string([minLength(1, "ກະລຸນາໃສ່ຂໍ້ມູນໄອດີ.")]),
   status: string([
-    minLength(1, "ກະລຸນາໃສ່ຂໍ້ມູນ."),
-    maxLength(30, "ຂໍ້ມູນຍາວເກີນໄປ."),
-  ]),
-  public_at: string([
     minLength(1, "ກະລຸນາໃສ່ຂໍ້ມູນ."),
     maxLength(30, "ຂໍ້ມູນຍາວເກີນໄປ."),
   ]),

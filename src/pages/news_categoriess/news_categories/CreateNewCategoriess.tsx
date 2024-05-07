@@ -2,12 +2,10 @@ import {
     SubmitHandler,
     createForm,
     getErrors,
-    reset,
-    setValue,
     valiForm,
 } from "@modular-forms/solid";
 import { useNavigate } from "@solidjs/router";
-import { createEffect, createSignal } from "solid-js";
+import { createEffect } from "solid-js";
 import {
     Permission,
     PermissionGroup,
@@ -19,8 +17,6 @@ import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import createNewsCategoriesApi from "./api/create-news-categories.api";
 import { NewCataegoriessForm, NewCataegoriessSchema } from "./schemas/news-categories.schema";
-import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
-import Textarea from "../../../components/forms/textarea/Textarea";
 import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
 import { createStore } from "solid-js/store";
 
@@ -34,11 +30,9 @@ export default () => {
         { label: "ພາສາຈີນ", key: "zh_cn" },
     ]);
 
-
     if (!checkPermission(Permission.Write, PermissionGroup.NewsCategoriess, auth))
         navigator(-1);
 
-    const [previewImg, setPreviewImg] = createSignal<string>("");
 
     const [newsCategoriessForm, { Form, Field, FieldArray }] = createForm<NewCataegoriessForm>({
         validate: valiForm(NewCataegoriessSchema),

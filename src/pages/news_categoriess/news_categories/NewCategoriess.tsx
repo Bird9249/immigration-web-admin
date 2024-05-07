@@ -40,18 +40,10 @@ export default () => {
             onClick: () => void;
         }[][] = [[]];
 
-        if (checkPermission(Permission.Read, PermissionGroup.NewsCategoriess, auth))
-            menus[0].push({
-                onClick() {
-                    navigate(`/news_categories/detail/${id}`);
-                },
-                label: "ລາຍລະອຽດ",
-            });
-
         if (checkPermission(Permission.Write, PermissionGroup.NewsCategoriess, auth))
             menus[0].push({
                 onClick() {
-                    navigate(`/news_categories/edit/${id}`);
+                    navigate(`/newsCategoriess/edit/${id}`);
                 },
                 label: "ແກ້ໄຂ",
             });
@@ -99,7 +91,7 @@ export default () => {
                             class="w-full sm:w-fit"
                             prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
                             onClick={() => {
-                                navigate("/news_categories/create");
+                                navigate("/newsCategoriess/create");
                             }}
                         >
                             ເພີ່ມຂໍ້ມູນ
@@ -122,24 +114,27 @@ export default () => {
                     header: "ຊືພາສາລາວ",
                     body: ({ translates }: NewCategoriessResponse) => (
                         <div>
-                            <p>test</p>
+                            <p>{translates[0]?.name}</p>
                         </div>
+
                     ),
                 },
                 {
                     header: "ພາສາອັງກິດ",
                     body: ({ translates }: NewCategoriessResponse) => (
                         <div>
-                            test
+                            <p>{translates[1]?.name}</p>
                         </div>
+
                     ),
                 },
                 {
                     header: "ພາສາຈີນ",
                     body: ({ translates }: NewCategoriessResponse) => (
                         <div>
-                            test
+                            <p>{translates[2]?.name}</p>
                         </div>
+
                     ),
                 },
                 {

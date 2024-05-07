@@ -49,16 +49,32 @@ export default () => {
 
                             content: (
                                 <div><br />
-                                    {/* <div class="px-4 mb-4 grid gap-4 sm:mb-5 sm:grid-cols-2 sm:gap-6 md:gap-12">
+                                    <div class="px-4 mb-4 grid gap-4 sm:mb-5 sm:grid-cols-2 sm:gap-6 md:gap-12">
+                                        <dl>
+                                            <div class="relative w-full mx-auto">
+                                                <img
+                                                    class="w-full object-cover rounded-md"
+                                                    src={import.meta.env.VITE_IMG_URL + item().data.thumbnail}
+                                                    alt="Random image"
+                                                />
+                                            </div>
+                                        </dl>
                                         <dl>
                                             <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
-                                                ຊື່ໂຮງແຮມ
+                                                ຊື່
                                             </dt>
                                             <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-                                                <p>{val.name}</p>
+                                                <p>{val.title}</p>
+                                            </dd>
+                                            <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+                                                ຄຳອະທິບາຍ
+                                            </dt>
+                                            <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+                                                <p>{val.description}</p>
                                             </dd>
                                         </dl>
-                                    </div> */}
+
+                                    </div>
                                     <div class="px-4 mb-4 grid gap-4 sm:mb-5 sm:grid-cols-2 sm:gap-6 md:gap-12">
                                         <dl>
                                             <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
