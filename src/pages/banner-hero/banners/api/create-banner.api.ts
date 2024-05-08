@@ -10,7 +10,7 @@ export default async (form: BannerForm) => {
   formData.append("link", form.link);
   formData.append("start_time", format(form.duration[0], "MM-dd-yyyy"));
   formData.append("end_time", format(form.duration[1], "MM-dd-yyyy"));
-  formData.append("is_private", form.is_private ? "1" : "0");
+  formData.append("is_private", form.is_private ? "0" : "1");
   formData.append("lo_title", form.translates[0].title);
   formData.append("lo_description", form.translates[0].description);
   formData.append("en_title", form.translates[1].title);

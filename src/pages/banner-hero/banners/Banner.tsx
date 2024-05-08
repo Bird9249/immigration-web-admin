@@ -100,7 +100,7 @@ export default () => {
               contentClass="w-44"
               items={[
                 {
-                  label: "ຍົກເລີກ",
+                  label: "ການເຜີຍແຜ່",
                   value: "-1",
                 },
                 {
@@ -125,7 +125,7 @@ export default () => {
               contentClass="w-44"
               items={[
                 {
-                  label: "ຍົກເລີກ",
+                  label: "ເລືອກສະຖານະ",
                   value: "-1",
                 },
                 {

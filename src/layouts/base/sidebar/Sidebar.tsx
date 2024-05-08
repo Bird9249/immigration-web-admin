@@ -11,6 +11,7 @@ import {
 import { createStore } from "solid-js/store";
 import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
+import Building from "../../../components/icons/Building";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
 import FilePenIcon from "../../../components/icons/FilePenIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
@@ -38,17 +39,19 @@ export default function () {
   const [sidebarMenus, setSidebarMenus] = createStore<{
     menus: SidebarMenuType[];
   }>({
-    menus: [
-      {
-        icon: <HomeIcon />,
-        href: "/dashboard",
-        label: "ໜ້າຫຼັກ",
-      },
-    ],
+    menus: [],
   });
 
   createEffect(() => {
     const preparedMenus: SidebarMenuType[] = [];
+
+    if (!auth.roles.includes("admin-hotel") || !auth.hotel_id) {
+      preparedMenus.push({
+        icon: <HomeIcon />,
+        href: "/dashboard",
+        label: "ໜ້າຫຼັກ",
+      });
+    }
 
     if (checkPermissionGroup(PermissionGroup.Registration, auth)) {
       preparedMenus.push({
@@ -59,6 +62,7 @@ export default function () {
           menus: [
             { href: "/registrations/arrival", label: "ລົງທະບຽນເຂົ້າເມືອງ" },
             { href: "/registrations/departure", label: "ລົງທະບຽນອອກເມືອງ" },
+            { href: "/registrations/number", label: "ຈຳນວນການລົງທະບຽນ" },
           ],
           isOpen: false,
         },
@@ -120,6 +124,22 @@ export default function () {
       });
     }
 
+    if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
+      preparedMenus.push({
+        icon: <Building />,
+        href: "/hotels",
+        label: "ຈັດການໂຮງແຮມ",
+      });
+    }
+
+    if (auth.roles.includes("admin-hotel") && auth.hotel_id) {
+      preparedMenus.push({
+        icon: <HomeIcon />,
+        href: "/admin-hotels",
+        label: "ໜ້າຫຼັກ",
+      });
+    }
+
     setSidebarMenus("menus", (prev) => [...prev, ...preparedMenus]);
   });
 
@@ -129,7 +149,7 @@ export default function () {
 
   return (
     <aside
-      class="fixed top-0 left-0 z-30 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+      class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
       aria-label="Sidenav"
       id="drawer-navigation"
     >
