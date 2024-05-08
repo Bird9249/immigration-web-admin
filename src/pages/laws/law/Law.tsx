@@ -42,14 +42,14 @@ export default () => {
         if (checkPermission(Permission.Read, PermissionGroup.Law, auth))
             menus[0].push({
                 onClick() {
-                    navigate(`/law/detail/${id}`);
+                    navigate(`/laws/detail/${id}`);
                 },
-                label: "ລາຍລະອຽດ",
+                label: "ຂໍ້ມູນເອກະສານ",
             });
         if (checkPermission(Permission.Write, PermissionGroup.Law, auth))
             menus[0].push({
                 onClick() {
-                    navigate(`/law/edit/${id}`);
+                    navigate(`/laws/edit/${id}`);
                 },
                 label: "ແກ້ໄຂ",
             });
@@ -100,7 +100,7 @@ export default () => {
                                 class="w-full sm:w-fit"
                                 prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
                                 onClick={() => {
-                                    navigate("/law/create");
+                                    navigate("/laws/create");
                                 }}
                             >
                                 ເພີ່ມຂໍ້ມູນ

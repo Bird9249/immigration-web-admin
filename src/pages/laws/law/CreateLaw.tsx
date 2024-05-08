@@ -1,5 +1,4 @@
 import {
-    FormError,
     SubmitHandler,
     createForm,
     reset,
@@ -7,19 +6,17 @@ import {
     valiForm,
 } from "@modular-forms/solid";
 import { useNavigate } from "@solidjs/router";
-import { Show, createEffect, createResource, createSignal } from "solid-js";
+import { Show, createResource, createSignal } from "solid-js";
 import { Transition } from "solid-transition-group";
 import {
     Permission,
     PermissionGroup,
 } from "../../../common/enum/permission.enum";
 import checkPermission from "../../../common/utils/check-permission";
-import Avatar from "../../../components/avatar/Avatar";
 import Button from "../../../components/button/Button";
 import InputFile from "../../../components/forms/input-file/InputFile";
 import InputText from "../../../components/forms/input-text/InputText";
-import PasswordInput from "../../../components/forms/password-input/PasswordInput";
-import Select from "../../../components/forms/select/Select";
+
 import LoadingIcon from "../../../components/icons/LoadingIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
@@ -47,29 +44,14 @@ export default () => {
         limit: undefined,
     });
     const [laws] = createResource(lawState);
-    const [roleOptions, setRoleOptions] = createSignal<
-        { label: string; value: string }[]
-    >([]);
 
-    // createEffect(() => {
-    //     if (laws.state === "ready") {
-    //         setRoleOptions(
-    //             laws().data.data.map((val) => ({
-    //                 label: val.name,
-    //                 value: String(val.id),
-    //             }))
-    //         );
-    //     }
-    // });
 
     const handleSubmit: SubmitHandler<LawForm> = async (values) => {
+        const res = await createLawApi(values);
 
-        console.log(values)
-        // const res = await createLawApi(values);
+        actionMessage.showMessage({ level: "success", message: res.data.message });
 
-        // actionMessage.showMessage({ level: "success", message: res.data.message });
-
-        // navigator("laws", { resolve: false });
+        navigator("laws", { resolve: false });
     };
 
     return (

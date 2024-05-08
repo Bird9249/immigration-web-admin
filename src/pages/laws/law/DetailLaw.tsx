@@ -36,6 +36,22 @@ export default () => {
             <div>
                 <dl>
                     <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
+
+                        <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+                            ໄຟລ໌ເອກະສານ
+                        </dt>
+                        <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">'
+                            <Show when={laws()} fallback={"ບໍ່ມີຂໍ້ມູນ"}>
+                                {(law_file) => (
+                                    <a
+                                        href={import.meta.env.VITE_IMG_URL + law_file().data.file}
+                                        class="font-medium text-primary-600 dark:text-primary-500 hover:underline"
+                                    >
+                                        {import.meta.env.VITE_IMG_URL + law_file().data.file}
+                                    </a>
+                                )}
+                            </Show>
+                        </dd>
                         <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
                             ຊື
                         </dt>
@@ -73,7 +89,7 @@ export default () => {
                         </dd>
                     </div>
                 </dl>
-            </div>
+            </div >
             <div class="p-4 flex items-center">
                 <Show
                     when={checkPermission(Permission.Write, PermissionGroup.Law, auth)}
@@ -133,6 +149,6 @@ export default () => {
                     </div>
                 </Show>
             </Transition>
-        </div>
+        </div >
     );
 };

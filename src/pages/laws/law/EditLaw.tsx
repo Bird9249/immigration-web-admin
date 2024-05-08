@@ -71,13 +71,12 @@ export default () => {
     );
 
     const handleSubmit: SubmitHandler<UpdateLawForm> = async (values) => {
-        console.log(values);
 
-        // const res = await updateLawApi(param.id, values);
+        const res = await updateLawApi(param.id, values);
 
-        // actionMessage.showMessage({ level: "success", message: res.data.message });
+        actionMessage.showMessage({ level: "success", message: res.data.message });
 
-        // navigator("/laws", { resolve: false });
+        navigator("/laws", { resolve: false });
     };
 
     return (
