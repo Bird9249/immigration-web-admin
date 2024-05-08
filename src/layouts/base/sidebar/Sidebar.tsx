@@ -62,6 +62,7 @@ export default function () {
           menus: [
             { href: "/registrations/arrival", label: "ລົງທະບຽນເຂົ້າເມືອງ" },
             { href: "/registrations/departure", label: "ລົງທະບຽນອອກເມືອງ" },
+            { href: "/registrations/number", label: "ຈຳນວນການລົງທະບຽນ" },
           ],
           isOpen: false,
         },

@@ -22,6 +22,10 @@ const registrationRoutes: RouteDefinition[] = [
         path: "/departure/:id",
         component: lazy(() => import("./departure/DepartureDetail")),
       },
+      {
+        path: "/number",
+        component: lazy(() => import("./number/Number")),
+      },
     ],
   },
 ];
