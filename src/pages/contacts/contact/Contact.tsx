@@ -1,14 +1,12 @@
 import { useNavigate } from "@solidjs/router";
-import { format, isWithinInterval } from "date-fns";
+import { format } from "date-fns";
 import { Show, createResource, createSignal } from "solid-js";
 import {
     Permission,
     PermissionGroup,
 } from "../../../common/enum/permission.enum";
 import checkPermission from "../../../common/utils/check-permission";
-import Button from "../../../components/button/Button";
 import Dropdown from "../../../components/dropdown/Dropdown";
-import PlusIcon from "../../../components/icons/PlusIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import Table from "../../../components/table/Table";
 import { useAuth } from "../../../contexts/authentication/AuthContext";

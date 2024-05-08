@@ -66,7 +66,7 @@ export default function () {
       preparedMenus.push({
         icon: <Contacts />,
         href: "/contacts",
-        label: "ຂໍ້ມູນຕິດຕໍ່",
+        label: "ຂໍ້ມູນຜູ້ຕິດຕໍ່",
       });
     }
 

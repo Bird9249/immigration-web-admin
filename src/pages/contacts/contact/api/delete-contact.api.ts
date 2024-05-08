@@ -3,5 +3,5 @@ import { useAxios } from "../../../../contexts/axios/AxiosContext";
 export default async (id: string) => {
   const { axios } = useAxios();
 
-  return axios.delete<{ message: string }>(`/contacts/${id}`);
+  return axios.delete<{ message: string }>(`/contact/${id}`);
 };
