@@ -1,0 +1,36 @@
+[data-scope='date-picker'][data-part='content'] {
+  @apply rounded-lg bg-white dark:bg-gray-700 shadow-lg p-4 z-50
+}
+
+[data-scope='date-picker'][data-part='content'][data-state='open'] {
+  @apply inline-block animate-slide-in;
+};
+
+[data-scope='date-picker'][data-part='content'][data-state='closed'] {
+  @apply animate-slide-out;
+};
+
+[data-scope='date-picker'][data-part='table-cell-trigger'] {
+  @apply w-full hover:bg-gray-100 dark:hover:bg-gray-600 flex-1 leading-9 border-0 rounded-lg cursor-pointer text-center text-gray-900 dark:text-white font-semibold text-sm;
+}
+
+[data-scope='date-picker'][data-part='table-cell-trigger'][data-selected] {
+  @apply bg-primary-700 text-white dark:bg-primary-600
+} 
+
+[data-scope='date-picker'][data-part='table-cell-trigger'][data-outside-range] {
+  @apply rounded-lg;
+};
+
+[data-scope='date-picker'][data-part='table-cell-trigger'][data-range-start] {
+  @apply bg-primary-700 text-white dark:bg-primary-600 rounded-s-lg;
+};
+
+[data-scope='date-picker'][data-part='table-cell-trigger'][data-range-end] {
+  @apply bg-primary-700 text-white dark:bg-primary-600 rounded-e-lg;
+};
+
+
+[data-scope='date-picker'][data-part='table-cell-trigger'][data-in-range]:not([data-selected]) {
+  @apply bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-none
+}
