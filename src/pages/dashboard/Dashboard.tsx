@@ -1,3 +1,4 @@
+
 export default () => {
   return (
     <div class="flex flex-col justify-center items-center min-h-[80vh]">
