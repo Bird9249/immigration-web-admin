@@ -17,6 +17,7 @@ type ConfirmContextState = {
   isLoading: boolean;
   onConfirm?: () => void | Promise<void>;
   onCancel?: () => void;
+  confirmColor?: "danger" | "primary";
 };
 
 type ConfirmContextValue = [
@@ -37,6 +38,7 @@ export const ConfirmProvider: ParentComponent = (props: ParentProps) => {
   const [state, setState] = createStore<ConfirmContextState>({
     isShow: false,
     isLoading: false,
+    confirmColor: "danger",
   });
 
   return (
@@ -44,8 +46,21 @@ export const ConfirmProvider: ParentComponent = (props: ParentProps) => {
       value={[
         { icon: state.icon, message: state.message },
         {
-          showConfirm: ({ icon, message, onCancel, onConfirm }) => {
-            setState({ icon, message, isShow: true, onCancel, onConfirm });
+          showConfirm: ({
+            icon,
+            message,
+            onCancel,
+            onConfirm,
+            confirmColor,
+          }) => {
+            setState({
+              icon,
+              message,
+              isShow: true,
+              onCancel,
+              onConfirm,
+              confirmColor: confirmColor ? confirmColor : "danger",
+            });
           },
         },
       ]}
@@ -75,7 +90,7 @@ export const ConfirmProvider: ParentComponent = (props: ParentProps) => {
             </Button>
             <Button
               type="button"
-              color="danger"
+              color={state.confirmColor}
               isLoading={state.isLoading}
               onClick={async () => {
                 if (state.onConfirm) {

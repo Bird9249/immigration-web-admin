@@ -2,6 +2,7 @@ import { useParams } from "@solidjs/router";
 import { format } from "date-fns";
 import { createResource, createSignal, Match, Show, Switch } from "solid-js";
 import { Transition } from "solid-transition-group";
+import Button from "../../../components/button/Button";
 import BriefcaseIcon from "../../../components/icons/BriefcaseIcon";
 import CameraPhotoIcon from "../../../components/icons/CameraPhotoIcon";
 import CheckIcon from "../../../components/icons/CheckIcon";
@@ -10,15 +11,45 @@ import LoadingIcon from "../../../components/icons/LoadingIcon";
 import MapIcon from "../../../components/icons/MapIcon";
 import TruckIcon from "../../../components/icons/TruckIcon";
 import Timeline from "../../../components/timeline/Timeline";
+import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
+import { useMessage } from "../../../contexts/message/MessageContext";
 import { fadeIn, fadeOut } from "../../../utils/transition-animation";
 import getArrivalRegistrationDetailApi from "./api/get-arrival-registration-detail.api";
+import verifyArrivalCodeApi from "./api/verify-arrival-code.api";
 
 export default () => {
   const param = useParams();
+  const [, actionMessage] = useMessage();
+  const [, actionConfirm] = useConfirm();
 
   const [id] = createSignal<string>(param.id);
 
-  const [arrival] = createResource(id, getArrivalRegistrationDetailApi);
+  const [arrival, { refetch, mutate }] = createResource(
+    id,
+    getArrivalRegistrationDetailApi
+  );
+
+  async function verify() {
+    actionConfirm.showConfirm({
+      icon: () => (
+        <CheckIcon
+          iconDirection="badge"
+          class="text-primary-600 dark:text-primary-500 w-11 h-11 mb-3.5 mx-auto"
+        />
+      ),
+      message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຢືນຢັນຂໍ້ມູນການລົງທະບຽນນີ້?",
+      onConfirm: async () => {
+        const res = await verifyArrivalCodeApi(id());
+        mutate(undefined);
+        await refetch();
+        actionMessage.showMessage({
+          level: "success",
+          message: res.data.message,
+        });
+      },
+      confirmColor: "primary",
+    });
+  }
 
   return (
     <div class="relative">
@@ -195,7 +226,20 @@ export default () => {
                       )}
                     </span>
                   ) : (
-                    "ຍັງບໍ່ມີການຢືນຢັນ"
+                    <>
+                      ຍັງບໍ່ມີການຢືນຢັນ
+                      <Button
+                        color="primary"
+                        size="sm"
+                        class="ms-2"
+                        prefixIcon={<CheckIcon iconDirection="badge" />}
+                        onClick={async () => {
+                          await verify();
+                        }}
+                      >
+                        ຢືນຢັນ
+                      </Button>
+                    </>
                   )
                 }
               </Show>
