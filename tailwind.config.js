@@ -1,3 +1,5 @@
+import colors from "tailwindcss/colors";
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -9,19 +11,32 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary:  { 
-          50: "#EEFFF5",
-          100: "#D8FFEB",
-          200: "#B4FED8",
-          300: "#79FCBA",
-          400: "#38F094",
-          500: "#0ED974",
-          600: "#05B45D",
-          700: "#088D4C",
-          800: "#0C6F3F",
-          900: "#0c5b36",
-          950: "#00331c"
-        }
+        primary: {
+          50: "#f5fbea",
+          100: "#e8f6d1",
+          200: "#d1eda9",
+          300: "#b3df77",
+          400: "#96cf4c",
+          500: "#77b42e",
+          600: "#5c8f21",
+          700: "#466d1d",
+          800: "#3b581c",
+          900: "#324b1c",
+          950: "#18290a",
+        },
+        secondary: {
+          50: colors.gray[50],
+          100: colors.gray[100],
+          200: colors.gray[200],
+          300: colors.gray[300],
+          400: colors.gray[400],
+          500: colors.gray[500],
+          600: colors.gray[600],
+          700: colors.gray[700],
+          800: colors.gray[800],
+          900: colors.gray[900],
+          950: colors.gray[950],
+        },
       },
       keyframes: {
         fadeIn: {
@@ -79,6 +94,22 @@ module.exports = {
             transform: "translateY(-10px)",
           },
         },
+        slideDown: {
+          from: {
+            height: "0"
+          },
+          to: {
+            height: "var(--height)"
+          }
+        },
+        slideUp: {
+          from: {
+            height: "var(--height)"
+          },
+          to: {
+            height: "0"
+          }
+        }
       },
       animation: {
         "fade-in": "fadeIn 0.25s ease-out",
@@ -87,18 +118,13 @@ module.exports = {
         "scale-out": "scaleOut 0.20s ease-in",
         "slide-in": "slideIn 0.25s ease-out",
         "slide-out": "slideOut 0.25s ease-in",
+        "slide-down": "slideDown 0.25s ease-out",
+        "slide-up": "slideUp 0.2s ease-in"
       },
     },
     fontFamily: {
-      body: [
-        "Noto Sans Lao",
-        "Poppins",
-      ],
-      sans: [
-        "Noto Sans Lao",
-        "Poppins",
-        "sans-serif",
-      ],
+      body: ["Noto Serif Lao"],
+      sans: ["Noto Serif Lao", "sans-serif"],
     },
   },
   plugins: [

@@ -11,8 +11,13 @@ import {
 import { createStore } from "solid-js/store";
 import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
+import Building from "../../../components/icons/Building";
+import BullhornIcon from "../../../components/icons/BullhornIcon";
+import FilePenIcon from "../../../components/icons/FilePenIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
+import Message from "../../../components/icons/Message";
 import UserIcon from "../../../components/icons/UserIcon";
+import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
 import Law from "../../../components/icons/Law";
@@ -35,17 +40,74 @@ export default function () {
   const [sidebarMenus, setSidebarMenus] = createStore<{
     menus: SidebarMenuType[];
   }>({
-    menus: [
-      {
-        icon: <HomeIcon />,
-        href: "/dashboard",
-        label: "ໜ້າຫຼັກ",
-      },
-    ],
+    menus: [],
   });
 
   createEffect(() => {
     const preparedMenus: SidebarMenuType[] = [];
+
+    if (!auth.roles.includes("admin-hotel") || !auth.hotel_id) {
+      preparedMenus.push({
+        icon: <HomeIcon />,
+        href: "/dashboard",
+        label: "ໜ້າຫຼັກ",
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.Registration, auth)) {
+      preparedMenus.push({
+        icon: <FilePenIcon />,
+        href: "/registrations",
+        label: "ການລົງທະບຽນ",
+        subMenus: {
+          menus: [
+            { href: "/registrations/arrival", label: "ລົງທະບຽນເຂົ້າເມືອງ" },
+            { href: "/registrations/departure", label: "ລົງທະບຽນອອກເມືອງ" },
+            { href: "/registrations/number", label: "ຈຳນວນການລົງທະບຽນ" },
+          ],
+          isOpen: false,
+        },
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.AccommodationRequest, auth)) {
+      preparedMenus.push({
+        icon: <HomeIcon />,
+        href: "/accommodation-request",
+        label: "ການຮ້ອງຂໍທີ່ພັກ",
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.VisaCategory, auth)) {
+      preparedMenus.push({
+        icon: <VisaIcon />,
+        href: "/visa-category",
+        label: "ປະເພດວີຊາ",
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.Banner, auth)) {
+      preparedMenus.push({
+        icon: <BullhornIcon />,
+        href: "/banner",
+        label: "ຈັດການໂຄສະນາ",
+        subMenus: {
+          menus: [
+            { href: "/banner/list", label: "ຈັດການປ້າຍ" },
+            { href: "/banner/popup", label: "ຈັດການ popup" },
+          ],
+          isOpen: false,
+        },
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.Feedback, auth)) {
+      preparedMenus.push({
+        icon: <Message />,
+        href: "/feedback",
+        label: "ຄຳຕິຊົມ",
+      });
+    }
 
     if (checkPermissionGroup(PermissionGroup.User, auth)) {
       preparedMenus.push({
@@ -67,6 +129,22 @@ export default function () {
         icon: <Law />,
         href: "/laws",
         label: "ກົດໝາຍ",
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
+      preparedMenus.push({
+        icon: <Building />,
+        href: "/hotels",
+        label: "ຈັດການໂຮງແຮມ",
+      });
+    }
+
+    if (auth.roles.includes("admin-hotel") && auth.hotel_id) {
+      preparedMenus.push({
+        icon: <HomeIcon />,
+        href: "/admin-hotels",
+        label: "ໜ້າຫຼັກ",
       });
     }
 

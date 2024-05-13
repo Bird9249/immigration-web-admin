@@ -2,6 +2,7 @@ import { useAxios } from "../axios/AxiosContext";
 
 export type AuthResponseType = {
   id: number;
+  hotel_id: number | null;
   email: string;
   created_at: string;
   updated_at: string;

@@ -94,7 +94,7 @@ export default () => {
           });
           setPreviewImg(
             input.data.profile.image
-              ? import.meta.env.VITE_BASE_API_URL + input.data.profile.image
+              ? import.meta.env.VITE_IMG_URL + input.data.profile.image
               : ""
           );
         }
@@ -108,7 +108,6 @@ export default () => {
         confirmPassword: "ລະຫັດຜ່ານບໍ່ກົງກັນ",
       });
     }
-
     const res = await updateUserApi(param.id, values);
 
     actionMessage.showMessage({ level: "success", message: res.data.message });
@@ -214,7 +213,7 @@ export default () => {
               {...props}
               value={field.value}
               error={field.error}
-              placeholder="•••••••••"
+              placeholder="ປ້ອນລະຫັດຜ່ານ"
             />
           )}
         </Field>
@@ -227,7 +226,7 @@ export default () => {
               {...props}
               value={field.value}
               error={field.error}
-              placeholder="•••••••••"
+              placeholder="ຢືນຢັນລະຫັດຜ່ານ"
             />
           )}
         </Field>
@@ -237,33 +236,40 @@ export default () => {
         <Button type="submit" isLoading={userForm.submitting} class="mr-3">
           ອັບເດດຜູ້ໃຊ້
         </Button>
-        <Button
-          color="danger"
-          outlined
-          type="button"
-          isLoading={userForm.submitting}
-          prefixIcon={<TrashIcon />}
-          onClick={() => {
-            actionConfirm.showConfirm({
-              icon: () => (
-                <TrashIcon class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" />
-              ),
-              message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
-              onConfirm: async () => {
-                const res = await deleteUserApi(param.id);
-
-                actionMessage.showMessage({
-                  level: "success",
-                  message: res.data.message,
-                });
-
-                navigator("/users/list", { resolve: false });
-              },
-            });
-          }}
+        <Show
+          when={
+            checkPermission(Permission.Remove, PermissionGroup.User, auth) &&
+            user()?.data.id !== auth.id
+          }
         >
-          ລຶບ
-        </Button>
+          <Button
+            color="danger"
+            outlined
+            type="button"
+            isLoading={userForm.submitting}
+            prefixIcon={<TrashIcon />}
+            onClick={() => {
+              actionConfirm.showConfirm({
+                icon: () => (
+                  <TrashIcon class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" />
+                ),
+                message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
+                onConfirm: async () => {
+                  const res = await deleteUserApi(param.id);
+
+                  actionMessage.showMessage({
+                    level: "success",
+                    message: res.data.message,
+                  });
+
+                  navigator("/users/list", { resolve: false });
+                },
+              });
+            }}
+          >
+            ລຶບ
+          </Button>
+        </Show>
       </div>
 
       <Transition onEnter={fadeIn} onExit={fadeOut}>

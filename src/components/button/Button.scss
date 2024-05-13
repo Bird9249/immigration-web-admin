@@ -24,14 +24,14 @@
   }
 
   &-secondary {
-    @apply text-gray-900 bg-white border border-gray-300 focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:focus:ring-gray-700;
+    @apply text-gray-900 bg-white border border-gray-300 focus:ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:focus:ring-gray-700;
 
     svg {
       @apply text-gray-900 dark:text-gray-400;
     }
 
     &:hover {
-      @apply bg-gray-100 dark:text-white dark:bg-gray-700 dark:border-gray-600;
+      @apply bg-gray-100 text-primary-700 dark:text-white dark:bg-gray-700 dark:border-gray-600;
 
       svg {
         @apply text-primary-700 dark:text-white;
