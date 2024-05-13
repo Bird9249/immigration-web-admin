@@ -13,15 +13,15 @@ import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
 import Building from "../../../components/icons/Building";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
+import Contacts from "../../../components/icons/Contacts";
 import FilePenIcon from "../../../components/icons/FilePenIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
+import Law from "../../../components/icons/Law";
 import Message from "../../../components/icons/Message";
 import UserIcon from "../../../components/icons/UserIcon";
 import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
-import Contacts from "../../../components/icons/Contacts";
-import Law from "../../../components/icons/Law";
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -110,28 +110,14 @@ export default function () {
       });
     }
 
-    if (checkPermissionGroup(PermissionGroup.User, auth)) {
-      preparedMenus.push({
-        icon: <UserIcon />,
-        href: "/users",
-        label: "ຈັດການຜູ້ໃຊ້",
-        subMenus: {
-          menus: [
-            { href: "/users/list", label: "ຜູ້ໃຊ້" },
-            { href: "/users/roles", label: "ບົດບາດ" },
-            { href: "/users/permissions", label: "ການອະນຸຍາດ" },
-          ],
-          isOpen: false,
-        },
-      });
-    }
-    
     if (checkPermissionGroup(PermissionGroup.Contacts, auth)) {
       preparedMenus.push({
         icon: <Contacts />,
         href: "/contacts",
-        label: "ຂໍ້ມູນຜູ້ຕິດຕໍ່",
-        
+        label: "ຂໍ້ມູນການຕິດຕໍ່",
+      });
+    }
+
     if (checkPermissionGroup(PermissionGroup.Law, auth)) {
       preparedMenus.push({
         icon: <Law />,
@@ -145,6 +131,22 @@ export default function () {
         icon: <Building />,
         href: "/hotels",
         label: "ຈັດການໂຮງແຮມ",
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.User, auth)) {
+      preparedMenus.push({
+        icon: <UserIcon />,
+        href: "/users",
+        label: "ຈັດການຜູ້ໃຊ້",
+        subMenus: {
+          menus: [
+            { href: "/users/list", label: "ຜູ້ໃຊ້" },
+            { href: "/users/roles", label: "ບົດບາດ" },
+            { href: "/users/permissions", label: "ການອະນຸຍາດ" },
+          ],
+          isOpen: false,
+        },
       });
     }
 

@@ -15,5 +15,5 @@ export type ContactResponse = {
 };
 
 export interface ContactsResponse extends IPaginated {
-  contacts: ContactResponse[];
+  data: ContactResponse[];
 }
