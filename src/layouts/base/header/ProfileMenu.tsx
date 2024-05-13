@@ -45,8 +45,7 @@ export default function () {
           src={
             auth.profile.image
               ? `${
-                  (import.meta.env.VITE_BASE_API_URL as string) +
-                  auth.profile.image
+                  (import.meta.env.VITE_IMG_URL as string) + auth.profile.image
                 }`
               : undefined
           }

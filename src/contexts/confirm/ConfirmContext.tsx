@@ -17,6 +17,7 @@ type ConfirmContextState = {
   isLoading: boolean;
   onConfirm?: () => void | Promise<void>;
   onCancel?: () => void;
+  confirmColor?: "danger" | "primary";
 };
 
 type ConfirmContextValue = [
@@ -37,6 +38,7 @@ export const ConfirmProvider: ParentComponent = (props: ParentProps) => {
   const [state, setState] = createStore<ConfirmContextState>({
     isShow: false,
     isLoading: false,
+    confirmColor: "danger",
   });
 
   return (
@@ -44,17 +46,31 @@ export const ConfirmProvider: ParentComponent = (props: ParentProps) => {
       value={[
         { icon: state.icon, message: state.message },
         {
-          showConfirm: ({ icon, message, onCancel, onConfirm }) => {
-            setState({ icon, message, isShow: true, onCancel, onConfirm });
+          showConfirm: ({
+            icon,
+            message,
+            onCancel,
+            onConfirm,
+            confirmColor,
+          }) => {
+            setState({
+              icon,
+              message,
+              isShow: true,
+              onCancel,
+              onConfirm,
+              confirmColor: confirmColor ? confirmColor : "danger",
+            });
           },
         },
       ]}
     >
-      {props.children}
       <Modal
         open={state.isShow}
         onOpenChange={({ open }) => setState("isShow", open)}
         close
+        modalClass="!z-50"
+        backdropClass="!z-50"
       >
         <div class="p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
           <Show when={state.icon}>{(icon) => icon()()}</Show>
@@ -63,6 +79,7 @@ export const ConfirmProvider: ParentComponent = (props: ParentProps) => {
 
           <div class="flex justify-center items-center space-x-4">
             <Button
+              type="button"
               color="secondary"
               onClick={() => {
                 if (state.onCancel) state.onCancel();
@@ -72,7 +89,8 @@ export const ConfirmProvider: ParentComponent = (props: ParentProps) => {
               ບໍ່, ຍົກເລີກ
             </Button>
             <Button
-              color="danger"
+              type="button"
+              color={state.confirmColor}
               isLoading={state.isLoading}
               onClick={async () => {
                 if (state.onConfirm) {
@@ -91,6 +109,7 @@ export const ConfirmProvider: ParentComponent = (props: ParentProps) => {
           </div>
         </div>
       </Modal>
+      {props.children}
     </ConfirmContext.Provider>
   );
 };

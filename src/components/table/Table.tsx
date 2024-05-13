@@ -32,14 +32,14 @@ export default (props: TableProps) => {
 
         <table class="table-content">
           <thead class="table-thead">
-            <tr>
+            <tr class="text-nowrap">
               <For each={props.children}>
                 {(childProps) => <Dynamic component={Column} {...childProps} />}
               </For>
             </tr>
           </thead>
 
-          <tbody>
+          <tbody class="text-nowrap">
             <Show
               when={props.value()}
               fallback={<tr style={{ height: "540px" }}></tr>}
@@ -51,7 +51,7 @@ export default (props: TableProps) => {
                 >
                   <For each={value().data[props.responseField]}>
                     {(value) => (
-                      <tr class="table-tbody">
+                      <tr class="table-tbody text-nowrap">
                         <For each={props.children}>
                           {(childProps) => (
                             <td class="px-4 py-3">
@@ -97,7 +97,7 @@ export default (props: TableProps) => {
                   { label: "100", value: "100" },
                 ]}
                 value={["10"]}
-                size="sm"
+                size="xs"
                 contentClass="w-fit"
                 onValueChange={({ value }) => {
                   setTable("paginate", (prev) => ({

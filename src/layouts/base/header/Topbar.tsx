@@ -1,6 +1,8 @@
+import { useLocation, useNavigate } from "@solidjs/router";
 import { Match, Switch } from "solid-js";
 import MoonIcon from "../../../components/icons/MoonIcon";
 import SunIcon from "../../../components/icons/SunIcon";
+import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useTheme } from "../../../contexts/theme/ThemeContext";
 import SidebarToggle from "../sidebar/SidebarToggle";
 import ProfileMenu from "./ProfileMenu";
@@ -8,6 +10,17 @@ import TopbarLogo from "./TopbarLogo";
 
 export default function () {
   const [theme, setTheme] = useTheme();
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const loc = useLocation();
+
+  if (
+    auth.roles.includes("admin-hotel") &&
+    auth.hotel_id &&
+    !loc.pathname.startsWith("/admin-hotels")
+  ) {
+    navigate("/admin-hotels");
+  }
 
   return (
     <nav class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
