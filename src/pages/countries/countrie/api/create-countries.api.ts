@@ -6,13 +6,10 @@ export default async (form: CountriesForm) => {
 
   const formData = new FormData();
   formData.append("image", form.image);
-  formData.append("is_except_visa", form.is_except_visa ? "0" : "1");
-  formData.append("lo_name", form.translates[0].name);
-  formData.append("lo_description", form.translates[0].description);
-  formData.append("en_name", form.translates[1].name);
-  formData.append("en_description", form.translates[1].description);
-  formData.append("zh_cn_name", form.translates[2].name);
-  formData.append("zh_cn_description", form.translates[2].description);
+  formData.append("is_except_visa", form.is_except_visa ? "1" : "0");
+  formData.append("lo", JSON.stringify(form.translates[0]));
+  formData.append("en", JSON.stringify(form.translates[1]));
+  formData.append("zh_cn", JSON.stringify(form.translates[2]));
 
-  return axios.post<{ message: string }>(`/countries`, formData);
+  return axios.post<{ message: string }>(`/country`, formData);
 };

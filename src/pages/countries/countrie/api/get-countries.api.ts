@@ -1,10 +1,14 @@
 import { useAxios } from "../../../../contexts/axios/AxiosContext";
-import { CountriesTableState, CountriesResponse } from "./countries.interface";
+import { CountriesResponse, CountriesTableState } from "./countries.interface";
 
-export default async (state: CountriesTableState) => {
+export default async (params: CountriesTableState) => {
   const { axios } = useAxios();
 
-  return axios.get<CountriesResponse>("/countries", {
-    params: { limit: state.limit, skip: state.offset },
+  return axios.get<CountriesResponse>("/country", {
+    params: {
+      ...params,
+      is_except_visa:
+        params.is_except_visa === "-1" ? undefined : params.is_except_visa,
+    },
   });
 };

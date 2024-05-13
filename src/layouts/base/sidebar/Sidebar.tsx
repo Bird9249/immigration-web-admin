@@ -14,6 +14,7 @@ import checkPermissionGroup from "../../../common/utils/check-permission-group";
 import Building from "../../../components/icons/Building";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
 import Contacts from "../../../components/icons/Contacts";
+import Countries from "../../../components/icons/Countries";
 import FilePenIcon from "../../../components/icons/FilePenIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
 import Law from "../../../components/icons/Law";
@@ -22,7 +23,6 @@ import UserIcon from "../../../components/icons/UserIcon";
 import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
-import Countries from "../../../components/icons/Countries";
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -135,6 +135,14 @@ export default function () {
       });
     }
 
+    if (checkPermissionGroup(PermissionGroup.Countries, auth)) {
+      preparedMenus.push({
+        icon: <Countries />,
+        href: "/countries",
+        label: "ປະເທດ",
+      });
+    }
+
     if (checkPermissionGroup(PermissionGroup.User, auth)) {
       preparedMenus.push({
         icon: <UserIcon />,
@@ -148,13 +156,6 @@ export default function () {
           ],
           isOpen: false,
         },
-      });
-    }
-    if (checkPermissionGroup(PermissionGroup.Countries, auth)) {
-      preparedMenus.push({
-        icon: <Countries />,
-        href: "/countries",
-        label: "ປະເທດ",
       });
     }
 

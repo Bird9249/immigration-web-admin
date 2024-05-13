@@ -3,9 +3,11 @@ import {
   IPaginated,
 } from "../../../../common/interface/pagination";
 
-export type CountriesTableState = IOffsetBasePaginate;
+export type CountriesTableState = IOffsetBasePaginate & {
+  is_except_visa: "-1" | "0" | "1";
+};
 
-export type CountriesResponse = {
+export type CountryResponse = {
   id: number;
   image: string;
   is_except_visa: boolean;
@@ -21,6 +23,6 @@ export type CountriesResponse = {
   }[];
 };
 
-export interface CountriessResponse extends IPaginated {
-  countries: CountriesResponse[];
+export interface CountriesResponse extends IPaginated {
+  data: CountriesResponse[];
 }
