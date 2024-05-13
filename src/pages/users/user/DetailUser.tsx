@@ -42,8 +42,7 @@ export default () => {
               size="xl"
               src={
                 user()?.data.profile.image
-                  ? import.meta.env.VITE_BASE_API_URL +
-                    user()?.data.profile.image
+                  ? import.meta.env.VITE_IMG_URL + user()?.data.profile.image
                   : undefined
               }
               isLoading={user.loading}
@@ -116,7 +115,10 @@ export default () => {
         </Show>
 
         <Show
-          when={checkPermission(Permission.Remove, PermissionGroup.User, auth)}
+          when={
+            checkPermission(Permission.Remove, PermissionGroup.User, auth) &&
+            user()?.data.id !== auth.id
+          }
         >
           <Button
             color="danger"

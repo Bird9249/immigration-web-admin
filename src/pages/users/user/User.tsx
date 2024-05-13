@@ -1,6 +1,6 @@
 import { useNavigate } from "@solidjs/router";
 import { format } from "date-fns";
-import { For, Show, createResource, createSignal } from "solid-js";
+import { Show, createResource, createSignal } from "solid-js";
 import {
   Permission,
   PermissionGroup,
@@ -57,7 +57,10 @@ export default () => {
         label: "ແກ້ໄຂ",
       });
 
-    if (checkPermission(Permission.Remove, PermissionGroup.User, auth)) {
+    if (
+      checkPermission(Permission.Remove, PermissionGroup.User, auth) &&
+      id !== auth.id
+    ) {
       menus.push([]);
 
       menus[1].push({
@@ -126,9 +129,7 @@ export default () => {
           }: UserResponse) => (
             <div class="flex items-center">
               <Avatar
-                src={
-                  image ? import.meta.env.VITE_BASE_API_URL + image : undefined
-                }
+                src={image ? import.meta.env.VITE_IMG_URL + image : undefined}
                 alt="image"
                 size="sm"
                 class="mr-3"
@@ -139,18 +140,7 @@ export default () => {
             </div>
           ),
         },
-        {
-          header: "ບົດບາດ",
-          body: ({ roles }: UserResponse) => (
-            <For each={roles}>
-              {({ name }) => (
-                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                  {name}
-                </span>
-              )}
-            </For>
-          ),
-        },
+
         {
           header: "ອີເມວ",
           body: ({ email }: UserResponse) => email,

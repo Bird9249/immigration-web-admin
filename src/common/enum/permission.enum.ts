@@ -6,5 +6,13 @@ export enum Permission {
 
 export enum PermissionGroup {
   User = "user",
-  Countries = "countries",
+  Registration = "registration",
+  Banner = "banner",
+  Feedback = "feedback",
+  AccommodationRequest = "accommodation-request",
+  Hotel = "hotel",
+  VisaCategory = "visa",
+  Law = "law",
+  Contacts = "contact",
+  Countries = "country",
 }

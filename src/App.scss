@@ -7,9 +7,9 @@
 @import './components/modal/Modal.scss';
 @import './components/pagination/Pagination.scss';
 @import './components/table/Table.scss';
+@import './components/forms/date-range-picker/DateRangePicker.scss';
 
-@import "./assets/css/poppins.css";
-@import "./assets/css/noto-sans-lao.css";
+@import "./assets/css/noto-serif-lao.css";
 
 
 .sidebar-active {
@@ -53,8 +53,9 @@
 }
 
 
- ::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 8px; 
+  height: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -65,3 +66,52 @@
 ::-webkit-scrollbar-track {
   background: #f1f1f1; 
 }
+
+*:focus-visible {
+  outline: none;
+}
+
+.tiptap {
+
+  ul, ol {
+    padding: 0 1rem;
+  }
+
+  blockquote.text-gray-900 > p {
+    @apply text-inherit
+  }
+
+  h1 {
+    @apply text-5xl font-extrabold
+  }
+
+  h2 {
+    @apply text-4xl font-bold
+  }
+
+  h3 {
+    @apply text-3xl font-bold
+  }
+
+  h4 {
+    @apply text-2xl font-bold 
+  }
+
+  h5 {
+    @apply text-xl font-bold
+  }
+
+  h6 {
+    @apply text-lg font-bold
+  }
+
+}
+
+
+// [data-scope='accordion'][data-part='item-content'][data-state='open'] {
+//   @apply animate-slide-down
+// }
+
+// [data-scope='accordion'][data-part='item-content'][data-state='closed'] {
+//   @apply animate-slide-up
+// }

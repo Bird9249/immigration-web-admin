@@ -1,19 +1,32 @@
 import { useNavigate } from "@solidjs/router";
 import axios, { AxiosError, AxiosStatic } from "axios";
-import { ParentProps, createContext, useContext } from "solid-js";
+import {
+  ParentProps,
+  Signal,
+  createContext,
+  createSignal,
+  useContext,
+} from "solid-js";
 import { useMessage } from "../message/MessageContext";
 
-type AxiosContextValue = { axios: AxiosStatic };
+type AxiosContextValue = {
+  axios: AxiosStatic;
+  error: Signal<{ message: string; level: "warn" | "danger" } | undefined>;
+};
 
-const AxiosContext = createContext<AxiosContextValue>({ axios });
+const AxiosContext = createContext<AxiosContextValue>({
+  axios,
+  error: createSignal<
+    { message: string; level: "warn" | "danger" } | undefined
+  >(),
+});
 
-export const AxiosProvider = (
-  props: ParentProps<{
-    onError: (message: string, errors: string[]) => void;
-  }>
-) => {
+export const AxiosProvider = (props: ParentProps<{}>) => {
   const [, actions] = useMessage();
   const navigator = useNavigate();
+  const [error, setError] = createSignal<
+    { message: string; level: "warn" | "danger" } | undefined
+  >();
 
   const token = localStorage.getItem("token");
   const auth = token ? `Bearer ${token}` : "";
@@ -32,24 +45,16 @@ export const AxiosProvider = (
         if (err.response.status >= 400 && err.response.status < 500) {
           if (err.response.status === 401) navigator("/login");
 
-          actions.showMessage({
-            level: "warning",
-            message: checkErrorMessage,
-          });
+          setError(() => ({ message: checkErrorMessage, level: "warn" }));
         } else if (err.response.status >= 500) {
-          actions.showMessage({
-            level: "danger",
-            message: checkErrorMessage,
-          });
+          setError(() => ({ message: checkErrorMessage, level: "danger" }));
         }
-
-        props.onError(checkErrorMessage, []);
       }
     }
   );
 
   return (
-    <AxiosContext.Provider value={{ axios }}>
+    <AxiosContext.Provider value={{ axios, error: [error, setError] }}>
       {props.children}
     </AxiosContext.Provider>
   );
