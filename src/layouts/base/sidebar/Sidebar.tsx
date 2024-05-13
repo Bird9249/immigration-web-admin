@@ -20,6 +20,7 @@ import UserIcon from "../../../components/icons/UserIcon";
 import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
+import Law from "../../../components/icons/Law";
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -121,6 +122,13 @@ export default function () {
           ],
           isOpen: false,
         },
+      });
+    }
+    if (checkPermissionGroup(PermissionGroup.Law, auth)) {
+      preparedMenus.push({
+        icon: <Law />,
+        href: "/laws",
+        label: "ກົດໝາຍ",
       });
     }
 
