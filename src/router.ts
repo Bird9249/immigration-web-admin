@@ -21,6 +21,7 @@ const routes: RouteDefinition[] = [
         component: lazy(() => import("./pages/dashboard/Dashboard")),
       },
       ...userRoutes,
+      ...contactsRoutes,
       ...lawsRoutes,
       ...hotelRoutes,
       ...accommodationRequestRoutes,

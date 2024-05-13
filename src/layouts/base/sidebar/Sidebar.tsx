@@ -20,6 +20,7 @@ import UserIcon from "../../../components/icons/UserIcon";
 import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
+import Contacts from "../../../components/icons/Contacts";
 import Law from "../../../components/icons/Law";
 
 interface SidebarMenuType {
@@ -124,6 +125,13 @@ export default function () {
         },
       });
     }
+    
+    if (checkPermissionGroup(PermissionGroup.Contacts, auth)) {
+      preparedMenus.push({
+        icon: <Contacts />,
+        href: "/contacts",
+        label: "ຂໍ້ມູນຜູ້ຕິດຕໍ່",
+        
     if (checkPermissionGroup(PermissionGroup.Law, auth)) {
       preparedMenus.push({
         icon: <Law />,
