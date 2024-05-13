@@ -22,6 +22,7 @@ import UserIcon from "../../../components/icons/UserIcon";
 import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
+import Countries from "../../../components/icons/Countries";
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -147,6 +148,13 @@ export default function () {
           ],
           isOpen: false,
         },
+      });
+    }
+    if (checkPermissionGroup(PermissionGroup.Countries, auth)) {
+      preparedMenus.push({
+        icon: <Countries />,
+        href: "/countries",
+        label: "ປະເທດ",
       });
     }
 
