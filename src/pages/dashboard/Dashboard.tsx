@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-=======
 import { createSignal } from "solid-js";
 import Button from "../../components/button/Button";
 import { FileAndFolder } from "../file-and-folder/FileAndFolder";
->>>>>>> a294dd5a6a68bbd140463c45dd04b202ea26b4c5
 
 export default () => {
   const [open, setOpen] = createSignal<boolean>(false);

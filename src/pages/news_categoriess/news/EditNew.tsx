@@ -2,6 +2,7 @@ import {
     SubmitHandler,
     createForm,
     getErrors,
+    getValue,
     reset,
     setValue,
     setValues,
@@ -34,7 +35,11 @@ import {
 import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
 import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
 import { createStore } from "solid-js/store";
+import { NewTableState } from "./api/news.interface";
 import Textarea from "../../../components/forms/textarea/Textarea";
+import Editor from "../../../components/forms/editor/Editor";
+import Select from "../../../components/forms/select/Select";
+import getNewsCategoriesApi from "../news_categories/api/get-news-categories.api";
 
 export default () => {
     const param = useParams();
@@ -50,18 +55,46 @@ export default () => {
 
     if (!checkPermission(Permission.Write, PermissionGroup.NewsCategoriess, auth))
         navigator(-1);
-
+    const [newsState] = createSignal<NewTableState>({
+        offset: undefined,
+        limit: undefined,
+    });
     const [id] = createSignal<string>(param.id);
     const [news] = createResource(id, getNewsDetailApi);
     const [previewImg, setPreviewImg] = createSignal<string>("");
+    const [newsApi] = createResource(newsState, getNewsCategoriesApi);
 
+    const [newsOptions, setnewsOptions] = createSignal<
+        { label: string; value: string }[]
+    >([]);
     const [newsForm, { Form, Field, FieldArray }] = createForm<UpdateNewsForm>({
         validate: valiForm(UpdateNewsSchema),
         initialValues: {
             translates: [
-                { title: "", content: "", description: "" },
-                { title: "", content: "", description: "" },
-                { title: "", content: "", description: "" },
+                {
+                    title: "",
+                    description: "",
+                    content: JSON.stringify({
+                        type: "doc",
+                        content: [],
+                    }),
+                },
+                {
+                    title: "",
+                    description: "",
+                    content: JSON.stringify({
+                        type: "doc",
+                        content: [],
+                    }),
+                },
+                {
+                    title: "",
+                    description: "",
+                    content: JSON.stringify({
+                        type: "doc",
+                        content: [],
+                    }),
+                },
             ],
         },
     });
@@ -75,19 +108,19 @@ export default () => {
                             {
                                 id: input.data.translates[0].id,
                                 title: input.data.translates[0].title,
-                                content: input.data.translates[0].content,
+                                content: JSON.stringify(input.data.translates[0].content),
                                 description: input.data.translates[0].description,
                             },
                             {
                                 id: input.data.translates[1].id,
                                 title: input.data.translates[1].title,
-                                content: input.data.translates[1].content,
+                                content: JSON.stringify(input.data.translates[1].content),
                                 description: input.data.translates[1].description,
                             },
                             {
                                 id: input.data.translates[2].id,
                                 title: input.data.translates[2].title,
-                                content: input.data.translates[2].content,
+                                content: JSON.stringify(input.data.translates[2].content),
                                 description: input.data.translates[2].description,
                             },
                         ]
@@ -110,6 +143,14 @@ export default () => {
                 setTabsItems(idx, "alert", false);
             }
         });
+        if (newsApi.state === "ready") {
+            setnewsOptions(
+                newsApi().data.data.map((val) => ({
+                    label: val.translates[0].name,
+                    value: String(val.id)
+                }))
+            )
+        }
     });
 
     const handleSubmit: SubmitHandler<UpdateNewsForm> = async (values) => {
@@ -126,6 +167,72 @@ export default () => {
             <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
                 ອັບເດດຂ່າວ
             </h2>
+            <Field name="thumbnail" type="File">
+                {(field, props) => (
+                    <ImageDropzone
+                        {...props}
+                        previewImage={[previewImg, setPreviewImg]}
+                        onSelectFile={(file) => {
+                            if (file) {
+                                setPreviewImg(URL.createObjectURL(file));
+                                setValue(newsForm, "thumbnail", file);
+                            } else {
+                                reset(newsForm, "thumbnail");
+                                setPreviewImg("");
+                            }
+                        }}
+                        error={field.error}
+                        helpMessage="SVG, PNG, JPG, Webp, ຫຼື GIF (MAX. 400x400px)."
+                    />
+                )}
+            </Field><br />
+            <div class="grid gap-4 my-4 md:grid-cols-2 md:gap-6">
+                <Field name="category_id" type="string[]">
+                    {(field, props) => (
+                        <Select
+                            placeholder="ເລືອກຂ່າວສານ"
+                            contentClass="w-44"
+                            onValueChange={({ value }) => {
+                                setValue(newsForm, "category_id", value);
+                            }}
+                            label="ເລືອກຂ່າວ"
+                            name={props.name}
+                            items={newsOptions()}
+                            error={field.error}
+                            value={field.value}
+                        ></Select>
+                    )}
+                </Field>
+                <Field name="status" type="string[]">
+                    {(field, props) => (
+                        <Select
+                            placeholder="ເລືອກສະຖານະ"
+                            contentClass="w-44"
+                            onValueChange={({ value }) => {
+                                setValue(newsForm, "status", value);
+                            }}
+                            label="ສະຖານະ"
+                            name={props.name}
+                            items={[
+                                {
+                                    label: "ແບບຮ່າງ",
+                                    value: "draft",
+                                },
+                                {
+                                    label: "ເຜີຍແຜ່",
+                                    value: "published",
+                                },
+                                {
+                                    label: "ສ່ວນໂຕ",
+                                    value: "private",
+                                },
+                            ]}
+                            error={field.error}
+                            value={field.value}
+                        ></Select>
+                    )}
+                </Field>
+            </div>
             <FieldArray name="translates">
                 {(fieldArray) => (
                     <Tabs
@@ -151,17 +258,22 @@ export default () => {
                                             )}
                                         </Field>
                                         <Field
-                                            name={`${fieldArray.name}.${idx as unknown as 0 | 1 | 2
-                                                }.content`}
+                                            name={`${fieldArray.name}.${idx as unknown as 0 | 1 | 2}.content`}
                                         >
-                                            {(field, props) => (
-                                                <InputText
-                                                    label="ເນື້ອໃນບົດຂ່າວ"
+                                            {(field) => (
+                                                <Editor
+                                                    label="ເນື້ອຫາຂ່າວ"
                                                     required
-                                                    {...props}
                                                     value={field.value}
                                                     error={field.error}
-                                                    placeholder="ປ້ອນເນື້ອໃນບົດຂ່າວ"
+                                                    onInput={(val) => {
+                                                        setValue(
+                                                            newsForm,
+                                                            `${fieldArray.name}.${idx as unknown as 0 | 1 | 2
+                                                            }.${"content"}`,
+                                                            val
+                                                        );
+                                                    }}
                                                 />
                                             )}
                                         </Field>
@@ -187,49 +299,6 @@ export default () => {
                     />
                 )}
             </FieldArray>
-            <Field name="thumbnail" type="File">
-                {(field, props) => (
-                    <ImageDropzone
-                        {...props}
-                        previewImage={[previewImg, setPreviewImg]}
-                        onSelectFile={(file) => {
-                            if (file) {
-                                setPreviewImg(URL.createObjectURL(file));
-                                setValue(newsForm, "thumbnail", file);
-                            } else {
-                                reset(newsForm, "thumbnail");
-                                setPreviewImg("");
-                            }
-                        }}
-                        error={field.error}
-                        helpMessage="SVG, PNG, JPG, Webp, ຫຼື GIF (MAX. 400x400px)."
-                    />
-                )}
-            </Field><br />
-            <div class="grid gap-4 my-4 md:grid-cols-2 md:gap-6">
-                <Field name="status">
-                    {(field, props) => (
-                        <InputText
-                            label="ສະຖານະ"
-                            {...props}
-                            value={field.value}
-                            error={field.error}
-                            placeholder="ປ້ອນສະຖານະ"
-                        />
-                    )}
-                </Field>
-                {/* <Field name="public_at">
-                    {(field, props) => (
-                        <InputText
-                            label="ສະແຕມເວລາຊີ້ບອກເວລາເຜີຍແຜ່ສາທາລະນະ"
-                            {...props}
-                            value={field.value}
-                            error={field.error}
-                            placeholder="ປ້ອນສະແຕມເວລາຊີ້ບອກເວລາເຜີຍແຜ່ສາທາລະນະ"
-                        />
-                    )}
-                </Field> */}
-            </div>
             <div class="flex items-center">
                 <Button type="submit" isLoading={newsForm.submitting} class="mr-3">
                     ອັບເດດຂ່າວ

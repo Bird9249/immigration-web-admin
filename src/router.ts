@@ -8,11 +8,10 @@ import feedbackRoutes from "./pages/feedbacks/route";
 import hotelRoutes from "./pages/hotels/route";
 import registrationRoutes from "./pages/registrations/route";
 import userRoutes from "./pages/users/route";
-<<<<<<< HEAD
+
 import newCategoriessRoutes from "./pages/news_categoriess/route";
-=======
+
 import visaCategoryRoutes from "./pages/visa-category/route";
->>>>>>> a294dd5a6a68bbd140463c45dd04b202ea26b4c5
 
 const routes: RouteDefinition[] = [
   {
@@ -24,10 +23,9 @@ const routes: RouteDefinition[] = [
         component: lazy(() => import("./pages/dashboard/Dashboard")),
       },
       ...userRoutes,
-<<<<<<< HEAD
+
       ...newCategoriessRoutes,
 
-=======
       ...hotelRoutes,
       ...accommodationRequestRoutes,
       ...registrationRoutes,
@@ -35,7 +33,6 @@ const routes: RouteDefinition[] = [
       ...bannerRoutes,
       ...visaCategoryRoutes,
       ...adminHotelRoutes,
->>>>>>> a294dd5a6a68bbd140463c45dd04b202ea26b4c5
       {
         path: "/*all",
         component: lazy(() => import("./pages/errors/PageNotFound")),

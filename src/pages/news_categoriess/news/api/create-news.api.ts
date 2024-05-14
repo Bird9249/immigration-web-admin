@@ -5,18 +5,12 @@ export default async (form: NewsForm) => {
   const { axios } = useAxios();
 
   const formData = new FormData();
-  formData.append("category_id", form.category_id);
+  formData.append("category_id", form.category_id[0]);
   formData.append("thumbnail", form.thumbnail);
-  formData.append("status", form.status);
-  formData.append("lo_title", form.translates[0].title);
-  formData.append("lo_description", form.translates[0].description);
-  formData.append("lo_content", form.translates[0].content);
-  formData.append("en_title", form.translates[1].title);
-  formData.append("en_description", form.translates[1].description);
-  formData.append("en_content", form.translates[1].content);
-  formData.append("zh_cn_titel", form.translates[2].title);
-  formData.append("zh_cn_description", form.translates[2].description);
-  formData.append("zh_cn_content", form.translates[2].content);
+  formData.append("status", form.status.toString());
+  formData.append("lo", JSON.stringify(form.translates[0]));
+  formData.append("en", JSON.stringify(form.translates[1]));
+  formData.append("zh_cn", JSON.stringify(form.translates[2]));
 
   return axios.post<{ message: string }>(`/news`, formData);
 };

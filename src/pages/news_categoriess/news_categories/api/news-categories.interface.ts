@@ -19,5 +19,5 @@ export type NewCategoriessResponse = {
 };
 
 export interface NewsCategoriessResponse extends IPaginated {
-  newsCatagoriess: NewCategoriessResponse[];
+  data: NewCategoriessResponse[];
 }
