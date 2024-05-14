@@ -16,10 +16,7 @@ export const NewTranslateSchemas = object({
     minLength(1, "ກະລຸນາປ້ອນຫົວຂໍ້."),
     maxLength(255, "ຫົວຂໍ້ຍາວເກີນໄປ."),
   ]),
-  description: string([
-    minLength(1, "ກະລຸນາປ້ອນຫົວຂໍ້."),
-    maxLength(255, "ຫົວຂໍ້ຍາວເກີນໄປ."),
-  ]),
+  description: string(),
   content: string("ຈະຕ້ອງເປັນ string.", [
     minLength(1, "ຈະຕ້ອງບໍ່ຫວ່າງເປົ່າ."),
     custom((input) => isValidJson(input), "ຕ້ອງເປັນ string json"),

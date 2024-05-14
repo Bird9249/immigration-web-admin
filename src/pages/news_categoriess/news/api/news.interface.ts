@@ -3,13 +3,24 @@ import {
   IPaginated,
 } from "../../../../common/interface/pagination";
 
-export type NewTableState = IOffsetBasePaginate;
+export type NewTableState = IOffsetBasePaginate & {
+  category_id?: string;
+  status?: "draft" | "published" | "private";
+};
 
 export type NewResponse = {
   id: number;
   category_id: number;
+  category: {
+    id: number;
+    translates: {
+      id: number;
+      lang: "lo" | "en" | "zh_cn";
+      name: string;
+    }[];
+  };
   thumbnail: string;
-  status: string;
+  status: "draft" | "published" | "private";
   public_at: string;
   created_at: string;
   updated_at: string;

@@ -19,11 +19,11 @@ import FilePenIcon from "../../../components/icons/FilePenIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
 import Law from "../../../components/icons/Law";
 import Message from "../../../components/icons/Message";
+import NewsIcon from "../../../components/icons/NewsIcon";
 import UserIcon from "../../../components/icons/UserIcon";
 import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
-import NewsIcon from "../../../components/icons/NewsIcon";
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -144,6 +144,21 @@ export default function () {
       });
     }
 
+    if (checkPermissionGroup(PermissionGroup.News, auth)) {
+      preparedMenus.push({
+        icon: <NewsIcon />,
+        href: "/newsCategoriess",
+        label: "ຂ່າວສານ",
+        subMenus: {
+          menus: [
+            { href: "/newsCategoriess/list", label: "ປະເພດຂ່າວ" },
+            { href: "/newsCategoriess/news", label: "ຂ່າວ" },
+          ],
+          isOpen: false,
+        },
+      });
+    }
+
     if (checkPermissionGroup(PermissionGroup.User, auth)) {
       preparedMenus.push({
         icon: <UserIcon />,
@@ -154,20 +169,6 @@ export default function () {
             { href: "/users/list", label: "ຜູ້ໃຊ້" },
             { href: "/users/roles", label: "ບົດບາດ" },
             { href: "/users/permissions", label: "ການອະນຸຍາດ" },
-          ],
-          isOpen: false,
-        },
-      });
-    }
-    if (checkPermissionGroup(PermissionGroup.NewsCategoriess, auth)) {
-      preparedMenus.push({
-        icon: <NewsIcon />,
-        href: "/newsCategoriess",
-        label: "ປະເພດຂ່າວສານ",
-        subMenus: {
-          menus: [
-            { href: "/newsCategoriess/list", label: "ໝວດໝູ່ຂ່າວ" },
-            { href: "/newsCategoriess/news", label: "ຂ່າວ" },
           ],
           isOpen: false,
         },

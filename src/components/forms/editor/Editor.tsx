@@ -12,6 +12,7 @@ import {
   Show,
 } from "solid-js";
 import { createStore } from "solid-js/store";
+import { FileAndFolder } from "../../../pages/file-and-folder/FileAndFolder";
 import Button from "../../button/Button";
 import AlignIcon from "../../icons/AlignIcon";
 import HeadingIcon from "../../icons/HeadingIcon";
@@ -197,8 +198,9 @@ export default (props: Props) => {
   return (
     <div>
       <label
-        class={`block mb-2 text-sm font-medium  ${props.error ? "text-red-500" : "text-gray-900"
-          } dark:text-white`}
+        class={`block mb-2 text-sm font-medium  ${
+          props.error ? "text-red-500" : "text-gray-900"
+        } dark:text-white`}
       >
         {props.label} {props.required && <span class="text-red-600">*</span>}
       </label>
@@ -413,6 +415,17 @@ export default (props: Props) => {
             </form>
           </div>
         </Modal>
+
+        <FileAndFolder
+          open={[imageOpen, setImageOpen]}
+          onOpenChange={(value) => {
+            setImageOpen(value);
+          }}
+          onSelect={(url) => {
+            editor()?.commands.setImage({ src: url, alt: url });
+            setImageOpen(false);
+          }}
+        />
       </div>
 
       <Show when={props.error}>
