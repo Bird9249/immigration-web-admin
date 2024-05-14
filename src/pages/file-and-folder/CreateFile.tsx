@@ -67,6 +67,7 @@ export default (props: ParentProps<Props>) => {
             }}
             error={field.error}
             helpMessage="SVG, PNG, JPG, Webp, ຫຼື GIF (MAX. 1440x500px)."
+            id="file-and-folder"
           />
         )}
       </Field>

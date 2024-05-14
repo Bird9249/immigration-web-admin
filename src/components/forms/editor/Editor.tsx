@@ -422,9 +422,8 @@ export default (props: Props) => {
             setImageOpen(value);
           }}
           onSelect={(url) => {
+            editor()?.commands.setImage({ src: url, alt: url });
             setImageOpen(false);
-
-            editor()?.chain().focus().setImage({ src: url }).run();
           }}
         />
       </div>

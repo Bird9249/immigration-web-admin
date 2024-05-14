@@ -69,8 +69,8 @@ export const ConfirmProvider: ParentComponent = (props: ParentProps) => {
         open={state.isShow}
         onOpenChange={({ open }) => setState("isShow", open)}
         close
-        modalClass="!z-50"
-        backdropClass="!z-50"
+        modalClass="!z-[60]"
+        backdropClass="!z-[60]"
       >
         <div class="p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
           <Show when={state.icon}>{(icon) => icon()()}</Show>

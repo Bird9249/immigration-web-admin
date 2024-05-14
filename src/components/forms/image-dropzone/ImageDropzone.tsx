@@ -1,4 +1,4 @@
-import { Accessor, JSX, ParentProps, Show, Signal, createSignal } from "solid-js";
+import { JSX, ParentProps, Show, Signal } from "solid-js";
 
 interface Props extends ParentProps<JSX.InputHTMLAttributes<HTMLInputElement>> {
   error?: string;
@@ -7,13 +7,14 @@ interface Props extends ParentProps<JSX.InputHTMLAttributes<HTMLInputElement>> {
   onSelectFile?: (file?: File) => void;
   imageAccept?: string;
   previewImage: Signal<string>;
+  id?: string;
 }
 
 export default (props: Props) => {
   return (
     <div class="flex flex-col items-center justify-center w-full">
       <label
-        for="dropzone-file"
+        for={props.id ? props.id : "dropzone-file"}
         class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer"
         classList={{
           "border-gray-300 bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600":
@@ -60,7 +61,7 @@ export default (props: Props) => {
 
         <input
           accept={props.imageAccept}
-          id="dropzone-file"
+          id={props.id ? props.id : "dropzone-file"}
           type="file"
           class="hidden"
           onInput={(e) => {

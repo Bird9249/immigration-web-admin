@@ -1,4 +1,5 @@
 import {
+  createEffect,
   createResource,
   createSignal,
   For,
@@ -61,10 +62,17 @@ export const FileAndFolder = (props: ParentProps<Props>) => {
     name: "",
     id: 0,
   });
+
   const [fileAndFolder, { refetch }] = createResource(
     state,
     getFileAndFolderApi
   );
+
+  createEffect(async () => {
+    if (props.open[0]()) {
+      await refetch();
+    }
+  });
 
   return (
     <>
@@ -290,7 +298,9 @@ export const FileAndFolder = (props: ParentProps<Props>) => {
 
             <FileOrFolderForm
               folderId={state}
-              onSuccess={async () => await refetch()}
+              onSuccess={async () => {
+                await refetch();
+              }}
             />
           </div>
 
