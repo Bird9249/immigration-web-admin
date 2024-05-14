@@ -1,5 +1,5 @@
 import { useNavigate } from "@solidjs/router";
-import { isWithinInterval } from "date-fns";
+import { format } from "date-fns";
 import { Show, createResource, createSignal } from "solid-js";
 import {
   Permission,
@@ -8,35 +8,36 @@ import {
 import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
 import Dropdown from "../../../components/dropdown/Dropdown";
+// import Toggle from "../../../components/forms/toggle/Toggle";
 import Select from "../../../components/forms/select/Select";
-import Toggle from "../../../components/forms/toggle/Toggle";
 import PlusIcon from "../../../components/icons/PlusIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import Table from "../../../components/table/Table";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
-import { BannerResponse, BannerTableState } from "./api/banner.interface";
-import changePrivateStatusBanner from "./api/change-private-status-banner";
-import deleteBannerApi from "./api/delete-banner.api";
-import getBannerApi from "./api/get-banner.api";
+import {
+  CountriesTableState,
+  CountryResponse,
+} from "./api/countries.interface";
+import deleteCountriesApi from "./api/delete-countries.api";
+import getCountriesApi from "./api/get-countries.api";
 export default () => {
   const navigate = useNavigate();
   const [, actionConfirm] = useConfirm();
   const [, actionMessage] = useMessage();
   const auth = useAuth();
 
-  if (!checkPermission(Permission.Read, PermissionGroup.Banner, auth))
+  if (!checkPermission(Permission.Read, PermissionGroup.Countries, auth))
     navigate(-1);
 
-  const [state, setState] = createSignal<BannerTableState>({
-    offset: 0,  
+  const [state, setState] = createSignal<CountriesTableState>({
+    offset: 0,
     limit: 10,
-    is_inactive: undefined,
-    is_private: undefined,
+    is_except_visa: "-1",
   });
 
-  const [banner, { refetch }] = createResource(state, getBannerApi);
+  const [countries, { refetch }] = createResource(state, getCountriesApi);
 
   const actionMenus = (id: number) => {
     const menus: {
@@ -44,22 +45,22 @@ export default () => {
       onClick: () => void;
     }[][] = [[]];
 
-    if (checkPermission(Permission.Read, PermissionGroup.Banner, auth))
+    if (checkPermission(Permission.Read, PermissionGroup.Countries, auth))
       menus[0].push({
         onClick() {
-          navigate(`/banner/detail/${id}`);
+          navigate(`/countries/detail/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });
-    if (checkPermission(Permission.Write, PermissionGroup.Banner, auth))
+    if (checkPermission(Permission.Write, PermissionGroup.Countries, auth))
       menus[0].push({
         onClick() {
-          navigate(`/banner/edit/${id}`);
+          navigate(`/countries/edit/${id}`);
         },
         label: "ແກ້ໄຂ",
       });
 
-    if (checkPermission(Permission.Remove, PermissionGroup.Banner, auth)) {
+    if (checkPermission(Permission.Remove, PermissionGroup.Countries, auth)) {
       menus.push([]);
 
       menus[1].push({
@@ -70,7 +71,7 @@ export default () => {
             ),
             message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
             onConfirm: async () => {
-              const res = await deleteBannerApi(String(id));
+              const res = await deleteCountriesApi(String(id));
               actionMessage.showMessage({
                 level: "success",
                 message: res.data.message,
@@ -90,64 +91,39 @@ export default () => {
       header={
         <div class="flex flex-col items-start justify-between border-b dark:border-gray-600 p-4 sm:flex-row sm:items-center">
           <h2 class="text-lg font-semibold mb-2 sm:mb-0 dark:text-white">
-            ຕາຕະລາງເກັບຮັກສາປ້າຍໂຄສະນາ
+            ຕາຕະລາງເກັບຮັກສາຂໍ້ມູນປະເທດ
           </h2>
 
           <div class=" flex items-center justify-end flex-col sm:flex-row gap-2 w-full sm:w-fit">
             <Select
               class="w-full sm:w-fit"
-              placeholder="ການເຜີຍແຜ່"
+              placeholder="ເລືອກປະເທດທີ່ຍົກເວັ້ນວີຊ້າ"
               contentClass="w-44"
               items={[
                 {
-                  label: "ການເຜີຍແຜ່",
+                  label: "ເລືອກປະເທດທີ່ຍົກເວັ້ນວີຊາ",
                   value: "-1",
                 },
                 {
-                  label: "ສາທາລະນະ",
+                  label: "ຕ້ອງການວີຊາ",
                   value: "0",
                 },
                 {
-                  label: "ສວນຕົວ",
+                  label: "ຍົກເວັ້ນວີຊາ",
                   value: "1",
                 },
               ]}
               onValueChange={({ value }) => {
                 setState((prev) => ({
                   ...prev,
-                  is_private: value[0] === "-1" ? undefined : value[0],
-                }));
-              }}
-            ></Select>
-            <Select
-              class="w-full sm:w-fit"
-              placeholder="ເລືອກສະຖານະ"
-              contentClass="w-44"
-              items={[
-                {
-                  label: "ເລືອກສະຖານະ",
-                  value: "-1",
-                },
-                {
-                  label: "ສະແດງຢູ່",
-                  value: "0",
-                },
-                {
-                  label: "ບໍ່ໄດ້ໃຊ້ງານ",
-                  value: "1",
-                },
-              ]}
-              onValueChange={({ value }) => {
-                setState((prev) => ({
-                  ...prev,
-                  is_inactive: value[0] === "-1" ? undefined : value[0],
+                  is_except_visa: value[0] as "-1" | "0" | "1",
                 }));
               }}
             ></Select>
             <Show
               when={checkPermission(
                 Permission.Write,
-                PermissionGroup.Banner,
+                PermissionGroup.Countries,
                 auth
               )}
             >
@@ -155,7 +131,7 @@ export default () => {
                 class="w-full sm:w-fit"
                 prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
                 onClick={() => {
-                  navigate("/banner/create");
+                  navigate("/countries/create");
                 }}
               >
                 ເພີ່ມຂໍ້ມູນ
@@ -164,7 +140,7 @@ export default () => {
           </div>
         </div>
       }
-      value={banner}
+      value={countries}
       responseField="data"
       onChange={({ paginate }) => {
         setState((prev) => ({
@@ -177,7 +153,7 @@ export default () => {
       {[
         {
           header: "ຮູບ",
-          body: ({ image }: BannerResponse) => (
+          body: ({ image }: CountryResponse) => (
             <div class="flex items-center w-60">
               <img
                 src={import.meta.env.VITE_IMG_URL + image}
@@ -188,53 +164,37 @@ export default () => {
           ),
         },
         {
-          header: "ລິ້ງ",
-          body: ({ link }: BannerResponse) => (
-            <Show when={link} fallback={"ບໍ່ມີລິ້ງ"}>
-              <a
-                href={link}
-                class="font-medium text-primary-500 dark:text-primary-500 hover:underline"
-              >
-                {link}
-              </a>
+          header: "ຊື່",
+          body: ({ translates }: CountryResponse) => (
+            <div>{translates[0].name}</div>
+          ),
+        },
+        {
+          header: "ຍົກເວັ້ນວິຊາ",
+          body: ({ is_except_visa }: CountryResponse) => (
+            <div class="flex items-center">
+              <div
+                class="border rounded-full size-3 mr-2"
+                classList={{
+                  "bg-green-500": is_except_visa,
+                  "bg-red-500": !is_except_visa,
+                }}
+              ></div>
+              {is_except_visa ? "ຍົກເວັ້ນວິຊາ" : "ຕ້ອງການວີຊາ"}
+            </div>
+          ),
+        },
+        {
+          header: "ເວລາສ້າງ",
+          body: ({ created_at }: CountryResponse) => (
+            <Show when={created_at} fallback="...">
+              {format(created_at, "dd/MM/yyyy HH:mm:ss")}
             </Show>
           ),
         },
 
         {
-          header: "ສະຖານະ",
-          body: ({ start_time, end_time }: BannerResponse) => (
-            <Show
-              when={isWithinInterval(new Date(), {
-                start: start_time,
-                end: end_time,
-              })}
-              fallback={
-                <span class="text-nowrap bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
-                  ບໍ່ໄດ້ໃຊ້ງານ
-                </span>
-              }
-            >
-              <span class="text-nowrap bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-                ດຳເນີນການຢູ່
-              </span>
-            </Show>
-          ),
-        },
-        {
-          header: "ການເຜີຍແຜ່",
-          body: ({ id, is_private }: BannerResponse) => (
-            <Toggle
-              value={!is_private}
-              onValueChange={async () => {
-                await changePrivateStatusBanner(id, !is_private);
-                is_private = !is_private;
-              }}
-            />
-          ),
-        },
-        {
-          body: ({ id }: BannerResponse) => (
+          body: ({ id }: CountryResponse) => (
             <Dropdown
               triggerEl={
                 <button class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-1 inline-flex items-center justify-center">
