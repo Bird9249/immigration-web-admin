@@ -10,6 +10,7 @@ import hotelRoutes from "./pages/hotels/route";
 import lawsRoutes from "./pages/laws/route";
 import registrationRoutes from "./pages/registrations/route";
 import userRoutes from "./pages/users/route";
+import newCategoriessRoutes from "./pages/news_categoriess/route";
 import countriesRoutes from "./pages/countries/route";
 import visaCategoryRoutes from "./pages/visa-category/route";
 
@@ -23,6 +24,7 @@ const routes: RouteDefinition[] = [
         component: lazy(() => import("./pages/dashboard/Dashboard")),
       },
       ...userRoutes,
+      ...newCategoriessRoutes,
       ...countriesRoutes,
       ...contactsRoutes,
       ...lawsRoutes,
