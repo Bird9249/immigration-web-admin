@@ -18,10 +18,7 @@ import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import createProvinceApi from "./api/create-province.api";
-import {
-  ProvinceForm,
-  ProvincesSchema,
-} from "./schemas/province.schemas";
+import { ProvinceForm, ProvincesSchema } from "./schemas/province.schemas";
 
 export default () => {
   const [, actionMessage] = useMessage();
@@ -33,16 +30,15 @@ export default () => {
     { label: "ພາສາຈີນ", key: "zh_cn" },
   ]);
 
-  if (!checkPermission(Permission.Write, PermissionGroup.Province, auth))
+  if (!checkPermission(Permission.Write, PermissionGroup.Checkpoint, auth))
     navigator(-1);
 
-  const [provinceForm, { Form, Field, FieldArray }] =
-    createForm<ProvinceForm>({
-      validate: valiForm(ProvincesSchema),
-      initialValues: {
-        translates: [{ name: "" }, { name: "" }, { name: "" }],
-      },
-    });
+  const [provinceForm, { Form, Field, FieldArray }] = createForm<ProvinceForm>({
+    validate: valiForm(ProvincesSchema),
+    initialValues: {
+      translates: [{ name: "" }, { name: "" }, { name: "" }],
+    },
+  });
   createEffect(() => {
     const errors = getErrors(provinceForm);
 
@@ -77,8 +73,9 @@ export default () => {
                 content: (
                   <div class="my-4 flex flex-col gap-4">
                     <Field
-                      name={`${fieldArray.name}.${idx as unknown as 0 | 1 | 2
-                        }.name`}
+                      name={`${fieldArray.name}.${
+                        idx as unknown as 0 | 1 | 2
+                      }.name`}
                     >
                       {(field, props) => (
                         <InputText
