@@ -389,6 +389,7 @@ export default () => {
         <Button type="submit" isLoading={hotelForm.submitting} class="mr-3">
           ອັບເດດໂຮງແຮມ
         </Button>
+
         <Show
           when={checkPermission(
             Permission.Remove,
