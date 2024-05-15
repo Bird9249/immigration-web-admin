@@ -24,6 +24,7 @@ import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import createHotelApi from "./api/create-hotel.api";
 import { HotelForm, HotelSchema } from "./schemas/hotel.schemas";
+import { useAxios } from "../../../contexts/axios/AxiosContext";
 
 export default () => {
   const [, actionMessage] = useMessage();
