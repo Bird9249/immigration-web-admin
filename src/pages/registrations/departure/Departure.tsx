@@ -10,6 +10,7 @@ import Button from "../../../components/button/Button";
 import Select from "../../../components/forms/select/Select";
 import CheckIcon from "../../../components/icons/CheckIcon";
 import InputSearch from "../../../components/input-search/InputSearch";
+import Modal from "../../../components/modal/Modal";
 import Table from "../../../components/table/Table";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { DepartureTableState, ListDeparture } from "./api/departure.interface";
@@ -229,10 +230,19 @@ export default () => {
           },
         ]}
       </Table>
-      <VerifyDepartureCode
-        open={[openVerify, setOpenVerify]}
-        onSuccess={async () => await refetch()}
-      />
+
+      <Modal
+        onOpenChange={({ open }) => {
+          setOpenVerify(open);
+        }}
+        open={openVerify()}
+      >
+        <VerifyDepartureCode
+          onClose={() => {
+            setOpenVerify(false);
+          }}
+        />
+      </Modal>
     </>
   );
 };

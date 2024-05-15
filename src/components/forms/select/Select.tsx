@@ -3,7 +3,8 @@ import { Index, Portal, Show } from "solid-js/web";
 import AngleIcon from "../../icons/AngleIcon";
 import "./Select.scss";
 
-interface Props extends SelectRootProps<{ label: string; value: string | undefined }> {
+interface Props
+  extends SelectRootProps<{ label: string; value: string | undefined }> {
   placeholder?: string;
   label?: string;
   size?: "xs" | "sm" | "md" | "lg";
@@ -59,17 +60,15 @@ export default (props: Props) => {
             <div class="py-2 text-sm text-gray-700 dark:text-gray-200">
               <Index each={props.items}>
                 {(item) => (
-                  <a href="#">
-                    <Select.Item
-                      item={item()}
-                      class="flex px-4 py-2 justify-between dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600 transition relative"
-                    >
-                      <Select.ItemText class="z-20">
-                        {item().label}
-                      </Select.ItemText>
-                      <Select.ItemIndicator class="absolute top-0 left-0 w-full h-full bg-primary-50 hover:bg-primary-100 dark:opacity-10"></Select.ItemIndicator>
-                    </Select.Item>
-                  </a>
+                  <Select.Item
+                    item={item()}
+                    class="cursor-pointer flex px-4 py-2 justify-between dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600 transition relative"
+                  >
+                    <Select.ItemText class="z-20">
+                      {item().label}
+                    </Select.ItemText>
+                    <Select.ItemIndicator class="absolute top-0 left-0 w-full h-full bg-primary-50 hover:bg-primary-100 dark:opacity-10"></Select.ItemIndicator>
+                  </Select.Item>
                 )}
               </Index>
             </div>

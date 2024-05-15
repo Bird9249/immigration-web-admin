@@ -1,6 +1,6 @@
 import { JSX, ParentProps } from "solid-js";
 
-interface IconProps extends ParentProps<JSX.SvgSVGAttributes<SVGSVGElement>> {}
+interface IconProps extends ParentProps<JSX.SvgSVGAttributes<SVGSVGElement>> { }
 
 export default function (props: IconProps) {
   return (

@@ -10,6 +10,7 @@ import Button from "../../../components/button/Button";
 import Select from "../../../components/forms/select/Select";
 import CheckIcon from "../../../components/icons/CheckIcon";
 import InputSearch from "../../../components/input-search/InputSearch";
+import Modal from "../../../components/modal/Modal";
 import Table from "../../../components/table/Table";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { ArrivalTableState, ListArrival } from "./api/arrival.interface";
@@ -70,7 +71,7 @@ export default () => {
                 </Show>
               </div>
             </div>
-            
+
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 py-3 mx-4">
               <InputSearch
                 placeholder="ຈຸດເຂົ້າ..."
@@ -251,10 +252,19 @@ export default () => {
           },
         ]}
       </Table>
-      <VerifyArrivalCode
-        open={[openVerify, setOpenVerify]}
-        onSuccess={async () => await refetch()}
-      />
+
+      <Modal
+        onOpenChange={({ open }) => {
+          setOpenVerify(open);
+        }}
+        open={openVerify()}
+      >
+        <VerifyArrivalCode
+          onClose={() => {
+            setOpenVerify(false);
+          }}
+        />
+      </Modal>
     </>
   );
 };

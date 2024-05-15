@@ -2,17 +2,48 @@ import { useParams } from "@solidjs/router";
 import { format } from "date-fns";
 import { createResource, createSignal, Match, Show, Switch } from "solid-js";
 import { Transition } from "solid-transition-group";
+import Button from "../../../components/button/Button";
 import CheckIcon from "../../../components/icons/CheckIcon";
 import LoadingIcon from "../../../components/icons/LoadingIcon";
+import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
+import { useMessage } from "../../../contexts/message/MessageContext";
 import { fadeIn, fadeOut } from "../../../utils/transition-animation";
 import getDepartureRegistrationDetailApi from "./api/get-departure-registration-detail.api";
+import verifyDepartureCodeApi from "./api/verify-departure-code.api";
 
 export default () => {
   const param = useParams();
+  const [, actionMessage] = useMessage();
+  const [, actionConfirm] = useConfirm();
 
   const [id] = createSignal<string>(param.id);
 
-  const [arrival] = createResource(id, getDepartureRegistrationDetailApi);
+  const [arrival, { refetch, mutate }] = createResource(
+    id,
+    getDepartureRegistrationDetailApi
+  );
+
+  async function verify() {
+    actionConfirm.showConfirm({
+      icon: () => (
+        <CheckIcon
+          iconDirection="badge"
+          class="text-primary-600 dark:text-primary-500 w-11 h-11 mb-3.5 mx-auto"
+        />
+      ),
+      message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຢືນຢັນຂໍ້ມູນການລົງທະບຽນນີ້?",
+      onConfirm: async () => {
+        const res = await verifyDepartureCodeApi(id());
+        mutate(undefined);
+        await refetch();
+        actionMessage.showMessage({
+          level: "success",
+          message: res.data.message,
+        });
+      },
+      confirmColor: "primary",
+    });
+  }
 
   return (
     <div class="relative">
@@ -92,10 +123,26 @@ export default () => {
                   item().data.verified_at ? (
                     <span class="text-green-500 font-medium flex gap-1 items-center">
                       <CheckIcon iconDirection="circle" class="size-4" />{" "}
-                      {format(item().data.verified_at as string, "dd/MM/yyyy")}
+                      {format(
+                        item().data.verified_at as string,
+                        "dd/MM/yyyy HH:mm:ss"
+                      )}
                     </span>
                   ) : (
-                    "ຍັງບໍ່ມີການຢືນຢັນ"
+                    <>
+                      ຍັງບໍ່ມີການຢືນຢັນ
+                      <Button
+                        color="primary"
+                        size="sm"
+                        class="ms-2"
+                        prefixIcon={<CheckIcon iconDirection="badge" />}
+                        onClick={async () => {
+                          await verify();
+                        }}
+                      >
+                        ຢືນຢັນ
+                      </Button>
+                    </>
                   )
                 }
               </Show>
