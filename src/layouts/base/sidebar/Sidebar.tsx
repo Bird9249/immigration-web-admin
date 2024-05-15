@@ -20,6 +20,7 @@ import UserIcon from "../../../components/icons/UserIcon";
 import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
+import CheckpointIcon from "../../../components/icons/CheckpointIcon";
 
 interface SidebarMenuType {
   icon: JSXElement;
@@ -99,6 +100,21 @@ export default function () {
         },
       });
     }
+    if (checkPermissionGroup(PermissionGroup.Province, auth)) {
+      preparedMenus.push({
+        icon: <CheckpointIcon />,
+        href: "/checkpoint",
+        label: "ຈັດການດ່ານ",
+        subMenus: {
+          menus: [
+            // { href: "/checkpoint/list", label: "ຈັດການປ້າຍ" },
+            { href: "/checkpoint/province", label: "ຈັດການແຂວງ" },
+          ],
+          isOpen: false,
+        },
+      });
+    }
+
 
     if (checkPermissionGroup(PermissionGroup.Feedback, auth)) {
       preparedMenus.push({

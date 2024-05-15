@@ -9,6 +9,7 @@ import hotelRoutes from "./pages/hotels/route";
 import registrationRoutes from "./pages/registrations/route";
 import userRoutes from "./pages/users/route";
 import visaCategoryRoutes from "./pages/visa-category/route";
+import provinceRoutes from "./pages/checkpoints/route";
 
 const routes: RouteDefinition[] = [
   {
@@ -27,6 +28,7 @@ const routes: RouteDefinition[] = [
       ...bannerRoutes,
       ...visaCategoryRoutes,
       ...adminHotelRoutes,
+      ...provinceRoutes,
       {
         path: "/*all",
         component: lazy(() => import("./pages/errors/PageNotFound")),
