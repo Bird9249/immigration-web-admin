@@ -108,6 +108,7 @@ export default function () {
         subMenus: {
           menus: [
             { href: "/checkpoint/category", label: "ປະເພດດ່ານ" },
+            { href: "/checkpoint", label: "ຂໍ້ມູນດ່ານ" },
             { href: "/checkpoint/province", label: "ຈັດການແຂວງ" },
           ],
           isOpen: false,

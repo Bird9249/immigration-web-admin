@@ -13,4 +13,5 @@ export enum PermissionGroup {
   Feedback = "feedback",
   VisaCategory = "visa-category",
   Checkpoint = "checkpoint",
+  Countries = "country",
 }

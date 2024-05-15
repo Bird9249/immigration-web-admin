@@ -11,8 +11,8 @@ export type CheckpointCategoryDetailResponse = {
   updated_at: string;
   translates: {
     id: number;
-    title: "ດ່ານຊາຍແດນສາກົນ";
-    description: "ດ່ານ​ຊາຍ​ແດນ​ລາວ​ເປັນ​ປະຕູ​ທີ່​ສຳຄັນ​ສຳລັບ​ຜູ້​ເດີນທາງ​ເຂົ້າ​ຫຼື​ອອກ​ຈາກ​ປະ​ເທດ​ລາວ, ສະໜອງ​ການ​ບໍລິການ​ດ້ານ​ຄົນ​ເຂົ້າ​ເມືອງ​ແລະ​ພາສີ​ທີ່​ຈຳ​ເປັນ​ເພື່ອ​ປະສົບ​ການ​ຜ່ານ​ດ່ານ​ຊາຍ​ແດນ​ທີ່​ລຽບ​ງ່າຍ.";
+    title: string;
+    description: string;
     lang: "lo" | "en" | "zh_cn";
   }[];
 };

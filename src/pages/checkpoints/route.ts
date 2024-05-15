@@ -6,6 +6,19 @@ const provinceRoutes: RouteDefinition[] = [
     path: "/checkpoint",
     component: lazy(() => import("./Checkpoint")),
     children: [
+      { path: "/", component: lazy(() => import("./checkpoint/Checkpoint")) },
+      {
+        path: "/create",
+        component: lazy(() => import("./checkpoint/CreateCheckpoint")),
+      },
+      {
+        path: "/edit/:id",
+        component: lazy(() => import("./checkpoint/EditCheckpoint")),
+      },
+      {
+        path: "/:id",
+        component: lazy(() => import("./checkpoint/DetailCheckpoint")),
+      },
       {
         path: "/category",
         component: lazy(() => import("./category/CheckpointCategory")),
