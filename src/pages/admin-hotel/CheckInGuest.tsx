@@ -57,7 +57,7 @@ export default ({ onClose }: ParentProps<Props>) => {
 
   onMount(() => {
     let html5QrcodeScanner = new Html5QrcodeScanner(
-      "reader",
+      "hotel-scan",
       { fps: 10, qrbox: { width: 250, height: 250 } },
       false
     );
@@ -98,7 +98,7 @@ export default ({ onClose }: ParentProps<Props>) => {
         </div>
 
         <div class="flex justify-center flex-col items-center">
-          <div id="reader" class="size-full"></div>
+          <div id="hotel-scan" class="size-full"></div>
         </div>
 
         <Show when={error()}>

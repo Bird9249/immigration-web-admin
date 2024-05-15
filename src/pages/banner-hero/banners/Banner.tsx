@@ -30,7 +30,7 @@ export default () => {
     navigate(-1);
 
   const [state, setState] = createSignal<BannerTableState>({
-    offset: 0,
+    offset: 0,  
     limit: 10,
     is_inactive: undefined,
     is_private: undefined,

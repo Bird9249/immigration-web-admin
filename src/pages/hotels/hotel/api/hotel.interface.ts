@@ -23,6 +23,14 @@ export type HotelResponse = {
     district: string;
     village: string;
   }[];
+  user: {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    hotel_id: number;
+    email: string;
+    password: string;
+  };
 };
 
 export interface HotelsResponse extends IPaginated {

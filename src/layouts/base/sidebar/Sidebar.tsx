@@ -14,9 +14,13 @@ import checkPermissionGroup from "../../../common/utils/check-permission-group";
 import Building from "../../../components/icons/Building";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
 import CheckpointIcon from "../../../components/icons/CheckpointIcon";
+import Contacts from "../../../components/icons/Contacts";
+import Countries from "../../../components/icons/Countries";
 import FilePenIcon from "../../../components/icons/FilePenIcon";
 import HomeIcon from "../../../components/icons/HomeIcon";
+import Law from "../../../components/icons/Law";
 import Message from "../../../components/icons/Message";
+import NewsIcon from "../../../components/icons/NewsIcon";
 import UserIcon from "../../../components/icons/UserIcon";
 import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
@@ -124,6 +128,53 @@ export default function () {
       });
     }
 
+    if (checkPermissionGroup(PermissionGroup.Contacts, auth)) {
+      preparedMenus.push({
+        icon: <Contacts />,
+        href: "/contacts",
+        label: "ຂໍ້ມູນການຕິດຕໍ່",
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.Law, auth)) {
+      preparedMenus.push({
+        icon: <Law />,
+        href: "/laws",
+        label: "ກົດໝາຍ",
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
+      preparedMenus.push({
+        icon: <Building />,
+        href: "/hotels",
+        label: "ຈັດການໂຮງແຮມ",
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.Countries, auth)) {
+      preparedMenus.push({
+        icon: <Countries />,
+        href: "/countries",
+        label: "ປະເທດ",
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.News, auth)) {
+      preparedMenus.push({
+        icon: <NewsIcon />,
+        href: "/newsCategoriess",
+        label: "ຂ່າວສານ",
+        subMenus: {
+          menus: [
+            { href: "/newsCategoriess/list", label: "ປະເພດຂ່າວ" },
+            { href: "/newsCategoriess/news", label: "ຂ່າວ" },
+          ],
+          isOpen: false,
+        },
+      });
+    }
+
     if (checkPermissionGroup(PermissionGroup.User, auth)) {
       preparedMenus.push({
         icon: <UserIcon />,
@@ -137,14 +188,6 @@ export default function () {
           ],
           isOpen: false,
         },
-      });
-    }
-
-    if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
-      preparedMenus.push({
-        icon: <Building />,
-        href: "/hotels",
-        label: "ຈັດການໂຮງແຮມ",
       });
     }
 

@@ -9,7 +9,7 @@ type Props = {
   folderId: Accessor<{
     parent_id: string;
   }>;
-  onSuccess: () => void;
+  onSuccess: () => Promise<void>;
 };
 
 export default (props: ParentProps<Props>) => {
@@ -83,9 +83,9 @@ export default (props: ParentProps<Props>) => {
                 content: (
                   <CreateFile
                     folderId={props.folderId}
-                    onSuccess={() => {
+                    onSuccess={async () => {
                       setOpenCreate(false);
-                      props.onSuccess();
+                      await props.onSuccess();
                     }}
                   />
                 ),
@@ -95,9 +95,9 @@ export default (props: ParentProps<Props>) => {
                 content: (
                   <CreateFolder
                     folderId={props.folderId}
-                    onSuccess={() => {
+                    onSuccess={async () => {
                       setOpenCreate(false);
-                      props.onSuccess();
+                      await props.onSuccess();
                     }}
                   />
                 ),

@@ -1,7 +1,7 @@
-import { FormError, createForm, valiForm } from "@modular-forms/solid";
-import { useLocation, useNavigate } from "@solidjs/router";
+import { createForm, valiForm } from "@modular-forms/solid";
+import { useNavigate } from "@solidjs/router";
 import { AxiosError } from "axios";
-import { Show } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import Button from "../../../components/button/Button";
 import InputText from "../../../components/forms/input-text/InputText";
 import PasswordInput from "../../../components/forms/password-input/PasswordInput";
@@ -13,13 +13,13 @@ import { LoginForm, LoginSchema } from "./login.schema";
 export default () => {
   const [, actions] = useMessage();
   const navigate = useNavigate();
-  const location = useLocation();
+  const [error, setError] = createSignal<string>("");
 
   const [loginForm, { Form, Field }] = createForm<LoginForm>({
     validate: valiForm(LoginSchema),
     initialValues: {
       email: "dev@gmail.com",
-      password: "devPassword",
+      password: "DevAdm1n@2024",
     },
   });
 
@@ -34,8 +34,7 @@ export default () => {
       navigate("/dashboard");
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new FormError<LoginForm>(error.message);
-      } else {
+        setError(error.response?.data.message);
       }
     }
   }
@@ -46,16 +45,14 @@ export default () => {
         ເຂົ້າສູ່ລະບົບບັນຊີຂອງທ່ານ
       </h1>
 
-      <Show when={loginForm.response.message}>
+      <Show when={error()}>
         <div
           class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
           role="alert"
         >
           <InfoCircleIcon class="flex-shrink-0 w-6 h-6" />
           <span class="sr-only">Info</span>
-          <div class="ms-3 text-sm font-medium">
-            {loginForm.response.message}
-          </div>
+          <div class="ms-3 text-sm font-medium">{error()}</div>
         </div>
       </Show>
 
