@@ -22,9 +22,9 @@ import {
   ProvinceForm,
   ProvincesSchema,
 } from "./schemas/province.schemas";
-import { ProvinceTableState } from "./api/province.interface";
 import getCountriesApi from "../../countries/countrie/api/get-countries.api";
 import Select from "../../../components/forms/select/Select";
+import { CountriesTableState } from "../../countries/countrie/api/countries.interface";
 export default () => {
   const [, actionMessage] = useMessage();
   const navigator = useNavigate();
@@ -35,12 +35,9 @@ export default () => {
     { label: "ພາສາຈີນ", key: "zh_cn" },
   ]);
 
-  if (!checkPermission(Permission.Write, PermissionGroup.Province, auth))
+  if (!checkPermission(Permission.Write, PermissionGroup.Checkpoint, auth))
     navigator(-1);
-  const [countryState] = createSignal<ProvinceTableState>({
-    offset: undefined,
-    limit: undefined,
-  });
+  const [countryState] = createSignal<CountriesTableState>();
 
   const [countrys] = createResource(countryState, getCountriesApi);
   const [countryOptions, setCountrysOptions] = createSignal<
@@ -64,15 +61,18 @@ export default () => {
         setTabsItems(idx, "alert", false);
       }
     });
-    // if (countrys.state === "ready") {
-    //   countryOptions(
-    //     countrys().data.data.map((val) => ({
-    //       label: val.translates[0].name,
-    //       value: String(val.id),
-    //     }))
-    //   );
-    // }
+
   });
+
+  createEffect(() => {
+    if (countrys.state === "ready") {
+
+      // countryOptions(
+
+      // );
+    }
+    console.log(countrys());
+  })
 
   const handleSubmit: SubmitHandler<ProvinceForm> = async (values) => {
     const res = await createProvinceApi(values);
@@ -87,22 +87,7 @@ export default () => {
         ເພີ່ມຂໍ້ມູນແຂວງ
       </h2>
       <div class="grid gap-4 my-4 md:grid-cols-2 md:gap-6">
-        {/* <Field name="country_ids" type="string[]">
-          {(field, props) => (
-            <Select
-              placeholder="ເລືອກປະເທດ"
-              contentClass="w-44"
-              onValueChange={({ value }) => {
-                setValue(provinceForm, "country_ids", value);
-              }}
-              label="ເລືອກຂ່າວ"
-              name={props.name}
-              items={setCountrysOptions()}
-              error={field.error}
-              value={field.value}
-            ></Select>
-          )}
-        </Field> */}
+
       </div>
       <FieldArray name="translates">
         {(fieldArray) => (

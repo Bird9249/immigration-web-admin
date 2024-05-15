@@ -24,5 +24,5 @@ export type CountryResponse = {
 };
 
 export interface CountriesResponse extends IPaginated {
-  data: CountriesResponse[];
+  data: CountryResponse[];
 }
