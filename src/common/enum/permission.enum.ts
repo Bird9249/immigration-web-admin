@@ -16,4 +16,5 @@ export enum PermissionGroup {
   Law = "law",
   Contacts = "contact",
   Countries = "country",
+  Checkpoint = "checkpoint",
 }
