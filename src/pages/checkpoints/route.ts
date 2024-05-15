@@ -6,18 +6,18 @@ const provinceRoutes: RouteDefinition[] = [
     path: "/checkpoint",
     component: lazy(() => import("./Checkpoint")),
     children: [
-      //   {
-      //     path: "/list",
-      //     component: lazy(() => import("./news_categories/NewCategoriess")),
-      //   },
-      //   {
-      //     path: "/create",
-      //     component: lazy(() => import("./news_categories/CreateNewCategoriess")),
-      //   },
-      //   {
-      //     path: "/edit/:id",
-      //     component: lazy(() => import("./news_categories/EditNewCategoriess")),
-      //   },
+      {
+        path: "/category",
+        component: lazy(() => import("./category/CheckpointCategory")),
+      },
+      {
+        path: "/category/create",
+        component: lazy(() => import("./category/CreateCheckpointCategory")),
+      },
+      {
+        path: "/category/edit/:id",
+        component: lazy(() => import("./category/EditCheckpointCategory")),
+      },
       {
         path: "/province",
         component: lazy(() => import("./province/Province")),
