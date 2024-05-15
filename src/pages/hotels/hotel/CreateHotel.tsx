@@ -1,13 +1,13 @@
 import {
-  SubmitHandler,
   createForm,
   getErrors,
   reset,
   setValue,
+  SubmitHandler,
   valiForm,
 } from "@modular-forms/solid";
 import { useNavigate } from "@solidjs/router";
-import { createEffect, createSignal } from "solid-js";
+import { createEffect, createSignal, on, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import {
   Permission,
@@ -17,6 +17,7 @@ import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
 import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
 import InputText from "../../../components/forms/input-text/InputText";
+import PasswordInput from "../../../components/forms/password-input/PasswordInput";
 import Toggle from "../../../components/forms/toggle/Toggle";
 import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
@@ -38,6 +39,18 @@ export default () => {
     navigator(-1);
 
   const [previewImg, setPreviewImg] = createSignal<string>("");
+
+  const [haveAdmin, setHaveAdmin] = createSignal<boolean>(false);
+
+  createEffect(
+    on(haveAdmin, (input) => {
+      if (input) {
+        setValue(hotelForm, "user", { email: "", password: "" });
+      } else {
+        setValue(hotelForm, "user", undefined);
+      }
+    })
+  );
 
   const [hotelForm, { Form, Field, FieldArray }] = createForm<HotelForm>({
     validate: valiForm(HotelSchema),
@@ -213,7 +226,47 @@ export default () => {
             />
           )}
         </Field>
+        <Toggle
+          value={haveAdmin()}
+          onValueChange={(val) => {
+            setHaveAdmin(val);
+          }}
+          label="ມີແອັດມີນ"
+        />
       </div>
+
+      <Show when={haveAdmin()}>
+        <>
+          <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+            ຂໍ້ມູນຜູ້ຈັດການໂຮງແຮມ
+          </h2>
+          <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
+            <Field name="user.email">
+              {(field, props) => (
+                <InputText
+                  label="ອີເມວ"
+                  {...props}
+                  value={field.value}
+                  error={field.error}
+                  placeholder="name@company.com"
+                />
+              )}
+            </Field>
+
+            <Field name="user.password">
+              {(field, props) => (
+                <PasswordInput
+                  label="ລະຫັດຜ່ານ"
+                  {...props}
+                  value={field.value}
+                  error={field.error}
+                  placeholder="ປ້ອນລະຫັດຜ່ານ"
+                />
+              )}
+            </Field>
+          </div>
+        </>
+      </Show>
 
       <Button type="submit" isLoading={hotelForm.submitting}>
         ເພີ່ມໂຮງແຮມ

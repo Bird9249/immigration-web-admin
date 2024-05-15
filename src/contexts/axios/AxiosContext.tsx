@@ -4,7 +4,9 @@ import {
   ParentProps,
   Signal,
   createContext,
+  createEffect,
   createSignal,
+  on,
   useContext,
 } from "solid-js";
 import { useMessage } from "../message/MessageContext";
@@ -51,6 +53,38 @@ export const AxiosProvider = (props: ParentProps<{}>) => {
         }
       }
     }
+  );
+
+  createEffect(
+    on(error, (err) => {
+      if (err) {
+        setTimeout(() => {
+          setError(undefined);
+        }, 5000);
+      } else {
+        axios.interceptors.response.use(
+          (res) => res,
+          (err: AxiosError<{ message: string; errors: string[] }>) => {
+            if (err.response) {
+              const checkErrorMessage = err.response.data.message
+                ? err.response.data.message
+                : err.message;
+
+              if (err.response.status >= 400 && err.response.status < 500) {
+                if (err.response.status === 401) navigator("/login");
+
+                setError(() => ({ message: checkErrorMessage, level: "warn" }));
+              } else if (err.response.status >= 500) {
+                setError(() => ({
+                  message: checkErrorMessage,
+                  level: "danger",
+                }));
+              }
+            }
+          }
+        );
+      }
+    })
   );
 
   return (

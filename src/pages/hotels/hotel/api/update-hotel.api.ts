@@ -12,6 +12,9 @@ export default async (id: string, form: UpdateHotelForm) => {
   formData.append("lo", JSON.stringify(form.translates[0]));
   formData.append("en", JSON.stringify(form.translates[1]));
   formData.append("zh_cn", JSON.stringify(form.translates[2]));
+  if (form.user) {
+    formData.append("user", JSON.stringify(form.user));
+  }
 
   return axios.put<{ message: string }>(`/hotel/${id}`, formData);
 };
