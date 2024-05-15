@@ -389,6 +389,14 @@ export default () => {
         <Button type="submit" isLoading={hotelForm.submitting} class="mr-3">
           ອັບເດດໂຮງແຮມ
         </Button>
+        
+        <Show
+          when={checkPermission(
+            Permission.Remove,
+            PermissionGroup.Hotel,
+            auth
+          )}
+        >
         <Button
           color="danger"
           outlined
@@ -416,6 +424,7 @@ export default () => {
         >
           ລຶບ
         </Button>
+        </Show>
       </div>
 
       <Transition onEnter={fadeIn} onExit={fadeOut}>

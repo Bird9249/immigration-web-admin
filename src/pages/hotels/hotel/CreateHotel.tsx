@@ -34,6 +34,9 @@ export default () => {
     { label: "ພາສາອັງກິດ", key: "en" },
     { label: "ພາສາຈີນ", key: "zh_cn" },
   ]);
+  const {
+    error: [error, setError],
+  } = useAxios();
 
   if (!checkPermission(Permission.Write, PermissionGroup.Hotel, auth))
     navigator(-1);
@@ -266,6 +269,18 @@ export default () => {
             </Field>
           </div>
         </>
+      </Show>
+
+      <Show when={error()}>
+        {(err) => (
+          <Alert
+            level={err().level}
+            message={err().message}
+            onClose={() => {
+              setError(undefined);
+            }}
+          />
+        )}
       </Show>
 
       <Button type="submit" isLoading={hotelForm.submitting}>
