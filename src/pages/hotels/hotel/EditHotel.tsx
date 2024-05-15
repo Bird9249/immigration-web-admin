@@ -16,14 +16,17 @@ import {
   PermissionGroup,
 } from "../../../common/enum/permission.enum";
 import checkPermission from "../../../common/utils/check-permission";
+import Alert from "../../../components/alert/Alert";
 import Button from "../../../components/button/Button";
 import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
 import InputText from "../../../components/forms/input-text/InputText";
+import PasswordInput from "../../../components/forms/password-input/PasswordInput";
 import Toggle from "../../../components/forms/toggle/Toggle";
 import LoadingIcon from "../../../components/icons/LoadingIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
+import { useAxios } from "../../../contexts/axios/AxiosContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import { fadeIn, fadeOut } from "../../../utils/transition-animation";
@@ -37,6 +40,9 @@ export default () => {
   const [, actionConfirm] = useConfirm();
   const [, actionMessage] = useMessage();
   const navigator = useNavigate();
+  const {
+    error: [error, setError],
+  } = useAxios();
   const auth = useAuth();
   const [tabsItems, setTabsItems] = createStore<TabsItems>([
     { label: "ພາສາລາວ", key: "lo" },
@@ -50,6 +56,19 @@ export default () => {
   const [id] = createSignal<string>(param.id);
   const [hotel] = createResource(id, getHotelDetailApi);
   const [previewImg, setPreviewImg] = createSignal<string>("");
+  const [haveAdmin, setHaveAdmin] = createSignal<boolean | undefined>(
+    undefined
+  );
+
+  createEffect(
+    on(haveAdmin, (input) => {
+      if (input) {
+        setValue(hotelForm, "user", { id: 0, email: "", password: "" });
+      } else {
+        setValue(hotelForm, "user", undefined);
+      }
+    })
+  );
 
   const [hotelForm, { Form, Field, FieldArray }] = createForm<UpdateHotelForm>({
     validate: valiForm(UpdateHotelSchema),
@@ -61,6 +80,7 @@ export default () => {
       ],
     },
   });
+
   createEffect(
     on(
       () => hotel(),
@@ -93,7 +113,20 @@ export default () => {
                 village: input.data.translates[2].village,
               },
             ],
+            user: input.data.user
+              ? {
+                  id: input.data.user.id,
+                  email: input.data.user.email,
+                }
+              : {},
           });
+
+          if (input.data.user) {
+            setHaveAdmin(true);
+          } else {
+            setHaveAdmin(false);
+          }
+
           setPreviewImg(
             input.data.image
               ? import.meta.env.VITE_IMG_URL + input.data.image
@@ -103,6 +136,7 @@ export default () => {
       }
     )
   );
+
   createEffect(() => {
     const errors = getErrors(hotelForm);
 
@@ -122,6 +156,13 @@ export default () => {
 
   const handleSubmit: SubmitHandler<UpdateHotelForm> = async (values) => {
     if (hotel.state === "ready") {
+      if (values.user) {
+        if (!values.user.id && !values.user.password) {
+          setError(() => ({ level: "warn", message: "ກະລຸນາປ້ອນລະຫັດຜ່ານ" }));
+          return;
+        }
+      }
+
       const res = await updateHotelApi(param.id, values);
 
       actionMessage.showMessage({
@@ -137,6 +178,7 @@ export default () => {
       <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
         ອັບເດດໂຮງແຮມ
       </h2>
+
       <FieldArray name="translates">
         {(fieldArray) => (
           <Tabs
@@ -224,6 +266,7 @@ export default () => {
           />
         )}
       </FieldArray>
+
       <Field name="image" type="File">
         {(field, props) => (
           <ImageDropzone
@@ -243,6 +286,7 @@ export default () => {
           />
         )}
       </Field>
+
       <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
         <Field name="link">
           {(field, props) => (
@@ -282,7 +326,64 @@ export default () => {
             />
           )}
         </Field>
+
+        <Show when={haveAdmin() !== undefined}>
+          <Toggle
+            value={haveAdmin()}
+            onValueChange={(val) => {
+              setHaveAdmin(val);
+            }}
+            label="ມີແອັດມີນ"
+          />
+        </Show>
       </div>
+
+      <Show when={haveAdmin()}>
+        <>
+          <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+            ຂໍ້ມູນຜູ້ຈັດການໂຮງແຮມ
+          </h2>
+          <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
+            <Field name="user.id">{(field, props) => <></>}</Field>
+
+            <Field name="user.email">
+              {(field, props) => (
+                <InputText
+                  label="ອີເມວ"
+                  {...props}
+                  value={field.value}
+                  error={field.error}
+                  placeholder="name@company.com"
+                />
+              )}
+            </Field>
+
+            <Field name="user.password">
+              {(field, props) => (
+                <PasswordInput
+                  label="ລະຫັດຜ່ານ"
+                  {...props}
+                  value={field.value}
+                  error={field.error}
+                  placeholder="ປ້ອນລະຫັດຜ່ານ"
+                />
+              )}
+            </Field>
+          </div>
+        </>
+      </Show>
+
+      <Show when={error()}>
+        {(err) => (
+          <Alert
+            level={err().level}
+            message={err().message}
+            onClose={() => {
+              setError(undefined);
+            }}
+          />
+        )}
+      </Show>
 
       <div class="flex items-center">
         <Button type="submit" isLoading={hotelForm.submitting} class="mr-3">
