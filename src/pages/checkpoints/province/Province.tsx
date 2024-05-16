@@ -124,13 +124,13 @@ export default () => {
         {
           header: "ຊືພາສາລາວ",
           body: ({ translates }: ProvinceResponse) => (
-            <div>{translates[1]?.name}</div>
+            <div>{translates[0]?.name}</div>
           ),
         },
         {
           header: "ພາສາອັງກິດ",
           body: ({ translates }: ProvinceResponse) => (
-            <div>{translates[0]?.name}</div>
+            <div>{translates[1]?.name}</div>
           ),
         },
         {
