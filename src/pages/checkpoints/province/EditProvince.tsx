@@ -28,7 +28,6 @@ import deleteProvinceApi from "./api/delete-province.api";
 import getProvinceDetailApi from "./api/get-province-detail.api";
 import updateProvinceApi from "./api/update-province.api";
 import getCountriesApi from "../../countries/countrie/api/get-countries.api";
-
 import {
   UpdateProvinceSchema,
   UpdateProvincesForm,
@@ -80,7 +79,6 @@ export default () => {
               {
                 id: input.data.translates[0].id,
                 name: input.data.translates[0].name,
-
               },
               {
                 id: input.data.translates[1].id,
@@ -98,8 +96,8 @@ export default () => {
   );
   createEffect(() => {
     const errors = getErrors(provinceForm);
-
     provinceForm.internal.initialValues.translates?.map((_, idx) => {
+
       if (errors[`translates.${idx as 0 | 1 | 2}.name`]) {
         setTabsItems(idx, "alert", true);
       } else {
@@ -118,6 +116,7 @@ export default () => {
 
   const handleSubmit: SubmitHandler<UpdateProvincesForm> = async (values) => {
     if (provinces.state === "ready") {
+
       const res = await updateProvinceApi(param.id, values);
 
       actionMessage.showMessage({
@@ -238,7 +237,6 @@ export default () => {
                     level: "success",
                     message: res.data.message,
                   });
-
                   navigator("/checkpoint/province", { resolve: false });
                 },
               });

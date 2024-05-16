@@ -6,18 +6,20 @@ import {
   PermissionGroup,
 } from "../../../common/enum/permission.enum";
 import checkPermission from "../../../common/utils/check-permission";
+import Button from "../../../components/button/Button";
 import Dropdown from "../../../components/dropdown/Dropdown";
-import Select from "../../../components/forms/select/Select";
-import Toggle from "../../../components/forms/toggle/Toggle";
+import PlusIcon from "../../../components/icons/PlusIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import Table from "../../../components/table/Table";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
-import deleteFeedbackApi from "./api/delete-feedback.api";
-import { FeedbackResponse, FeedbackTableState } from "./api/feedback.inteface";
-import getChangeStatusApi from "./api/get-change-status.api";
-import getFeedbackApi from "./api/get-feedback.api";
+import {
+  CheckpointCategoryResponse,
+  CheckpointCategoryTableState,
+} from "./apis/checkpoint-category.interface";
+import deleteCheckpointCategoryApi from "./apis/delete-checkpoint-category.api";
+import getCheckpointCategoryApi from "./apis/get-checkpoint-category.api";
 
 export default () => {
   const navigate = useNavigate();
@@ -25,15 +27,18 @@ export default () => {
   const [, actionMessage] = useMessage();
   const auth = useAuth();
 
-  if (!checkPermission(Permission.Read, PermissionGroup.Feedback, auth))
+  if (!checkPermission(Permission.Read, PermissionGroup.Checkpoint, auth))
     navigate(-1);
 
-  const [state, setState] = createSignal<FeedbackTableState>({
+  const [state, setState] = createSignal<CheckpointCategoryTableState>({
     offset: 0,
     limit: 10,
   });
 
-  const [feedbacks, { refetch }] = createResource(state, getFeedbackApi);
+  const [Provinces, { refetch }] = createResource(
+    state,
+    getCheckpointCategoryApi
+  );
 
   const actionMenus = (id: number) => {
     const menus: {
@@ -41,15 +46,15 @@ export default () => {
       onClick: () => void;
     }[][] = [[]];
 
-    if (checkPermission(Permission.Read, PermissionGroup.Feedback, auth))
+    if (checkPermission(Permission.Write, PermissionGroup.Checkpoint, auth))
       menus[0].push({
         onClick() {
-          navigate(`/feedback/${id}`);
+          navigate(`/checkpoint/category/edit/${id}`);
         },
-        label: "ລາຍລະອຽດ",
+        label: "ແກ້ໄຂ",
       });
 
-    if (checkPermission(Permission.Remove, PermissionGroup.Feedback, auth)) {
+    if (checkPermission(Permission.Remove, PermissionGroup.Checkpoint, auth)) {
       menus.push([]);
 
       menus[1].push({
@@ -60,14 +65,14 @@ export default () => {
             ),
             message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
             onConfirm: async () => {
-              const res = await deleteFeedbackApi(String(id));
+              const res = await deleteCheckpointCategoryApi(String(id));
 
               actionMessage.showMessage({
                 level: "success",
                 message: res.data.message,
               });
 
-              refetch();
+              await refetch();
             },
           });
         },
@@ -83,37 +88,28 @@ export default () => {
       header={
         <div class="flex flex-col items-start justify-between border-b dark:border-gray-600 p-4 sm:flex-row sm:items-center">
           <h2 class="text-lg font-semibold mb-2 sm:mb-0 dark:text-white">
-            ຕາຕະລາງລາຍລະອຽດຄຳຕິຊົມ
+            ຕາຕະລາງປະເພດດ່ານ
           </h2>
-
-          <Select
-            class="w-full sm:w-fit"
-            placeholder="ການເຜີຍແຜ່"
-            contentClass="w-44"
-            items={[
-              {
-                label: "ການເຜີຍແຜ່",
-                value: "-1",
-              },
-              {
-                label: "ສາທາລະນະ",
-                value: "1",
-              },
-              {
-                label: "ສວນຕົວ",
-                value: "0",
-              },
-            ]}
-            onValueChange={({ value }) => {
-              setState((prev) => ({
-                ...prev,
-                is_published: value[0] === "-1" ? undefined : value[0],
-              }));
-            }}
-          ></Select>
+          <Show
+            when={checkPermission(
+              Permission.Write,
+              PermissionGroup.Checkpoint,
+              auth
+            )}
+          >
+            <Button
+              class="w-full sm:w-fit"
+              prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
+              onClick={() => {
+                navigate("/checkpoint/category/create");
+              }}
+            >
+              ເພີ່ມຂໍ້ມູນ
+            </Button>
+          </Show>
         </div>
       }
-      value={feedbacks}
+      value={Provinces}
       responseField="data"
       onChange={({ paginate }) => {
         setState((prev) => ({
@@ -125,48 +121,33 @@ export default () => {
     >
       {[
         {
-          header: "ຊື",
-          body: ({ name }: FeedbackResponse) => (
-            <Show when={name} fallback="....">
-              <div>{name}</div>
-            </Show>
+          header: "ຊືພາສາລາວ",
+          body: ({ translates }: CheckpointCategoryResponse) => (
+            <div>{translates[0].title}</div>
           ),
         },
         {
-          header: "ເບີໂທ",
-          body: ({ tel }: FeedbackResponse) => (
-            <Show when={tel} fallback="....">
-              <div>{tel}</div>
-            </Show>
+          header: "ພາສາອັງກິດ",
+          body: ({ translates }: CheckpointCategoryResponse) => (
+            <div>{translates[1].title}</div>
           ),
         },
         {
-          header: "ອີເມວ",
-          body: ({ email }: FeedbackResponse) => email,
-        },
-        {
-          header: "ການເຜີຍແຜ່",
-          body: ({ is_published, id }: FeedbackResponse) => (
-            <Toggle
-              value={is_published}
-              onValueChange={async () => {
-                await getChangeStatusApi(id, !is_published);
-                is_published = !is_published;
-              }}
-            />
+          header: "ພາສາຈີນ",
+          body: ({ translates }: CheckpointCategoryResponse) => (
+            <div>{translates[2].title}</div>
           ),
         },
-
         {
-          header: "ເວລາສ້າງ",
-          body: ({ created_at }: FeedbackResponse) => (
+          header: "ເພີ່ມເມື່ອ",
+          body: ({ created_at }: CheckpointCategoryResponse) => (
             <Show when={created_at} fallback="...">
               {format(created_at, "dd/MM/yyyy HH:mm:ss")}
             </Show>
           ),
         },
         {
-          body: ({ id }: FeedbackResponse) => (
+          body: ({ id }: CheckpointCategoryResponse) => (
             <Dropdown
               triggerEl={
                 <button class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-1 inline-flex items-center justify-center">

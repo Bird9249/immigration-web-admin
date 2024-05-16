@@ -7,6 +7,7 @@ import {
 } from "@modular-forms/solid";
 import { useNavigate } from "@solidjs/router";
 import { createEffect, createResource, createSignal } from "solid-js";
+
 import { createStore } from "solid-js/store";
 import {
   Permission,
@@ -26,6 +27,7 @@ import {
 import getCountriesApi from "../../countries/countrie/api/get-countries.api";
 import Select from "../../../components/forms/select/Select";
 import { CountriesTableState } from "../../countries/countrie/api/countries.interface";
+
 export default () => {
   const [, actionMessage] = useMessage();
   const navigator = useNavigate();
@@ -54,6 +56,7 @@ export default () => {
         translates: [{ name: "" }, { name: "" }, { name: "" }],
       },
     });
+
   createEffect(() => {
     const errors = getErrors(provinceForm);
 
@@ -64,7 +67,6 @@ export default () => {
         setTabsItems(idx, "alert", false);
       }
     });
-
   });
 
   createEffect(() => {
@@ -77,6 +79,7 @@ export default () => {
       )
     }
   })
+
 
   const handleSubmit: SubmitHandler<ProvinceForm> = async (values) => {
     const res = await createProvinceApi(values);
@@ -157,8 +160,8 @@ export default () => {
             />
           )}
         </FieldArray>
-
       </div>
+
       <Button type="submit" isLoading={provinceForm.submitting}>
         ເພີ່ມແຂວງ
       </Button>

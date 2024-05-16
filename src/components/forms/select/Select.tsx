@@ -55,7 +55,7 @@ export default (props: Props) => {
       <Portal>
         <Select.Positioner>
           <Select.Content
-            class={`z-20 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 ${props.contentClass}`}
+            class={`z-20 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 max-h-[300px] overflow-auto ${props.contentClass}`}
           >
             <div class="py-2 text-sm text-gray-700 dark:text-gray-200">
               <Index each={props.items}>

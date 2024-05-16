@@ -5,6 +5,6 @@ export default async (state: FeedbackTableState) => {
   const { axios } = useAxios();
 
   return axios.get<FeedbacksResponse>("/feedback", {
-    params: { limit: state.limit, skip: state.offset },
+    params: state,
   });
 };

@@ -30,8 +30,6 @@ export default () => {
 
   const [provinces] = createResource(id, getProvinceDetailApi);
 
-
-
   return (
     <>
       <h2 class=" text-xl font-bold text-gray-900 dark:text-white">
@@ -108,17 +106,17 @@ export default () => {
                         </Show>
                       </dd>
                     </dl>
-
                   </div>
                 ),
               }))}
             />
           )}
         </Show >
+
         <div class="p-4 flex items-center">
           <Show
             when={checkPermission(
-              Permission.Write,
+              Permission.Wri
               PermissionGroup.Checkpoint,
               auth
             )}
