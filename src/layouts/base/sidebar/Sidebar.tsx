@@ -13,6 +13,7 @@ import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
 import Building from "../../../components/icons/Building";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
+import CheckpointIcon from "../../../components/icons/CheckpointIcon";
 import Contacts from "../../../components/icons/Contacts";
 import Countries from "../../../components/icons/Countries";
 import FilePenIcon from "../../../components/icons/FilePenIcon";
@@ -98,6 +99,22 @@ export default function () {
           menus: [
             { href: "/banner/list", label: "ຈັດການປ້າຍ" },
             { href: "/banner/popup", label: "ຈັດການ popup" },
+          ],
+          isOpen: false,
+        },
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.Checkpoint, auth)) {
+      preparedMenus.push({
+        icon: <CheckpointIcon />,
+        href: "/checkpoint",
+        label: "ຈັດການດ່ານ",
+        subMenus: {
+          menus: [
+            { href: "/checkpoint/category", label: "ປະເພດດ່ານ" },
+            { href: "/checkpoint", label: "ຂໍ້ມູນດ່ານ" },
+            { href: "/checkpoint/province", label: "ຈັດການແຂວງ" },
           ],
           isOpen: false,
         },
