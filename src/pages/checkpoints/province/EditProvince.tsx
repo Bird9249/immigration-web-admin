@@ -17,6 +17,7 @@ import {
 import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
 import InputText from "../../../components/forms/input-text/InputText";
+import Select from "../../../components/forms/select/Select";
 import LoadingIcon from "../../../components/icons/LoadingIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
@@ -24,16 +25,15 @@ import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import { fadeIn, fadeOut } from "../../../utils/transition-animation";
+import { CountriesTableState } from "../../countries/countrie/api/countries.interface";
+import getCountriesApi from "../../countries/countrie/api/get-countries.api";
 import deleteProvinceApi from "./api/delete-province.api";
 import getProvinceDetailApi from "./api/get-province-detail.api";
 import updateProvinceApi from "./api/update-province.api";
-import getCountriesApi from "../../countries/countrie/api/get-countries.api";
 import {
   UpdateProvinceSchema,
   UpdateProvincesForm,
 } from "./schemas/province.schemas";
-import Select from "../../../components/forms/select/Select";
-import { CountriesTableState } from "../../countries/countrie/api/countries.interface";
 
 export default () => {
   const param = useParams();
@@ -54,27 +54,30 @@ export default () => {
   const [id] = createSignal<string>(param.id);
   const [lang, setLang] = createSignal<number>(0);
   const [provinces] = createResource(id, getProvinceDetailApi);
-  const [provinceApi] = createResource(provinceState, getCountriesApi)
+  const [provinceApi] = createResource(provinceState, getCountriesApi);
   const [provinceOptions, setprovinceOptions] = createSignal<
     { label: string; value: string }[]
   >([]);
-  const [provinceForm, { Form, Field, FieldArray }] = createForm<UpdateProvincesForm>({
-    validate: valiForm(UpdateProvinceSchema),
-    initialValues: {
-      translates: [
-        { id: 0, name: "" },
-        { id: 0, name: "" },
-        { id: 0, name: "" },
-      ],
-    },
-  });
+  const [provinceForm, { Form, Field, FieldArray }] =
+    createForm<UpdateProvincesForm>({
+      validate: valiForm(UpdateProvinceSchema),
+      initialValues: {
+        translates: [
+          { id: 0, name: "" },
+          { id: 0, name: "" },
+          { id: 0, name: "" },
+        ],
+      },
+    });
   createEffect(
     on(
       () => provinces(),
       (input) => {
         if (input) {
           setValues(provinceForm, {
-            country_ids: input.data.countries.map((val) => String(val.country.translates[0].id)),
+            country_ids: input.data.countries.map((val) =>
+              String(val.country.id)
+            ),
             translates: [
               {
                 id: input.data.translates[0].id,
@@ -97,7 +100,6 @@ export default () => {
   createEffect(() => {
     const errors = getErrors(provinceForm);
     provinceForm.internal.initialValues.translates?.map((_, idx) => {
-
       if (errors[`translates.${idx as 0 | 1 | 2}.name`]) {
         setTabsItems(idx, "alert", true);
       } else {
@@ -116,7 +118,6 @@ export default () => {
 
   const handleSubmit: SubmitHandler<UpdateProvincesForm> = async (values) => {
     if (provinces.state === "ready") {
-
       const res = await updateProvinceApi(param.id, values);
 
       actionMessage.showMessage({
@@ -138,19 +139,18 @@ export default () => {
             <Tabs
               onValueChange={(val) => {
                 switch (val) {
-                  case 'lo':
-                    setLang(0)
+                  case "lo":
+                    setLang(0);
                     break;
 
-                  case 'en':
-                    setLang(1)
+                  case "en":
+                    setLang(1);
                     break;
 
                   default:
-                    setLang(2)
+                    setLang(2);
                     break;
                 }
-
               }}
               items={tabsItems}
               contents={[{ key: "lo" }, { key: "en" }, { key: "zh_cn" }].map(
@@ -159,15 +159,17 @@ export default () => {
                   content: (
                     <div class="my-4 flex flex-col gap-4">
                       <Field
-                        name={`${fieldArray.name}.${idx as unknown as 0 | 1 | 2
-                          }.id`}
+                        name={`${fieldArray.name}.${
+                          idx as unknown as 0 | 1 | 2
+                        }.id`}
                         type="number"
                       >
                         {() => <></>}
                       </Field>
                       <Field
-                        name={`${fieldArray.name}.${idx as unknown as 0 | 1 | 2
-                          }.name`}
+                        name={`${fieldArray.name}.${
+                          idx as unknown as 0 | 1 | 2
+                        }.name`}
                       >
                         {(field, props) => (
                           <InputText
@@ -204,7 +206,6 @@ export default () => {
             />
           )}
         </FieldArray>
-
       </div>
 
       <div class="flex items-center">

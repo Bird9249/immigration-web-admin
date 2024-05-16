@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "@solidjs/router";
 import { format } from "date-fns";
-import { Show, createEffect, createResource, createSignal } from "solid-js";
+import { Show, createResource, createSignal } from "solid-js";
 import { Transition } from "solid-transition-group";
 import {
   Permission,
@@ -46,30 +46,25 @@ export default () => {
                   val.lang === "lo"
                     ? "ພາສາລາວ"
                     : val.lang === "en"
-                      ? "ພາສາອັງກິດ"
-                      : "ພາສາຈີນ",
+                    ? "ພາສາອັງກິດ"
+                    : "ພາສາຈີນ",
               }))}
               contents={item().data.translates.map((val, idx) => ({
                 key: val.lang,
                 content: (
                   <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6 my-4">
                     <dl>
-                      <div class="relative w-full mx-auto">
-                        <img
-                          class="w-full object-cover rounded-md"
-                          src={import.meta.env.VITE_IMG_URL + item().data.countries.map((val) => String(val.country.image))}
-                          alt="Random image"
-                        />
-                      </div>
-                    </dl>
-                    <dl>
                       <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
-                        ສາຍແດນຕິດກັບປະທດ:
+                        ຊາຍແດນຕິດກັບປະທດ:
                       </dt>
                       <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
                         <Show when={provinces()} fallback={"...."}>
                           {(provinces_country) => (
-                            <p>{provinces_country().data.countries.map((val) => (val.country.translates[idx].name))}</p>
+                            <p>
+                              {provinces_country().data.countries.map(
+                                (val) => val.country.translates[idx].name
+                              )}
+                            </p>
                           )}
                         </Show>
                       </dd>
@@ -111,12 +106,12 @@ export default () => {
               }))}
             />
           )}
-        </Show >
+        </Show>
 
         <div class="p-4 flex items-center">
           <Show
             when={checkPermission(
-              Permission.Wri
+              Permission.Write,
               PermissionGroup.Checkpoint,
               auth
             )}
@@ -176,7 +171,7 @@ export default () => {
             </div>
           </Show>
         </Transition>
-      </div >
+      </div>
     </>
   );
 };

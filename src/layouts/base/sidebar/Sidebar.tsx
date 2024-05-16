@@ -25,7 +25,6 @@ import UserIcon from "../../../components/icons/UserIcon";
 import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import SidebarMenu from "./SidebarMenu";
-import CheckpointIcon from "../../../components/icons/CheckpointIcon";
 
 interface SidebarMenuType {
   icon: JSXElement;
