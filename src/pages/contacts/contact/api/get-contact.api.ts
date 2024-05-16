@@ -5,6 +5,6 @@ export default async (state: ContactTableState) => {
   const { axios } = useAxios();
 
   return axios.get<ContactsResponse>("/contact", {
-    params: { limit: state.limit, skip: state.offset },
+    params: state,
   });
 };

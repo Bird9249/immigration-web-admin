@@ -7,6 +7,7 @@ import {
 } from "../../../common/enum/permission.enum";
 import checkPermission from "../../../common/utils/check-permission";
 import Dropdown from "../../../components/dropdown/Dropdown";
+import Select from "../../../components/forms/select/Select";
 import Toggle from "../../../components/forms/toggle/Toggle";
 import TrashIcon from "../../../components/icons/TrashIcon";
 import Table from "../../../components/table/Table";
@@ -84,6 +85,32 @@ export default () => {
           <h2 class="text-lg font-semibold mb-2 sm:mb-0 dark:text-white">
             ຕາຕະລາງລາຍລະອຽດຄຳຕິຊົມ
           </h2>
+
+          <Select
+            class="w-full sm:w-fit"
+            placeholder="ການເຜີຍແຜ່"
+            contentClass="w-44"
+            items={[
+              {
+                label: "ການເຜີຍແຜ່",
+                value: "-1",
+              },
+              {
+                label: "ສາທາລະນະ",
+                value: "1",
+              },
+              {
+                label: "ສວນຕົວ",
+                value: "0",
+              },
+            ]}
+            onValueChange={({ value }) => {
+              setState((prev) => ({
+                ...prev,
+                is_published: value[0] === "-1" ? undefined : value[0],
+              }));
+            }}
+          ></Select>
         </div>
       }
       value={feedbacks}

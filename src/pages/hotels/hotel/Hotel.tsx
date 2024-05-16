@@ -8,6 +8,7 @@ import {
 import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
 import Dropdown from "../../../components/dropdown/Dropdown";
+import Select from "../../../components/forms/select/Select";
 import Toggle from "../../../components/forms/toggle/Toggle";
 import PlusIcon from "../../../components/icons/PlusIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
@@ -95,23 +96,51 @@ export default () => {
           <h2 class="text-lg font-semibold mb-2 sm:mb-0 dark:text-white">
             ຕາຕະລາງຂໍ້ມູນໂຮງແຮມ
           </h2>
-          <Show
-            when={checkPermission(
-              Permission.Write,
-              PermissionGroup.Hotel,
-              auth
-            )}
-          >
-            <Button
+          <div class=" flex items-center justify-end flex-col sm:flex-row gap-2 w-full sm:w-fit">
+            <Select
               class="w-full sm:w-fit"
-              prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
-              onClick={() => {
-                navigate("/hotels/create");
+              placeholder="ການເຜີຍແຜ່"
+              contentClass="w-44"
+              items={[
+                {
+                  label: "ການເຜີຍແຜ່",
+                  value: "-1",
+                },
+                {
+                  label: "ສາທາລະນະ",
+                  value: "1",
+                },
+                {
+                  label: "ສວນຕົວ",
+                  value: "0",
+                },
+              ]}
+              onValueChange={({ value }) => {
+                setState((prev) => ({
+                  ...prev,
+                  is_published: value[0] === "-1" ? undefined : value[0],
+                }));
               }}
+            ></Select>
+
+            <Show
+              when={checkPermission(
+                Permission.Write,
+                PermissionGroup.Hotel,
+                auth
+              )}
             >
-              ເພີ່ມຂໍ້ມູນໂຮງແຮມ
-            </Button>
-          </Show>
+              <Button
+                class="w-full sm:w-fit"
+                prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
+                onClick={() => {
+                  navigate("/hotels/create");
+                }}
+              >
+                ເພີ່ມຂໍ້ມູນໂຮງແຮມ
+              </Button>
+            </Show>
+          </div>
         </div>
       }
       value={hotels}
