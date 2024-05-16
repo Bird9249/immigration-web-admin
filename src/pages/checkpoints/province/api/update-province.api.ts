@@ -5,8 +5,9 @@ export default async (id: string, form: UpdateProvincesForm) => {
   const { axios } = useAxios();
 
   return axios.put<{ message: string }>(`/provinces/${id}`, {
-    lo: { id: form.translates[0].id, name: form.translates[0].name },
-    en: { id: form.translates[1].id, name: form.translates[1].name },
-    zh_cn: { id: form.translates[2].id, name: form.translates[2].name },
+    country_ids: form.country_ids.map((val) => Number(val)),
+    lo: form.translates[0],
+    en: form.translates[1],
+    zh_cn: form.translates[2],
   });
 };

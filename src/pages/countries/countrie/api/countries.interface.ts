@@ -4,7 +4,7 @@ import {
 } from "../../../../common/interface/pagination";
 
 export type CountriesTableState = IOffsetBasePaginate & {
-  is_except_visa: "-1" | "0" | "1";
+  is_except_visa?: "-1" | "0" | "1";
 };
 
 export type CountryResponse = {

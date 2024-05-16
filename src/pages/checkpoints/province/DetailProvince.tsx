@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "@solidjs/router";
 import { format } from "date-fns";
-import { Show, createResource, createSignal } from "solid-js";
+import { Show, createEffect, createResource, createSignal } from "solid-js";
 import { Transition } from "solid-transition-group";
 import {
   Permission,
@@ -30,6 +30,8 @@ export default () => {
 
   const [provinces] = createResource(id, getProvinceDetailApi);
 
+
+
   return (
     <>
       <h2 class=" text-xl font-bold text-gray-900 dark:text-white">
@@ -46,65 +48,78 @@ export default () => {
                   val.lang === "lo"
                     ? "ພາສາລາວ"
                     : val.lang === "en"
-                    ? "ພາສາອັງກິດ"
-                    : "ພາສາຈີນ",
+                      ? "ພາສາອັງກິດ"
+                      : "ພາສາຈີນ",
               }))}
-              contents={item().data.translates.map((val) => ({
+              contents={item().data.translates.map((val, idx) => ({
                 key: val.lang,
                 content: (
-                  <div class="my-4 grid gap-4 sm:mb-5 sm:grid-cols-1 sm:gap-6 md:gap-12">
-                    <div class="relative w-full mx-auto">
-                      <br />
-                      <div class="absolute inset-0 flex flex-col px-6 md:px-12 lg:px-28 justify-center gap-2 sm:gap-4 text-black">
-                        <h2 class="text-2xl sm:text-4xl font-bold">
-                          {val.name}
-                        </h2>
+                  <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6 my-4">
+                    <dl>
+                      <div class="relative w-full mx-auto">
+                        <img
+                          class="w-full object-cover rounded-md"
+                          src={import.meta.env.VITE_IMG_URL + item().data.countries.map((val) => String(val.country.image))}
+                          alt="Random image"
+                        />
                       </div>
-                    </div>
+                    </dl>
+                    <dl>
+                      <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+                        ສາຍແດນຕິດກັບປະທດ:
+                      </dt>
+                      <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+                        <Show when={provinces()} fallback={"...."}>
+                          {(provinces_country) => (
+                            <p>{provinces_country().data.countries.map((val) => (val.country.translates[idx].name))}</p>
+                          )}
+                        </Show>
+                      </dd>
+                      <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+                        ຊືແຂວງ:
+                      </dt>
+                      <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+                        {val.name}
+                      </dd>
+                      <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+                        ເວລາສ້າງ:
+                      </dt>
+                      <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+                        <Show when={provinces()} fallback={"..."}>
+                          {(provinces_created_at) =>
+                            format(
+                              provinces_created_at().data.created_at,
+                              "dd/MM/yyyy HH:mm:ss"
+                            )
+                          }
+                        </Show>
+                      </dd>
+                      <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+                        ເວລາອັບເດດ:
+                      </dt>
+                      <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+                        <Show when={provinces()} fallback={"..."}>
+                          {(provinces_updated_at) =>
+                            format(
+                              provinces_updated_at().data.updated_at,
+                              "dd/MM/yyyy HH:mm:ss"
+                            )
+                          }
+                        </Show>
+                      </dd>
+                    </dl>
+
                   </div>
                 ),
               }))}
             />
           )}
-        </Show>
-
-        <div>
-          <dl>
-            <div class="grid gap-4 mb-4 sm:mb-8 md:grid-cols-2 md:gap-6">
-              <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
-                ເວລາສ້າງ:
-              </dt>
-              <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-                <Show when={provinces()} fallback={"..."}>
-                  {(provinces_created_at) =>
-                    format(
-                      provinces_created_at().data.created_at,
-                      "dd/MM/yyyy HH:mm:ss"
-                    )
-                  }
-                </Show>
-              </dd>
-              <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
-                ເວລາອັບເດດ:
-              </dt>
-              <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-                <Show when={provinces()} fallback={"..."}>
-                  {(provinces_updated_at) =>
-                    format(
-                      provinces_updated_at().data.updated_at,
-                      "dd/MM/yyyy HH:mm:ss"
-                    )
-                  }
-                </Show>
-              </dd>
-            </div>
-          </dl>
-        </div>
+        </Show >
         <div class="p-4 flex items-center">
           <Show
             when={checkPermission(
               Permission.Write,
-              PermissionGroup.Banner,
+              PermissionGroup.Checkpoint,
               auth
             )}
           >
@@ -163,7 +178,7 @@ export default () => {
             </div>
           </Show>
         </Transition>
-      </div>
+      </div >
     </>
   );
 };

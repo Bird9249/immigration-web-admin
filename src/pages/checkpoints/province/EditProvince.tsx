@@ -2,6 +2,7 @@ import {
   SubmitHandler,
   createForm,
   getErrors,
+  setValue,
   setValues,
   valiForm,
 } from "@modular-forms/solid";
@@ -26,10 +27,14 @@ import { fadeIn, fadeOut } from "../../../utils/transition-animation";
 import deleteProvinceApi from "./api/delete-province.api";
 import getProvinceDetailApi from "./api/get-province-detail.api";
 import updateProvinceApi from "./api/update-province.api";
+import getCountriesApi from "../../countries/countrie/api/get-countries.api";
+
 import {
   UpdateProvinceSchema,
   UpdateProvincesForm,
 } from "./schemas/province.schemas";
+import Select from "../../../components/forms/select/Select";
+import { CountriesTableState } from "../../countries/countrie/api/countries.interface";
 
 export default () => {
   const param = useParams();
@@ -46,11 +51,15 @@ export default () => {
   if (!checkPermission(Permission.Write, PermissionGroup.Checkpoint, auth))
     navigator(-1);
 
+  const [provinceState] = createSignal<CountriesTableState>({});
   const [id] = createSignal<string>(param.id);
-  const [category] = createResource(id, getProvinceDetailApi);
-  const [previewImg, setPreviewImg] = createSignal<string>("");
-
-  const [form, { Form, Field, FieldArray }] = createForm<UpdateProvincesForm>({
+  const [lang, setLang] = createSignal<number>(0);
+  const [provinces] = createResource(id, getProvinceDetailApi);
+  const [provinceApi] = createResource(provinceState, getCountriesApi)
+  const [provinceOptions, setprovinceOptions] = createSignal<
+    { label: string; value: string }[]
+  >([]);
+  const [provinceForm, { Form, Field, FieldArray }] = createForm<UpdateProvincesForm>({
     validate: valiForm(UpdateProvinceSchema),
     initialValues: {
       translates: [
@@ -62,14 +71,16 @@ export default () => {
   });
   createEffect(
     on(
-      () => category(),
+      () => provinces(),
       (input) => {
         if (input) {
-          const oldData: UpdateProvincesForm = {
+          setValues(provinceForm, {
+            country_ids: input.data.countries.map((val) => String(val.country.translates[0].id)),
             translates: [
               {
                 id: input.data.translates[0].id,
                 name: input.data.translates[0].name,
+
               },
               {
                 id: input.data.translates[1].id,
@@ -80,27 +91,33 @@ export default () => {
                 name: input.data.translates[2].name,
               },
             ],
-          };
-
-          setValues(form, oldData);
+          });
         }
       }
     )
   );
   createEffect(() => {
-    const errors = getErrors(form);
+    const errors = getErrors(provinceForm);
 
-    form.internal.initialValues.translates?.map((_, idx) => {
+    provinceForm.internal.initialValues.translates?.map((_, idx) => {
       if (errors[`translates.${idx as 0 | 1 | 2}.name`]) {
         setTabsItems(idx, "alert", true);
       } else {
         setTabsItems(idx, "alert", false);
       }
     });
+    if (provinceApi.state === "ready") {
+      setprovinceOptions(
+        provinceApi().data.data.map((val) => ({
+          label: val.translates[lang()].name,
+          value: String(val.id),
+        }))
+      );
+    }
   });
 
   const handleSubmit: SubmitHandler<UpdateProvincesForm> = async (values) => {
-    if (category.state === "ready") {
+    if (provinces.state === "ready") {
       const res = await updateProvinceApi(param.id, values);
 
       actionMessage.showMessage({
@@ -108,7 +125,7 @@ export default () => {
         message: res.data.message,
       });
     }
-    navigator("/newsCategoriess/list", { resolve: false });
+    navigator("/checkpoint/province", { resolve: false });
   };
 
   return (
@@ -116,49 +133,84 @@ export default () => {
       <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
         ອັບເດດຂ່າວສານ
       </h2>
-      <FieldArray name="translates">
-        {(fieldArray) => (
-          <Tabs
-            items={tabsItems}
-            contents={[{ key: "lo" }, { key: "en" }, { key: "zh_cn" }].map(
-              (val, idx) => ({
-                ...val,
-                content: (
-                  <div class="my-4 flex flex-col gap-4">
-                    <Field
-                      name={`${fieldArray.name}.${
-                        idx as unknown as 0 | 1 | 2
-                      }.id`}
-                      type="number"
-                    >
-                      {() => <></>}
-                    </Field>
-                    <Field
-                      name={`${fieldArray.name}.${
-                        idx as unknown as 0 | 1 | 2
-                      }.name`}
-                    >
-                      {(field, props) => (
-                        <InputText
-                          label="ຊື່ຂ່າວສານ"
-                          required
-                          {...props}
-                          value={field.value}
-                          error={field.error}
-                          placeholder="ປ້ອນຊື່ຂອງຂ່າວສານ"
-                        />
-                      )}
-                    </Field>
-                  </div>
-                ),
-              })
-            )}
-          />
-        )}
-      </FieldArray>
+      <div class="grid gap-4 my-4 md:grid-cols-2 md:gap-6">
+        <FieldArray name="translates">
+          {(fieldArray) => (
+            <Tabs
+              onValueChange={(val) => {
+                switch (val) {
+                  case 'lo':
+                    setLang(0)
+                    break;
+
+                  case 'en':
+                    setLang(1)
+                    break;
+
+                  default:
+                    setLang(2)
+                    break;
+                }
+
+              }}
+              items={tabsItems}
+              contents={[{ key: "lo" }, { key: "en" }, { key: "zh_cn" }].map(
+                (val, idx) => ({
+                  ...val,
+                  content: (
+                    <div class="my-4 flex flex-col gap-4">
+                      <Field
+                        name={`${fieldArray.name}.${idx as unknown as 0 | 1 | 2
+                          }.id`}
+                        type="number"
+                      >
+                        {() => <></>}
+                      </Field>
+                      <Field
+                        name={`${fieldArray.name}.${idx as unknown as 0 | 1 | 2
+                          }.name`}
+                      >
+                        {(field, props) => (
+                          <InputText
+                            label="ຊືແຂວງ"
+                            required
+                            {...props}
+                            value={field.value}
+                            error={field.error}
+                            placeholder="ປ້ອນຊື່ແຂວງ"
+                          />
+                        )}
+                      </Field>
+                      <Field name="country_ids" type="string[]">
+                        {(field, props) => (
+                          <Select
+                            multiple
+                            placeholder="ເລືອກປະເທດ"
+                            contentClass="w-fit"
+                            onValueChange={({ value }) => {
+                              setValue(provinceForm, "country_ids", value);
+                            }}
+                            label="ເລືອກປະເທດ"
+                            name={props.name}
+                            items={provinceOptions()}
+                            error={field.error}
+                            value={field.value}
+                          ></Select>
+                        )}
+                      </Field>
+                    </div>
+                  ),
+                })
+              )}
+            />
+          )}
+        </FieldArray>
+
+      </div>
+
       <div class="flex items-center">
-        <Button type="submit" isLoading={form.submitting} class="mr-3">
-          ອັບເດດໂຮງແຮມ
+        <Button type="submit" isLoading={provinceForm.submitting} class="mr-3">
+          ອັບເດດແຂວງ
         </Button>
         <Show
           when={checkPermission(
@@ -171,7 +223,7 @@ export default () => {
             color="danger"
             outlined
             type="button"
-            isLoading={form.submitting}
+            isLoading={provinceForm.submitting}
             prefixIcon={<TrashIcon />}
             onClick={() => {
               actionConfirm.showConfirm({
@@ -187,7 +239,7 @@ export default () => {
                     message: res.data.message,
                   });
 
-                  navigator("/newsCategoriess/list", { resolve: false });
+                  navigator("/checkpoint/province", { resolve: false });
                 },
               });
             }}
@@ -198,7 +250,7 @@ export default () => {
       </div>
 
       <Transition onEnter={fadeIn} onExit={fadeOut}>
-        <Show when={category.loading}>
+        <Show when={provinces.loading}>
           <div
             class={`absolute z-10 top-0 left-0 bg-black/50 w-full h-full flex items-center justify-center`}
           >

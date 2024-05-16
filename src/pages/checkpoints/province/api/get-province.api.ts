@@ -5,6 +5,6 @@ export default async (state: ProvinceTableState) => {
   const { axios } = useAxios();
 
   return axios.get<ProvincesResponse>("/provinces", {
-    params: { limit: state.limit, skip: state.offset },
+    params: state,
   });
 };

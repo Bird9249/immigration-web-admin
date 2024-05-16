@@ -5,9 +5,9 @@ export default async (form: ProvinceForm) => {
   const { axios } = useAxios();
 
   return axios.post<{ message: string }>(`/provinces`, {
-    country_ids: [],
-    lo: { name: form.translates[0].name },
-    en: { name: form.translates[1].name },
-    zh_cn: { name: form.translates[2].name },
+    country_ids: form.country_ids.map((val) => Number(val)),
+    lo: form.translates[0],
+    en: form.translates[1],
+    zh_cn: form.translates[2],
   });
 };
