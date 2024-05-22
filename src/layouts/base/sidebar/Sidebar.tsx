@@ -50,7 +50,7 @@ export default function () {
   createEffect(() => {
     const preparedMenus: SidebarMenuType[] = [];
 
-    if (!auth.roles.includes("admin-hotel") || !auth.hotel_id) {
+    if (!auth.roles.includes("admin-hotel") && !auth.hotel_id) {
       preparedMenus.push({
         icon: <HomeIcon />,
         href: "/dashboard",
@@ -191,6 +191,7 @@ export default function () {
         },
       });
     }
+    console.log(auth);
 
     if (auth.roles.includes("admin-hotel") && auth.hotel_id) {
       preparedMenus.push({

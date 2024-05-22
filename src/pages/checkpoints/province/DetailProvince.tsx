@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "@solidjs/router";
 import { format } from "date-fns";
-import { Show, createResource, createSignal } from "solid-js";
+import { For, Show, createResource, createSignal } from "solid-js";
 import { Transition } from "solid-transition-group";
 import {
   Permission,
@@ -61,9 +61,15 @@ export default () => {
                         <Show when={provinces()} fallback={"...."}>
                           {(provinces_country) => (
                             <p>
-                              {provinces_country().data.countries.map(
-                                (val) => val.country.translates[idx].name
-                              )}
+                              <For each={provinces_country().data.countries}>
+                                {({ country: { translates } }) =>
+                                  translates[idx].name +
+                                  (idx !==
+                                  provinces_country().data.countries.length - 1
+                                    ? ", "
+                                    : "")
+                                }
+                              </For>
                             </p>
                           )}
                         </Show>

@@ -18,10 +18,13 @@ const isFile = (input: unknown) => input instanceof File;
 
 export const CreateCheckpointSchema = merge([
   object({
-    category_id: array(string("ບໍ່ຕ້ອງຫວ່າງເປົ່າ"), [
+    category_id: array(string("ຕ້ອງເປັນ string"), [
       minLength(1, "ກະລຸນາເລືອກປະເພດດ່ານ"),
     ]),
-    province_id: array(string("ບໍ່ຕ້ອງຫວ່າງເປົ່າ"), [
+    province_id: array(string("ຕ້ອງເປັນ string"), [
+      minLength(1, "ກະລຸນາເລືອກແຂວງ"),
+    ]),
+    country_id: array(string("ຕ້ອງເປັນ string"), [
       minLength(1, "ກະລຸນາເລືອກແຂວງ"),
     ]),
     image: special<File>(isFile, "ຮູບພາບບໍ່ຄວນຫວ່າງເປົ່າ", [

@@ -20,8 +20,12 @@ export type CheckpointDetailResponse = {
     }[];
   };
   province_id: number;
+  country_id: number;
   province: {
-    countries: [];
+    id: number;
+    translates: { id: number; name: string; lang: "lo" | "en" | "zh_cn" }[];
+  };
+  country: {
     id: number;
     translates: { id: number; name: string; lang: "lo" | "en" | "zh_cn" }[];
   };

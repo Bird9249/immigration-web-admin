@@ -30,6 +30,8 @@ import { useAxios } from "../../../contexts/axios/AxiosContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import { fadeIn, fadeOut } from "../../../utils/transition-animation";
+import { CountriesTableState } from "../../countries/countrie/api/countries.interface";
+import getCountriesApi from "../../countries/countrie/api/get-countries.api";
 import { CheckpointCategoryTableState } from "../category/apis/checkpoint-category.interface";
 import getCheckpointCategoryApi from "../category/apis/get-checkpoint-category.api";
 import getProvinceApi from "../province/api/get-province.api";
@@ -72,10 +74,6 @@ export default () => {
   createEffect(() => {
     if (category.state === "ready") {
       setCatOptions([
-        {
-          label: "ເລືອກປະເພດດ່ານ",
-          value: "-1",
-        },
         ...category().data.data.map((val) => ({
           label: val.translates[0].title,
           value: String(val.id),
@@ -92,11 +90,24 @@ export default () => {
   createEffect(() => {
     if (province.state === "ready") {
       setProOptions([
-        {
-          label: "ເລືອກແຂວງ",
-          value: "-1",
-        },
         ...province().data.data.map((val) => ({
+          label: val.translates[0].name,
+          value: String(val.id),
+        })),
+      ]);
+    }
+  });
+
+  const [countryState, setCountryState] = createSignal<CountriesTableState>({});
+  const [countryOptions, setCountryOptions] = createSignal<
+    { label: string; value: string }[]
+  >([]);
+  const [country] = createResource(countryState, getCountriesApi);
+  createEffect(() => {
+    if (country.state === "ready") {
+      setCountryOptions([
+        { label: "ເລືອກປະເທດ", value: "0" },
+        ...country().data.data.map((val) => ({
           label: val.translates[0].name,
           value: String(val.id),
         })),
@@ -109,6 +120,7 @@ export default () => {
     initialValues: {
       category_id: [],
       province_id: [],
+      country_id: [],
       translates: [
         { name: "", content: "", address: "" },
         { name: "", content: "", address: "" },
@@ -139,6 +151,9 @@ export default () => {
         const fromData: UpdateCheckpointForm = {
           category_id: [String(input.data.category_id)],
           province_id: [String(input.data.province_id)],
+          country_id: input.data.country_id
+            ? [String(input.data.country_id)]
+            : [],
           email: input.data.email,
           phone_number: input.data.phone_number,
           link_map: input.data.link_map,
@@ -293,6 +308,24 @@ export default () => {
               label="ເລືອກແຂວງທີ່ຢູ່ຂອງດ່ານ"
               name={props.name}
               items={proOptions()}
+              error={field.error}
+              value={field.value}
+            ></Select>
+          )}
+        </Field>
+
+        <Field name="country_id" type="string[]">
+          {(field, props) => (
+            <Select
+              required
+              placeholder="ເລືອກຊາຍແດນປະເທດ"
+              contentClass="w-fit"
+              onValueChange={({ value }) => {
+                setValue(form, "country_id", value);
+              }}
+              label="ເລືອກຊາຍແດນປະເທດ"
+              name={props.name}
+              items={countryOptions()}
               error={field.error}
               value={field.value}
             ></Select>

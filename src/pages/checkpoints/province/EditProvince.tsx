@@ -92,7 +92,7 @@ export default () => {
                 name: input.data.translates[2].name,
               },
             ],
-          });
+          } );
         }
       }
     )
