@@ -24,9 +24,7 @@ export const CreateCheckpointSchema = merge([
     province_id: array(string("ຕ້ອງເປັນ string"), [
       minLength(1, "ກະລຸນາເລືອກແຂວງ"),
     ]),
-    country_id: array(string("ຕ້ອງເປັນ string"), [
-      minLength(1, "ກະລຸນາເລືອກແຂວງ"),
-    ]),
+    country_id: array(string("ຕ້ອງເປັນ string")),
     image: special<File>(isFile, "ຮູບພາບບໍ່ຄວນຫວ່າງເປົ່າ", [
       mimeType(
         ["image/jpeg", "image/png", "image/webp"],
