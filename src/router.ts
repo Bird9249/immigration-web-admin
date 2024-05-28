@@ -4,16 +4,17 @@ import accommodationRequestRoutes from "./pages/accommodation-requests/route";
 import adminHotelRoutes from "./pages/admin-hotel/route";
 import authenticationRoutes from "./pages/authentication/route";
 import bannerRoutes from "./pages/banner-hero/route";
+import provinceRoutes from "./pages/checkpoints/route";
 import contactsRoutes from "./pages/contacts/route";
+import countriesRoutes from "./pages/countries/route";
 import feedbackRoutes from "./pages/feedbacks/route";
 import hotelRoutes from "./pages/hotels/route";
 import lawsRoutes from "./pages/laws/route";
+import lostPassportRoutes from "./pages/lost-passport/route";
+import newCategoriessRoutes from "./pages/news_categoriess/route";
 import registrationRoutes from "./pages/registrations/route";
 import userRoutes from "./pages/users/route";
-import newCategoriessRoutes from "./pages/news_categoriess/route";
-import countriesRoutes from "./pages/countries/route";
 import visaCategoryRoutes from "./pages/visa-category/route";
-import provinceRoutes from "./pages/checkpoints/route";
 
 const routes: RouteDefinition[] = [
   {
@@ -37,6 +38,7 @@ const routes: RouteDefinition[] = [
       ...visaCategoryRoutes,
       ...adminHotelRoutes,
       ...provinceRoutes,
+      ...lostPassportRoutes,
       {
         path: "/*all",
         component: lazy(() => import("./pages/errors/PageNotFound")),

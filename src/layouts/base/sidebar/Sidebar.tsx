@@ -14,6 +14,7 @@ import checkPermissionGroup from "../../../common/utils/check-permission-group";
 import Building from "../../../components/icons/Building";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
 import CheckpointIcon from "../../../components/icons/CheckpointIcon";
+import CloseIcon from "../../../components/icons/CloseIcon";
 import Contacts from "../../../components/icons/Contacts";
 import Countries from "../../../components/icons/Countries";
 import FilePenIcon from "../../../components/icons/FilePenIcon";
@@ -79,6 +80,14 @@ export default function () {
         icon: <HomeIcon />,
         href: "/accommodation-request",
         label: "ການຮ້ອງຂໍທີ່ພັກ",
+      });
+    }
+
+    if (checkPermissionGroup(PermissionGroup.LostPassport, auth)) {
+      preparedMenus.push({
+        icon: <CloseIcon iconDirection="circle-line" />,
+        href: "/lost-passport",
+        label: "ໜັງສືຜ່ານແດນເສຍ",
       });
     }
 

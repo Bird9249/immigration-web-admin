@@ -10,6 +10,7 @@ export enum PermissionGroup {
   Banner = "banner",
   Feedback = "feedback",
   AccommodationRequest = "accommodation-request",
+  LostPassport = "lost-passport",
   Hotel = "hotel",
   News = "news",
   VisaCategory = "visa",
