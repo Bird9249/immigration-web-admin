@@ -200,7 +200,6 @@ export default function () {
         },
       });
     }
-    console.log(auth);
 
     if (auth.roles.includes("admin-hotel") && auth.hotel_id) {
       preparedMenus.push({
