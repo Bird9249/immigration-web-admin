@@ -253,7 +253,6 @@ export default () => {
         <Field name="country_id" type="string[]">
           {(field, props) => (
             <Select
-              required
               placeholder="ເລືອກຊາຍແດນປະເທດ"
               contentClass="w-fit"
               onValueChange={({ value }) => {

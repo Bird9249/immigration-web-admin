@@ -1,32 +1,11 @@
-import { createSignal } from "solid-js";
-import Button from "../../components/button/Button";
-import { FileAndFolder } from "../file-and-folder/FileAndFolder";
+import logo from "../../assets/logo.webp";
 
 export default () => {
-  const [open, setOpen] = createSignal<boolean>(false);
-
   return (
-    <div class="flex flex-col justify-center items-center min-h-[80vh]">
-      <h1 class="text-gray-900 text-xl dark:text-white">ຍີນດີຕອນຮັບ</h1>
-      <Button
-        color="primary"
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        File
-      </Button>
+    <div class="flex flex-col gap-4 justify-center items-center min-h-[80vh]">
+      <img src={logo} class="mr-3 h-40" alt="Flowbite Logo" />
 
-      <FileAndFolder
-        open={[open, setOpen]}
-        onOpenChange={(value) => {
-          setOpen(value);
-        }}
-        onSelect={(url) => {
-          console.log(url);
-          setOpen(false);
-        }}
-      />
+      <h1 class="text-gray-900 text-xl dark:text-white">ຍີນດີຕອນຮັບ</h1>
     </div>
   );
 };
