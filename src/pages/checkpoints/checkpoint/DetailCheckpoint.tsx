@@ -8,6 +8,8 @@ import {
 } from "../../../common/enum/permission.enum";
 import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
+import CheckIcon from "../../../components/icons/CheckIcon";
+import CloseIcon from "../../../components/icons/CloseIcon";
 import EditIcon from "../../../components/icons/EditIcon";
 import LoadingIcon from "../../../components/icons/LoadingIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
@@ -110,7 +112,7 @@ export default () => {
           </dt>
           <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
             <Show when={checkpoint()?.data.country} fallback={"ບໍ່ມີຂໍ້ມູນ"}>
-              {(country) => country().translates[0].name}
+              {(country) => country()}
             </Show>
           </dd>
         </dl>
@@ -150,6 +152,34 @@ export default () => {
           <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
             <Show when={checkpoint()?.data.email} fallback={"ບໍ່ມີຂໍ້ມູນ"}>
               {(email) => email()}
+            </Show>
+          </dd>
+
+          <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+            ຮັບ Visa
+          </dt>
+          <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+            <Show
+              when={checkpoint()?.data.visa}
+              fallback={
+                <CloseIcon iconDirection="circle" class="size-8 text-red-500" />
+              }
+            >
+              <CheckIcon iconDirection="circle" class="size-8 text-green-500" />
+            </Show>
+          </dd>
+
+          <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+            ຮັບ E Visa
+          </dt>
+          <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+            <Show
+              when={checkpoint()?.data.e_visa}
+              fallback={
+                <CloseIcon iconDirection="circle" class="size-8 text-red-500" />
+              }
+            >
+              <CheckIcon iconDirection="circle" class="size-8 text-green-500" />
             </Show>
           </dd>
         </dl>

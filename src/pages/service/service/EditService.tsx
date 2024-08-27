@@ -18,17 +18,18 @@ import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
 import Editor from "../../../components/forms/editor/Editor";
 import InputText from "../../../components/forms/input-text/InputText";
+import Textarea from "../../../components/forms/textarea/Textarea";
 import LoadingIcon from "../../../components/icons/LoadingIcon";
 import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import { fadeIn, fadeOut } from "../../../utils/transition-animation";
-import getAccommodationRequestByIdApi from "./api/get-accommodation-request-by-id.api";
-import updateAccommodationRequestApi from "./api/update-accommodation-request.api";
+import getServiceByIdApi from "./api/get-service-by-id.api";
+import updateServiceApi from "./api/update-service.api";
 import {
-  UpdateAccommodationRequestSchema,
-  UpdateAccommodationRequestSchemaType,
-} from "./schemas/update-accommodation-request.schema";
+  UpdateServiceSchema,
+  UpdateServiceSchemaType,
+} from "./schemas/update-service.schema";
 
 export default () => {
   const [, actionMessage] = useMessage();
@@ -36,19 +37,10 @@ export default () => {
   const auth = useAuth();
   const param = useParams();
 
-  if (
-    !checkPermission(
-      Permission.Write,
-      PermissionGroup.AccommodationRequest,
-      auth
-    )
-  )
+  if (!checkPermission(Permission.Write, PermissionGroup.Service, auth))
     navigator(-1);
 
-  const [accommodationRequest] = createResource(
-    param.id,
-    getAccommodationRequestByIdApi
-  );
+  const [service] = createResource(param.id, getServiceByIdApi);
 
   const [tabsItems, setTabsItems] = createStore<TabsItems>([
     { label: "ພາສາລາວ", key: "lo" },
@@ -57,13 +49,14 @@ export default () => {
   ]);
 
   const [form, { Form, FieldArray, Field }] =
-    createForm<UpdateAccommodationRequestSchemaType>({
-      validate: valiForm(UpdateAccommodationRequestSchema),
+    createForm<UpdateServiceSchemaType>({
+      validate: valiForm(UpdateServiceSchema),
       initialValues: {
         translates: [
           {
             id: 0,
             title: "",
+            description: "",
             content: JSON.stringify({
               type: "doc",
               content: [],
@@ -72,6 +65,7 @@ export default () => {
           {
             id: 0,
             title: "",
+            description: "",
             content: JSON.stringify({
               type: "doc",
               content: [],
@@ -80,6 +74,7 @@ export default () => {
           {
             id: 0,
             title: "",
+            description: "",
             content: JSON.stringify({
               type: "doc",
               content: [],
@@ -91,24 +86,27 @@ export default () => {
 
   createEffect(
     on(
-      () => accommodationRequest(),
+      () => service(),
       (input) => {
         if (input) {
-          const data: UpdateAccommodationRequestSchemaType = {
+          const data: UpdateServiceSchemaType = {
             translates: [
               {
                 id: input.data.translates[0].id,
                 title: input.data.translates[0].title,
+                description: input.data.translates[0].description,
                 content: JSON.stringify(input.data.translates[0].content),
               },
               {
                 id: input.data.translates[1].id,
                 title: input.data.translates[1].title,
+                description: input.data.translates[1].description,
                 content: JSON.stringify(input.data.translates[1].content),
               },
               {
                 id: input.data.translates[2].id,
                 title: input.data.translates[2].title,
+                description: input.data.translates[2].description,
                 content: JSON.stringify(input.data.translates[2].content),
               },
             ],
@@ -135,18 +133,18 @@ export default () => {
     });
   });
 
-  const handleSubmit: SubmitHandler<
-    UpdateAccommodationRequestSchemaType
-  > = async (values) => {
-    const res = await updateAccommodationRequestApi(param.id, values);
+  const handleSubmit: SubmitHandler<UpdateServiceSchemaType> = async (
+    values
+  ) => {
+    const res = await updateServiceApi(param.id, values);
     actionMessage.showMessage({ level: "success", message: res.data.message });
-    navigator("/accommodation-request");
+    navigator("/service");
   };
 
   return (
     <div class="relative">
       <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-        ແກ້ໄຂຂໍ້ມູນການຮ້ອງຂໍທີ່ພັກ
+        ແກ້ໄຂຂໍ້ມູນການບໍລິການ
       </h2>
 
       <Form onSubmit={handleSubmit}>
@@ -179,6 +177,21 @@ export default () => {
                               value={field.value}
                               error={field.error}
                               placeholder="ປ້ອນຫົວຂໍ້"
+                            />
+                          )}
+                        </Field>
+                        <Field
+                          name={`${fieldArray.name}.${
+                            idx as unknown as 0 | 1 | 2
+                          }.description`}
+                        >
+                          {(field, props) => (
+                            <Textarea
+                              label="ຄຳອະທິບາຍ"
+                              {...props}
+                              value={field.value}
+                              error={field.error}
+                              placeholder="ປ້ອນຄຳອະທິບາຍ"
                             />
                           )}
                         </Field>
@@ -225,7 +238,7 @@ export default () => {
       </Form>
 
       <Transition onEnter={fadeIn} onExit={fadeOut}>
-        <Show when={accommodationRequest.loading}>
+        <Show when={service.loading}>
           <div
             class={`absolute z-10 top-0 left-0 bg-black/50 w-full h-full flex items-center justify-center`}
           >

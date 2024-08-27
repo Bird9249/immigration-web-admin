@@ -200,6 +200,7 @@ export default () => {
         <Field name="category_id" type="string[]">
           {(field, props) => (
             <Select
+              required
               placeholder="ເລືອກຂ່າວສານ"
               contentClass="w-fit"
               onValueChange={({ value }) => {

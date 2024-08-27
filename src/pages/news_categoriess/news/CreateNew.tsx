@@ -166,6 +166,7 @@ export default () => {
               }}
               label="ສະຖານະ"
               name={props.name}
+              required
               items={[
                 {
                   label: "ແບບຮ່າງ",

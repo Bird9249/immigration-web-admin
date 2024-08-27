@@ -1,5 +1,6 @@
 import {
   array,
+  boolean,
   Input,
   maxLength,
   maxSize,
@@ -24,7 +25,7 @@ export const CreateCheckpointSchema = merge([
     province_id: array(string("ຕ້ອງເປັນ string"), [
       minLength(1, "ກະລຸນາເລືອກແຂວງ"),
     ]),
-    country_id: array(string("ຕ້ອງເປັນ string")),
+    country: array(string("ຕ້ອງເປັນ string")),
     image: special<File>(isFile, "ຮູບພາບບໍ່ຄວນຫວ່າງເປົ່າ", [
       mimeType(
         ["image/jpeg", "image/png", "image/webp"],
@@ -39,6 +40,8 @@ export const CreateCheckpointSchema = merge([
       maxLength(20, "ບໍ່ສາມາດປ້ອນເບີຫຼາຍກວ່າ 20 ຫຼັກ."),
     ]),
     email: string(),
+    visa: boolean(),
+    e_visa: boolean(),
   }),
   object({
     translates: tuple([

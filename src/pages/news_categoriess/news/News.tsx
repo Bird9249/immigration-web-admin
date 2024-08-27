@@ -65,8 +65,6 @@ export default () => {
         })),
       ]);
     }
-
-    console.log(catOptions());
   });
 
   const actionMenus = (id: number) => {

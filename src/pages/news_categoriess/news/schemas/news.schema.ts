@@ -28,7 +28,8 @@ export const NewSchema = object({
     string([
       minLength(1, "ກະລຸນາໃສ່ຂໍ້ມູນ."),
       maxLength(30, "ຂໍ້ມູນຍາວເກີນໄປ."),
-    ])
+    ]),
+    [minLength(1, "ກະລຸນາເລືອກສະຖານະ")]
   ),
   translates: tuple([
     omit(NewTranslateSchemas, ["id"]),

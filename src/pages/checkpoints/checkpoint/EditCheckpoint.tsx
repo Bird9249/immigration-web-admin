@@ -18,6 +18,7 @@ import {
 import checkPermission from "../../../common/utils/check-permission";
 import Alert from "../../../components/alert/Alert";
 import Button from "../../../components/button/Button";
+import Checkbox from "../../../components/forms/check-box/Checkbox";
 import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
 import InputText from "../../../components/forms/input-text/InputText";
 import Select from "../../../components/forms/select/Select";
@@ -30,8 +31,6 @@ import { useAxios } from "../../../contexts/axios/AxiosContext";
 import { useConfirm } from "../../../contexts/confirm/ConfirmContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import { fadeIn, fadeOut } from "../../../utils/transition-animation";
-import { CountriesTableState } from "../../countries/countrie/api/countries.interface";
-import getCountriesApi from "../../countries/countrie/api/get-countries.api";
 import { CheckpointCategoryTableState } from "../category/apis/checkpoint-category.interface";
 import getCheckpointCategoryApi from "../category/apis/get-checkpoint-category.api";
 import getProvinceApi from "../province/api/get-province.api";
@@ -98,29 +97,12 @@ export default () => {
     }
   });
 
-  const [countryState, setCountryState] = createSignal<CountriesTableState>({});
-  const [countryOptions, setCountryOptions] = createSignal<
-    { label: string; value: string }[]
-  >([]);
-  const [country] = createResource(countryState, getCountriesApi);
-  createEffect(() => {
-    if (country.state === "ready") {
-      setCountryOptions([
-        { label: "ເລືອກປະເທດ", value: "0" },
-        ...country().data.data.map((val) => ({
-          label: val.translates[0].name,
-          value: String(val.id),
-        })),
-      ]);
-    }
-  });
-
   const [form, { Form, Field, FieldArray }] = createForm<UpdateCheckpointForm>({
     validate: valiForm(UpdateCheckpointSchema),
     initialValues: {
       category_id: [],
       province_id: [],
-      country_id: [],
+      country: [],
       translates: [
         { name: "", content: "", address: "" },
         { name: "", content: "", address: "" },
@@ -151,9 +133,9 @@ export default () => {
         const fromData: UpdateCheckpointForm = {
           category_id: [String(input.data.category_id)],
           province_id: [String(input.data.province_id)],
-          country_id: input.data.country_id
-            ? [String(input.data.country_id)]
-            : [],
+          country: [input.data.country],
+          visa: input.data.visa,
+          e_visa: input.data.e_visa,
           email: input.data.email,
           phone_number: input.data.phone_number,
           link_map: input.data.link_map,
@@ -314,22 +296,54 @@ export default () => {
           )}
         </Field>
 
-        <Field name="country_id" type="string[]">
+        <Field name="country" type="string[]">
           {(field, props) => (
             <Select
               placeholder="ເລືອກຊາຍແດນປະເທດ"
               contentClass="w-fit"
               onValueChange={({ value }) => {
-                setValue(form, "country_id", value);
+                setValue(form, "country", value);
               }}
               label="ເລືອກຊາຍແດນປະເທດ"
               name={props.name}
-              items={countryOptions()}
+              items={[
+                { label: "ຫວຽດນາມ", value: "vietnam" },
+                { label: "ກຳປູເຈຍ", value: "cambodia" },
+                { label: "ໄທ", value: "thailand" },
+                { label: "ມຽນມ້າ", value: "myanmar" },
+                { label: "ຈີນ", value: "china" },
+              ]}
               error={field.error}
               value={field.value}
             ></Select>
           )}
         </Field>
+
+        <div class="flex items-end h-full mb-4">
+          <Field name="visa" type="boolean">
+            {(field, props) => (
+              <Checkbox
+                label="ຮັບ Visa"
+                required
+                {...props}
+                checked={field.value}
+                error={field.error}
+              />
+            )}
+          </Field>
+
+          <Field name="e_visa" type="boolean">
+            {(field, props) => (
+              <Checkbox
+                label="ຮັບ E Visa"
+                required
+                {...props}
+                checked={field.value}
+                error={field.error}
+              />
+            )}
+          </Field>
+        </div>
       </div>
 
       <Field name="image" type="File">

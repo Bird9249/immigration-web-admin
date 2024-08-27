@@ -9,16 +9,7 @@ export type ProvinceResponse = {
   id: number;
   created_at: string;
   updated_at: string;
-  countries: {
-    country: {
-      id: number;
-      image: string;
-      translates: {
-        id: number;
-        name: string;
-      }[];
-    };
-  }[];
+  countries: { id: number; country: string; provinceId: number }[];
   translates: {
     id: number;
     country_ids: number;

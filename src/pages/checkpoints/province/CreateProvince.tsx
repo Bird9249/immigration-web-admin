@@ -1,12 +1,11 @@
 import {
-  SubmitHandler,
   createForm,
   getErrors,
-  setValue,
+  SubmitHandler,
   valiForm,
 } from "@modular-forms/solid";
 import { useNavigate } from "@solidjs/router";
-import { createEffect, createResource, createSignal } from "solid-js";
+import { createEffect, createResource, createSignal, For } from "solid-js";
 
 import { createStore } from "solid-js/store";
 import {
@@ -15,18 +14,15 @@ import {
 } from "../../../common/enum/permission.enum";
 import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
+import Checkbox from "../../../components/forms/check-box/Checkbox";
 import InputText from "../../../components/forms/input-text/InputText";
 import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
-import createProvinceApi from "./api/create-province.api";
-import {
-  ProvinceForm,
-  ProvincesSchema,
-} from "./schemas/province.schemas";
-import getCountriesApi from "../../countries/countrie/api/get-countries.api";
-import Select from "../../../components/forms/select/Select";
 import { CountriesTableState } from "../../countries/countrie/api/countries.interface";
+import getCountriesApi from "../../countries/countrie/api/get-countries.api";
+import createProvinceApi from "./api/create-province.api";
+import { ProvinceForm, ProvincesSchema } from "./schemas/province.schemas";
 
 export default () => {
   const [, actionMessage] = useMessage();
@@ -40,22 +36,20 @@ export default () => {
 
   if (!checkPermission(Permission.Write, PermissionGroup.Checkpoint, auth))
     navigator(-1);
-  const [countryState] = createSignal<CountriesTableState>({
-  });
+  const [countryState] = createSignal<CountriesTableState>({});
 
-  const [lang, setLang] = createSignal<number>(0)
+  const [lang, setLang] = createSignal<number>(0);
   const [countrys] = createResource(countryState, getCountriesApi);
   const [countryOptions, setCountrysOptions] = createSignal<
     { label: string; value: string }[]
   >([]);
-  const [provinceForm, { Form, Field, FieldArray }] =
-    createForm<ProvinceForm>({
-      validate: valiForm(ProvincesSchema),
-      initialValues: {
-        country_ids: [],
-        translates: [{ name: "" }, { name: "" }, { name: "" }],
-      },
-    });
+  const [provinceForm, { Form, Field, FieldArray }] = createForm<ProvinceForm>({
+    validate: valiForm(ProvincesSchema),
+    initialValues: {
+      countries: [],
+      translates: [{ name: "" }, { name: "" }, { name: "" }],
+    },
+  });
 
   createEffect(() => {
     const errors = getErrors(provinceForm);
@@ -76,10 +70,9 @@ export default () => {
           label: val.translates[lang()].name,
           value: String(val.id),
         }))
-      )
+      );
     }
-  })
-
+  });
 
   const handleSubmit: SubmitHandler<ProvinceForm> = async (values) => {
     const res = await createProvinceApi(values);
@@ -93,25 +86,24 @@ export default () => {
       <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
         ເພີ່ມຂໍ້ມູນແຂວງ
       </h2>
-      <div class="grid gap-4 my-4 md:grid-cols-2 md:gap-6">
+      <div class="flex flex-col gap-4 my-4 ">
         <FieldArray name="translates">
           {(fieldArray) => (
             <Tabs
               onValueChange={(val) => {
                 switch (val) {
-                  case 'lo':
-                    setLang(0)
+                  case "lo":
+                    setLang(0);
                     break;
 
-                  case 'en':
-                    setLang(1)
+                  case "en":
+                    setLang(1);
                     break;
 
                   default:
-                    setLang(2)
+                    setLang(2);
                     break;
                 }
-
               }}
               items={tabsItems}
               contents={[{ key: "lo" }, { key: "en" }, { key: "zh_cn" }].map(
@@ -120,8 +112,9 @@ export default () => {
                   content: (
                     <div class="my-4 flex flex-col gap-4">
                       <Field
-                        name={`${fieldArray.name}.${idx as unknown as 0 | 1 | 2
-                          }.name`}
+                        name={`${fieldArray.name}.${
+                          idx as unknown as 0 | 1 | 2
+                        }.name`}
                       >
                         {(field, props) => (
                           <InputText
@@ -134,25 +127,6 @@ export default () => {
                           />
                         )}
                       </Field>
-
-                      <Field name="country_ids" type="string[]">
-                        {(field, props) => (
-                          <Select
-                            multiple
-                            class="my-4"
-                            placeholder="ກະລຸນາເລືອກປະເທດ"
-                            contentClass="w-44"
-                            onValueChange={({ value }) => {
-                              setValue(provinceForm, "country_ids", value);
-                            }}
-                            label="ເລືອກປະເທດ"
-                            name={props.name}
-                            items={countryOptions()}
-                            error={field.error}
-                            value={field.value}
-                          ></Select>
-                        )}
-                      </Field>
                     </div>
                   ),
                 })
@@ -160,6 +134,38 @@ export default () => {
             />
           )}
         </FieldArray>
+
+        <div>
+          <span>ຊາຍແດນຕິດກັບປະເທດ</span>
+          <div class="flex">
+            <For
+              each={[
+                { label: "ຫວຽດນາມ", value: "vietnam" },
+                { label: "ກຳປູເຈຍ", value: "cambodia" },
+                { label: "ໄທ", value: "thailand" },
+                { label: "ມຽນມ້າ", value: "myanmar" },
+                { label: "ຈີນ", value: "china" },
+              ]}
+            >
+              {({ label, value }) => (
+                <Field name="countries" type="string[]">
+                  {(field, props) => (
+                    <>
+                      <Checkbox
+                        {...props}
+                        checked={field.value?.includes(value)}
+                        label={label}
+                        error={field.error}
+                        value={value}
+                      />
+                      {field.error}
+                    </>
+                  )}
+                </Field>
+              )}
+            </For>
+          </div>
+        </div>
       </div>
 
       <Button type="submit" isLoading={provinceForm.submitting}>

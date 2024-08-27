@@ -77,6 +77,7 @@ export type Arrival = {
     nationality: string;
     occupation: string;
     phone_number: string;
+    race: string;
   };
   intended_address: {
     id: number;
