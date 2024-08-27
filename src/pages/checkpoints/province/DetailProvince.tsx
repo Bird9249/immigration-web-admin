@@ -30,6 +30,26 @@ export default () => {
 
   const [provinces] = createResource(id, getProvinceDetailApi);
 
+  const translateCountry = (
+    country: "vietnam" | "cambodia" | "thailand" | "myanmar" | "china"
+  ) => {
+    switch (country) {
+      case "vietnam":
+        return "ຫວຽດນາມ";
+      case "cambodia":
+        return "ກຳປູເຈຍ";
+      case "thailand":
+        return "ໄທ";
+      case "myanmar":
+        return "ມຽນມ້າ";
+      case "china":
+        return "ຈີນ";
+
+      default:
+        break;
+    }
+  };
+
   return (
     <>
       <h2 class=" text-xl font-bold text-gray-900 dark:text-white">
@@ -62,8 +82,8 @@ export default () => {
                           {(provinces_country) => (
                             <p>
                               <For each={provinces_country().data.countries}>
-                                {({ country: { translates } }) =>
-                                  translates[idx].name +
+                                {({ country }) =>
+                                  country +
                                   (idx !==
                                   provinces_country().data.countries.length - 1
                                     ? ", "

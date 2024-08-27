@@ -16,27 +16,22 @@ import checkPermission from "../../../common/utils/check-permission";
 import Button from "../../../components/button/Button";
 import Editor from "../../../components/forms/editor/Editor";
 import InputText from "../../../components/forms/input-text/InputText";
+import Textarea from "../../../components/forms/textarea/Textarea";
 import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
-import createAccommodationRequestApi from "./api/create-accommodation-request.api";
+import createServiceApi from "./api/create-service.api";
 import {
-  CreateAccommodationRequestSchema,
-  CreateAccommodationRequestSchemaType,
-} from "./schemas/create-accommodation-request.schemas";
+  CreateServiceSchema,
+  CreateServiceSchemaType,
+} from "./schemas/create-service.schemas";
 
 export default () => {
   const [, actionMessage] = useMessage();
   const navigator = useNavigate();
   const auth = useAuth();
 
-  if (
-    !checkPermission(
-      Permission.Write,
-      PermissionGroup.AccommodationRequest,
-      auth
-    )
-  )
+  if (!checkPermission(Permission.Write, PermissionGroup.Service, auth))
     navigator(-1);
 
   const [tabsItems, setTabsItems] = createStore<TabsItems>([
@@ -46,12 +41,13 @@ export default () => {
   ]);
 
   const [form, { Form, FieldArray, Field }] =
-    createForm<CreateAccommodationRequestSchemaType>({
-      validate: valiForm(CreateAccommodationRequestSchema),
+    createForm<CreateServiceSchemaType>({
+      validate: valiForm(CreateServiceSchema),
       initialValues: {
         translates: [
           {
             title: "",
+            description: "",
             content: JSON.stringify({
               type: "doc",
               content: [],
@@ -59,6 +55,7 @@ export default () => {
           },
           {
             title: "",
+            description: "",
             content: JSON.stringify({
               type: "doc",
               content: [],
@@ -66,6 +63,7 @@ export default () => {
           },
           {
             title: "",
+            description: "",
             content: JSON.stringify({
               type: "doc",
               content: [],
@@ -90,18 +88,20 @@ export default () => {
     });
   });
 
-  const handleSubmit: SubmitHandler<
-    CreateAccommodationRequestSchemaType
-  > = async (values) => {
-    const res = await createAccommodationRequestApi(values);
+  const handleSubmit: SubmitHandler<CreateServiceSchemaType> = async (
+    values
+  ) => {
+    console.log(values);
+
+    const res = await createServiceApi(values);
     actionMessage.showMessage({ level: "success", message: res.data.message });
-    navigator("/accommodation-request");
+    navigator("/service");
   };
 
   return (
     <>
       <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-        ເພີ່ມຂໍ້ມູນການຮ້ອງຂໍທີ່ພັກ
+        ເພີ່ມຂໍ້ມູນການບໍລິການ
       </h2>
       <Form onSubmit={handleSubmit}>
         <FieldArray name="translates">
@@ -126,6 +126,22 @@ export default () => {
                             value={field.value}
                             error={field.error}
                             placeholder="ປ້ອນຫົວຂໍ້"
+                          />
+                        )}
+                      </Field>
+
+                      <Field
+                        name={`${fieldArray.name}.${
+                          idx as unknown as 0 | 1 | 2
+                        }.description`}
+                      >
+                        {(field, props) => (
+                          <Textarea
+                            label="ຄຳອະທິບາຍ"
+                            {...props}
+                            value={field.value}
+                            error={field.error}
+                            placeholder="ປ້ອນຄຳອະທິບາຍ"
                           />
                         )}
                       </Field>

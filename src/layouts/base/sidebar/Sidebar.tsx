@@ -14,7 +14,6 @@ import checkPermissionGroup from "../../../common/utils/check-permission-group";
 import Building from "../../../components/icons/Building";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
 import CheckpointIcon from "../../../components/icons/CheckpointIcon";
-import CloseIcon from "../../../components/icons/CloseIcon";
 import Contacts from "../../../components/icons/Contacts";
 import Countries from "../../../components/icons/Countries";
 import FilePenIcon from "../../../components/icons/FilePenIcon";
@@ -22,6 +21,7 @@ import HomeIcon from "../../../components/icons/HomeIcon";
 import Law from "../../../components/icons/Law";
 import Message from "../../../components/icons/Message";
 import NewsIcon from "../../../components/icons/NewsIcon";
+import UserHeadsetIcon from "../../../components/icons/UserHeadsetIcon";
 import UserIcon from "../../../components/icons/UserIcon";
 import VisaIcon from "../../../components/icons/VisaIcon";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
@@ -75,19 +75,11 @@ export default function () {
       });
     }
 
-    if (checkPermissionGroup(PermissionGroup.AccommodationRequest, auth)) {
+    if (checkPermissionGroup(PermissionGroup.Service, auth)) {
       preparedMenus.push({
-        icon: <HomeIcon />,
-        href: "/accommodation-request",
-        label: "ການຮ້ອງຂໍທີ່ພັກ",
-      });
-    }
-
-    if (checkPermissionGroup(PermissionGroup.LostPassport, auth)) {
-      preparedMenus.push({
-        icon: <CloseIcon iconDirection="circle-line" />,
-        href: "/lost-passport",
-        label: "ໜັງສືຜ່ານແດນເສຍ",
+        icon: <UserHeadsetIcon />,
+        href: "/service",
+        label: "ບໍລິການ",
       });
     }
 

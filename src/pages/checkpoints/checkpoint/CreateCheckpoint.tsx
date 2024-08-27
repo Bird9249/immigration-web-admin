@@ -16,6 +16,7 @@ import {
 import checkPermission from "../../../common/utils/check-permission";
 import Alert from "../../../components/alert/Alert";
 import Button from "../../../components/button/Button";
+import Checkbox from "../../../components/forms/check-box/Checkbox";
 import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
 import InputText from "../../../components/forms/input-text/InputText";
 import Select from "../../../components/forms/select/Select";
@@ -24,8 +25,6 @@ import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
 import { useAxios } from "../../../contexts/axios/AxiosContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
-import { CountriesTableState } from "../../countries/countrie/api/countries.interface";
-import getCountriesApi from "../../countries/countrie/api/get-countries.api";
 import { CheckpointCategoryTableState } from "../category/apis/checkpoint-category.interface";
 import getCheckpointCategoryApi from "../category/apis/get-checkpoint-category.api";
 import getProvinceApi from "../province/api/get-province.api";
@@ -87,29 +86,12 @@ export default () => {
     }
   });
 
-  const [countryState, setCountryState] = createSignal<CountriesTableState>({});
-  const [countryOptions, setCountryOptions] = createSignal<
-    { label: string; value: string }[]
-  >([]);
-  const [country] = createResource(countryState, getCountriesApi);
-  createEffect(() => {
-    if (country.state === "ready") {
-      setCountryOptions([
-        { label: "ເລືອກປະເທດ", value: "0" },
-        ...country().data.data.map((val) => ({
-          label: val.translates[0].name,
-          value: String(val.id),
-        })),
-      ]);
-    }
-  });
-
   const [form, { Form, Field, FieldArray }] = createForm<CreateCheckpointForm>({
     validate: valiForm(CreateCheckpointSchema),
     initialValues: {
       category_id: [],
       province_id: [],
-      country_id: [],
+      country: [],
       translates: [
         { name: "", content: "", address: "" },
         { name: "", content: "", address: "" },
@@ -250,22 +232,54 @@ export default () => {
           )}
         </Field>
 
-        <Field name="country_id" type="string[]">
+        <Field name="country" type="string[]">
           {(field, props) => (
             <Select
               placeholder="ເລືອກຊາຍແດນປະເທດ"
               contentClass="w-fit"
               onValueChange={({ value }) => {
-                setValue(form, "country_id", value);
+                setValue(form, "country", value);
               }}
               label="ເລືອກຊາຍແດນປະເທດ"
               name={props.name}
-              items={countryOptions()}
+              items={[
+                { label: "ຫວຽດນາມ", value: "vietnam" },
+                { label: "ກຳປູເຈຍ", value: "cambodia" },
+                { label: "ໄທ", value: "thailand" },
+                { label: "ມຽນມ້າ", value: "myanmar" },
+                { label: "ຈີນ", value: "china" },
+              ]}
               error={field.error}
               value={field.value}
             ></Select>
           )}
         </Field>
+
+        <div class="flex items-end h-full mb-4">
+          <Field name="visa" type="boolean">
+            {(field, props) => (
+              <Checkbox
+                label="ຮັບ Visa"
+                required
+                {...props}
+                checked={field.value}
+                error={field.error}
+              />
+            )}
+          </Field>
+
+          <Field name="e_visa" type="boolean">
+            {(field, props) => (
+              <Checkbox
+                label="ຮັບ E Visa"
+                required
+                {...props}
+                checked={field.value}
+                error={field.error}
+              />
+            )}
+          </Field>
+        </div>
       </div>
 
       <Field name="image" type="File">

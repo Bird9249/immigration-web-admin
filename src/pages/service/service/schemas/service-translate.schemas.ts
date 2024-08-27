@@ -10,11 +10,14 @@ import {
 import getJsonStringSize from "../../../../common/utils/get-json-string-size";
 import isValidJson from "../../../../common/utils/is-valid-json";
 
-export const LostPassportTranslateSchemas = object({
+export const ServiceTranslateSchemas = object({
   id: number("ຈະຕ້ອງເປັນ number"),
   title: string("ຈະຕ້ອງເປັນ string", [
     minLength(1, "ຈະຕ້ອງບໍ່ຫວ່າງເປົ່າ."),
     maxLength(255, "ຄວາມຍາວສູງສຸດທີ່ອະນຸຍາດແມ່ນ 255 ຕົວອັກສອນ."),
+  ]),
+  description: string("ຈະຕ້ອງເປັນ string", [
+    maxLength(1000, "ຄວາມຍາວສູງສຸດທີ່ອະນຸຍາດແມ່ນ 1000 ຕົວອັກສອນ."),
   ]),
   content: string("ຈະຕ້ອງເປັນ string.", [
     minLength(1, "ຈະຕ້ອງບໍ່ຫວ່າງເປົ່າ."),
@@ -26,6 +29,4 @@ export const LostPassportTranslateSchemas = object({
   ]),
 });
 
-export type LostPassportTranslateSchemasType = Input<
-  typeof LostPassportTranslateSchemas
->;
+export type ServiceTranslateSchemasType = Input<typeof ServiceTranslateSchemas>;
