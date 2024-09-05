@@ -7,7 +7,9 @@ export default async (form: CreateCheckpointForm) => {
   const formData = new FormData();
   formData.append("category_id", form.category_id[0]);
   formData.append("province_id", form.province_id[0]);
-  formData.append("country", form.country[0]);
+  if (form.country[0]) {
+    formData.append("country", form.country[0]);
+  }
   formData.append("image", form.image);
   formData.append("link_map", form.link_map);
   formData.append("phone_number", form.phone_number);

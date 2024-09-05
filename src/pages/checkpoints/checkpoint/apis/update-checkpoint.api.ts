@@ -7,7 +7,9 @@ export default async (id: string, form: UpdateCheckpointForm) => {
   const formData = new FormData();
   formData.append("category_id", form.category_id[0]);
   formData.append("province_id", form.province_id[0]);
-  formData.append("country", form.country[0]);
+  if (form.country[0]) {
+    formData.append("country", form.country[0]);
+  }
   if (form.image) {
     formData.append("image", form.image);
   }
