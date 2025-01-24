@@ -42,7 +42,7 @@ export type Arrival = {
   traveling_by_type: "flight" | "car" | "bus";
   traveling_by_no: string;
   traveling_from: string;
-  is_traveling_in_tour: false;
+  is_traveling_in_tour: string;
   verification_code?: string;
   verified_at?: string;
   black_list: "available" | "unavailable";
@@ -55,11 +55,14 @@ export type Arrival = {
     date_issue: string;
     place_issue: string;
     image: string;
+    people_image: string;
     created_at: string;
     updated_at: string;
   };
   visa_information: {
     id: number;
+    visaCategory: string;
+
     number: string;
     date_issue: string;
     place_issue: string;

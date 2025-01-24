@@ -110,13 +110,13 @@ export default () => {
             <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
               <Show when={arrival()} fallback={"..."}>
                 {(arrival) =>
-                  arrival().data.is_traveling_in_tour ? (
+                  arrival().data.is_traveling_in_tour !== "No" ? (
                     <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-                      ແມ່ນແລ້ວ
+                      {arrival().data.is_traveling_in_tour}
                     </span>
                   ) : (
-                    <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
-                      ບໍ່
+                    <span class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-900 dark:text-gray-300">
+                      ບໍ່ມີ
                     </span>
                   )
                 }
@@ -373,59 +373,71 @@ export default () => {
             )}
           </Show>
 
-          <dl class="ms-0 md:ms-4 flex flex-row md:flex-col justify-between md:justify-start">
-            <div>
-              <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
-                ເລກໜັງສືຜ່ານແດນ
-              </dt>
-              <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-                <Show when={arrival()} fallback={"..."}>
-                  {(arrival) => arrival().data.passport_information.number}
-                </Show>
-              </dd>
-            </div>
-            <div>
-              <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
-                ວັນ​ຫມົດ​ອາ​ຍຸ
-              </dt>
-              <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-                <Show when={arrival()} fallback={"..."}>
-                  {(arrival) =>
-                    format(
-                      arrival().data.passport_information.expiry_date,
-                      "dd/MM/yyyy"
-                    )
-                  }
-                </Show>
-              </dd>
-            </div>
-            <div>
-              <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
-                ວັນທີອອກ
-              </dt>
-              <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-                <Show when={arrival()} fallback={"..."}>
-                  {(arrival) =>
-                    format(
-                      arrival().data.passport_information.date_issue,
-                      "dd/MM/yyyy"
-                    )
-                  }
-                </Show>
-              </dd>
-            </div>
-            <div>
-              <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
-                ສະ​ຖານ​ທີ່​ອອກ
-              </dt>
-              <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
-                <Show when={arrival()} fallback={"..."}>
-                  {(arrival) => arrival().data.passport_information.place_issue}
-                </Show>
-              </dd>
-            </div>
-          </dl>
+          <Show when={arrival()} fallback={"..."}>
+            {(arrival) => (
+              <img
+                src={
+                  import.meta.env.VITE_IMG_URL +
+                  arrival().data.passport_information.people_image
+                }
+                alt="passport image"
+                class="w-full rounded-lg border"
+              />
+            )}
+          </Show>
         </div>
+        <dl class="ms-0 md:ms-4 flex flex-wrap justify-between mt-4">
+          <div>
+            <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+              ເລກໜັງສືຜ່ານແດນ
+            </dt>
+            <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+              <Show when={arrival()} fallback={"..."}>
+                {(arrival) => arrival().data.passport_information.number}
+              </Show>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+              ວັນ​ຫມົດ​ອາ​ຍຸ
+            </dt>
+            <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+              <Show when={arrival()} fallback={"..."}>
+                {(arrival) =>
+                  format(
+                    arrival().data.passport_information.expiry_date,
+                    "dd/MM/yyyy"
+                  )
+                }
+              </Show>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+              ວັນທີອອກ
+            </dt>
+            <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+              <Show when={arrival()} fallback={"..."}>
+                {(arrival) =>
+                  format(
+                    arrival().data.passport_information.date_issue,
+                    "dd/MM/yyyy"
+                  )
+                }
+              </Show>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+              ສະ​ຖານ​ທີ່​ອອກ
+            </dt>
+            <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+              <Show when={arrival()} fallback={"..."}>
+                {(arrival) => arrival().data.passport_information.place_issue}
+              </Show>
+            </dd>
+          </div>
+        </dl>
       </div>
 
       <Show when={arrival()?.data.visa_information} fallback={"..."}>
@@ -449,6 +461,17 @@ export default () => {
             </Show>
 
             <dl class="ms-0 md:ms-4 flex flex-row md:flex-col justify-between md:justify-start">
+              <div>
+                <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+                  ປະເພດວີຊ່າ
+                </dt>
+                <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+                  <Show when={arrival()} fallback={"..."}>
+                    {(arrival) => arrival().data.visa_information.visaCategory}
+                  </Show>
+                </dd>
+              </div>
+
               <div>
                 <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
                   ໝາຍເລກວີຊາ

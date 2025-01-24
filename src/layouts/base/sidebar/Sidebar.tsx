@@ -11,7 +11,6 @@ import {
 import { createStore } from "solid-js/store";
 import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
-import Building from "../../../components/icons/Building";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
 import CheckpointIcon from "../../../components/icons/CheckpointIcon";
 import Contacts from "../../../components/icons/Contacts";
@@ -146,13 +145,13 @@ export default function () {
       });
     }
 
-    if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
-      preparedMenus.push({
-        icon: <Building />,
-        href: "/hotels",
-        label: "ຈັດການໂຮງແຮມ",
-      });
-    }
+    // if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
+    //   preparedMenus.push({
+    //     icon: <Building />,
+    //     href: "/hotels",
+    //     label: "ຈັດການໂຮງແຮມ",
+    //   });
+    // }
 
     if (checkPermissionGroup(PermissionGroup.Countries, auth)) {
       preparedMenus.push({
