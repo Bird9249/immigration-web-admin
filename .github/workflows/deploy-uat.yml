@@ -24,8 +24,10 @@ jobs:
       - name: Create .env file
         uses: ozaytsev86/create-env-file@v1
         with:
-          VITE_BASE_API_URL: "http://178.128.20.203/api/"
-          VITE_IMG_URL: "http://178.128.20.203/api/"
+          file-name: .env
+          envs: |
+            VITE_BASE_API_URL: "http://178.128.20.203/api/"
+            VITE_IMG_URL: "http://178.128.20.203/api/"
 
       - name: Build Project
         run: npm run build
