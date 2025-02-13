@@ -79,7 +79,7 @@ export default () => {
 
     actionMessage.showMessage({ level: "success", message: res.data.message });
 
-    navigator("/checkpoint/province", { resolve: false });
+    navigator("/admin/checkpoint/province", { resolve: false });
   };
   return (
     <Form onSubmit={handleSubmit} class="relative">

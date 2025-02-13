@@ -84,7 +84,7 @@ export default () => {
       message: res.data.message,
     });
 
-    navigator("users/roles", { resolve: false });
+    navigator("/admin/users/roles", { resolve: false });
   };
 
   return (
@@ -179,7 +179,7 @@ export default () => {
                   message: res.data.message,
                 });
 
-                navigator("users/roles", { resolve: false });
+                navigator("/admin/users/roles", { resolve: false });
               },
             });
           }}

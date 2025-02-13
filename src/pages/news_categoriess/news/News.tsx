@@ -76,7 +76,7 @@ export default () => {
     if (checkPermission(Permission.Read, PermissionGroup.News, auth))
       menus[0].push({
         onClick() {
-          navigate(`/newsCategoriess/news/detail/${id}`);
+          navigate(`/admin/newsCategoriess/news/detail/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });
@@ -84,7 +84,7 @@ export default () => {
     if (checkPermission(Permission.Write, PermissionGroup.News, auth))
       menus[0].push({
         onClick() {
-          navigate(`/newsCategoriess/news/edit/${id}`);
+          navigate(`/admin/newsCategoriess/news/edit/${id}`);
         },
         label: "ແກ້ໄຂ",
       });
@@ -183,7 +183,7 @@ export default () => {
                 class="w-full sm:w-fit"
                 prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
                 onClick={() => {
-                  navigate("/newsCategoriess/news/create");
+                  navigate("/admin/newsCategoriess/news/create");
                 }}
               >
                 ເພີ່ມຂໍ້ມູນ

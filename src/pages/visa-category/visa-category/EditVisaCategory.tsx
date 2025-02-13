@@ -131,7 +131,7 @@ export default () => {
   ) => {
     const res = await updateVisaCategoryApi(param.id, values);
     actionMessage.showMessage({ level: "success", message: res.data.message });
-    navigator("/visa-category");
+    navigator("/admin/visa-category");
   };
 
   return (

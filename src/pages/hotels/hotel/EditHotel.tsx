@@ -170,7 +170,7 @@ export default () => {
         message: res.data.message,
       });
     }
-    navigator("/hotels", { resolve: false });
+    navigator("/admin/hotels", { resolve: false });
   };
 
   return (
@@ -391,39 +391,35 @@ export default () => {
         </Button>
 
         <Show
-          when={checkPermission(
-            Permission.Remove,
-            PermissionGroup.Hotel,
-            auth
-          )}
+          when={checkPermission(Permission.Remove, PermissionGroup.Hotel, auth)}
         >
-        <Button
-          color="danger"
-          outlined
-          type="button"
-          isLoading={hotelForm.submitting}
-          prefixIcon={<TrashIcon />}
-          onClick={() => {
-            actionConfirm.showConfirm({
-              icon: () => (
-                <TrashIcon class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" />
-              ),
-              message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
-              onConfirm: async () => {
-                const res = await deleteHotelApi(param.id);
+          <Button
+            color="danger"
+            outlined
+            type="button"
+            isLoading={hotelForm.submitting}
+            prefixIcon={<TrashIcon />}
+            onClick={() => {
+              actionConfirm.showConfirm({
+                icon: () => (
+                  <TrashIcon class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" />
+                ),
+                message: "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບລາຍການນີ້?",
+                onConfirm: async () => {
+                  const res = await deleteHotelApi(param.id);
 
-                actionMessage.showMessage({
-                  level: "success",
-                  message: res.data.message,
-                });
+                  actionMessage.showMessage({
+                    level: "success",
+                    message: res.data.message,
+                  });
 
-                navigator("/hotels/list", { resolve: false });
-              },
-            });
-          }}
-        >
-          ລຶບ
-        </Button>
+                  navigator("/admin/hotels/list", { resolve: false });
+                },
+              });
+            }}
+          >
+            ລຶບ
+          </Button>
         </Show>
       </div>
 

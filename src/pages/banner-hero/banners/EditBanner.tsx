@@ -135,7 +135,7 @@ export default () => {
         message: res.data.message,
       });
     }
-    navigator("/banner/list", { resolve: false });
+    navigator("/admin/banner/list", { resolve: false });
   };
 
   return (
@@ -295,7 +295,7 @@ export default () => {
                     message: res.data.message,
                   });
 
-                  navigator("/banner/list", { resolve: false });
+                  navigator("/admin/banner/list", { resolve: false });
                 },
               });
             }}

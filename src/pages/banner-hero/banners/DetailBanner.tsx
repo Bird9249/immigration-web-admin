@@ -169,7 +169,7 @@ export default () => {
               color="primary"
               prefixIcon={<EditIcon />}
               onClick={() => {
-                navigator(`/banner/edit/${param.id}`);
+                navigator(`/admin/banner/edit/${param.id}`);
               }}
             >
               ແກ້ໄຂ

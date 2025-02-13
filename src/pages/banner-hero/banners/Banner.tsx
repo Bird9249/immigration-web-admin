@@ -47,14 +47,14 @@ export default () => {
     if (checkPermission(Permission.Read, PermissionGroup.Banner, auth))
       menus[0].push({
         onClick() {
-          navigate(`/banner/detail/${id}`);
+          navigate(`/admin/banner/detail/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });
     if (checkPermission(Permission.Write, PermissionGroup.Banner, auth))
       menus[0].push({
         onClick() {
-          navigate(`/banner/edit/${id}`);
+          navigate(`/admin/banner/edit/${id}`);
         },
         label: "ແກ້ໄຂ",
       });
@@ -155,7 +155,7 @@ export default () => {
                 class="w-full sm:w-fit"
                 prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
                 onClick={() => {
-                  navigate("/banner/create");
+                  navigate("/admin/banner/create");
                 }}
               >
                 ເພີ່ມຂໍ້ມູນ

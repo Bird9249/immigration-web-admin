@@ -40,7 +40,7 @@ export default () => {
     if (checkPermission(Permission.Read, PermissionGroup.Contacts, auth))
       menus[0].push({
         onClick() {
-          navigate(`/contacts/detail/${id}`);
+          navigate(`/admin/contacts/detail/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });

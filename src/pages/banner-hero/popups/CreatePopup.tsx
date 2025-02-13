@@ -37,7 +37,7 @@ export default () => {
   const handleSubmit: SubmitHandler<PopupForm> = async (values) => {
     const res = await createPopupApi(values);
     actionMessage.showMessage({ level: "success", message: res.data.message });
-    navigator("banner/popup", { resolve: false });
+    navigator("/admin/banner/popup", { resolve: false });
   };
   return (
     <Form onSubmit={handleSubmit} class="relative">

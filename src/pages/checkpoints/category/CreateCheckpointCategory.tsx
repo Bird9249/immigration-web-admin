@@ -75,7 +75,7 @@ export default () => {
 
     actionMessage.showMessage({ level: "success", message: res.data.message });
 
-    navigator("/checkpoint/category");
+    navigator("/admin/checkpoint/category");
   };
   return (
     <Form onSubmit={handleSubmit} class="relative">

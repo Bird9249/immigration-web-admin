@@ -70,7 +70,7 @@ export default () => {
   const handleSubmit: SubmitHandler<BannerForm> = async (values) => {
     const res = await createBannerApi(values);
     actionMessage.showMessage({ level: "success", message: res.data.message });
-    navigator("banner/list", { resolve: false });
+    navigator("admin/banner/list", { resolve: false });
   };
 
   return (

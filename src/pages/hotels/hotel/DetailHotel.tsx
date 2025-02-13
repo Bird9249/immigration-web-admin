@@ -161,7 +161,7 @@ export default () => {
             color="primary"
             prefixIcon={<EditIcon />}
             onClick={() => {
-              navigator(`/hotels/edit/${param.id}`);
+              navigator(`/admin/hotels/edit/${param.id}`);
             }}
           >
             ແກ້ໄຂ

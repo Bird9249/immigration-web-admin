@@ -31,7 +31,7 @@ export default () => {
         message: "ເຂົ້າສູ່ລະບົບສຳເລັດແລ້ວ",
       });
 
-      navigate("/dashboard");
+      navigate("/admin/dashboard");
     } catch (error) {
       if (error instanceof AxiosError) {
         setError(error.response?.data.message);

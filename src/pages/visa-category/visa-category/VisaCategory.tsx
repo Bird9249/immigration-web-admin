@@ -161,7 +161,7 @@ export default () => {
               class="w-full sm:w-fit"
               prefixIcon={<PlusIcon class="size-4" />}
               onClick={() => {
-                navigate("/visa-category/create");
+                navigate("/admin/visa-category/create");
               }}
             >
               ເພີ່ມຂໍ້ມູນ
@@ -227,7 +227,7 @@ export default () => {
                                   <button
                                     onClick={() => {
                                       navigate(
-                                        `/visa-category/edit/${item().id}`
+                                        `/admin/visa-category/edit/${item().id}`
                                       );
                                     }}
                                     type="button"

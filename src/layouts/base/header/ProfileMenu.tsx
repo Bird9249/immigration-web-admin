@@ -32,7 +32,7 @@ export default function () {
           message: res.data.message,
         });
 
-        navigator("/login", { resolve: false });
+        navigator("/admin/login", { resolve: false });
       },
     });
   }
@@ -72,7 +72,7 @@ export default function () {
           >
             <li>
               <A
-                href={`users/detail/${auth.id}`}
+                href={`/admin/users/detail/${auth.id}`}
                 class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
               >
                 ໂປຣໄຟລ໌ຂອງຂ້ອຍ

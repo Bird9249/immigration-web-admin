@@ -44,7 +44,7 @@ export default () => {
     if (checkPermission(Permission.Read, PermissionGroup.Feedback, auth))
       menus[0].push({
         onClick() {
-          navigate(`/feedback/${id}`);
+          navigate(`/admin/feedback/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });

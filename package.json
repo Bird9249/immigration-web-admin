@@ -8,7 +8,8 @@
     "build": "vite build",
     "serve": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "deploy": "scp -r dist/* ubuntu@157.119.183.230:/var/www/admin.immigration.gov"
   },
   "license": "MIT",
   "devDependencies": {

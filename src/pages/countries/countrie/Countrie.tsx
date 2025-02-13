@@ -48,14 +48,14 @@ export default () => {
     if (checkPermission(Permission.Read, PermissionGroup.Countries, auth))
       menus[0].push({
         onClick() {
-          navigate(`/countries/detail/${id}`);
+          navigate(`/admin/countries/detail/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });
     if (checkPermission(Permission.Write, PermissionGroup.Countries, auth))
       menus[0].push({
         onClick() {
-          navigate(`/countries/edit/${id}`);
+          navigate(`/admin/countries/edit/${id}`);
         },
         label: "ແກ້ໄຂ",
       });
@@ -131,7 +131,7 @@ export default () => {
                 class="w-full sm:w-fit"
                 prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
                 onClick={() => {
-                  navigate("/countries/create");
+                  navigate("/admin/countries/create");
                 }}
               >
                 ເພີ່ມຂໍ້ມູນ

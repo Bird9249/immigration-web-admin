@@ -121,7 +121,7 @@ export default () => {
 
     actionMessage.showMessage({ level: "success", message: res.data.message });
 
-    navigator("/checkpoint");
+    navigator("/admin/checkpoint");
   };
 
   return (

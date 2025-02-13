@@ -112,7 +112,7 @@ export default () => {
 
     actionMessage.showMessage({ level: "success", message: res.data.message });
 
-    navigator("/users/list", { resolve: false });
+    navigator("/admin/users/list", { resolve: false });
   };
 
   return (
@@ -262,7 +262,7 @@ export default () => {
                     message: res.data.message,
                   });
 
-                  navigator("/users/list", { resolve: false });
+                  navigator("/admin/users/list", { resolve: false });
                 },
               });
             }}

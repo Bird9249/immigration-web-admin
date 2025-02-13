@@ -49,7 +49,7 @@ export default () => {
     if (checkPermission(Permission.Write, PermissionGroup.Checkpoint, auth))
       menus[0].push({
         onClick() {
-          navigate(`/checkpoint/category/edit/${id}`);
+          navigate(`/admin/checkpoint/category/edit/${id}`);
         },
         label: "ແກ້ໄຂ",
       });
@@ -101,7 +101,7 @@ export default () => {
               class="w-full sm:w-fit"
               prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
               onClick={() => {
-                navigate("/checkpoint/category/create");
+                navigate("/admin/checkpoint/category/create");
               }}
             >
               ເພີ່ມຂໍ້ມູນ

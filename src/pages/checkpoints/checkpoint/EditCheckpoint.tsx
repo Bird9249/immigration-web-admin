@@ -176,7 +176,7 @@ export default () => {
 
     actionMessage.showMessage({ level: "success", message: res.data.message });
 
-    navigator("/checkpoint");
+    navigator("/admin/checkpoint");
   };
 
   return (
@@ -447,7 +447,7 @@ export default () => {
                     message: res.data.message,
                   });
 
-                  navigator("/checkpoint");
+                  navigator("/admin/checkpoint");
                 },
               });
             }}
