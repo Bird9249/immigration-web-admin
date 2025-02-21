@@ -1,3 +1,4 @@
+import { useNavigate } from "@solidjs/router";
 import {
   ParentComponent,
   ParentProps,
@@ -12,6 +13,7 @@ import getAuthApi, { AuthResponseType } from "./get-auth.api";
 const AuthContext = createContext<AuthResponseType>(undefined);
 
 export const AuthProvider: ParentComponent = (props: ParentProps) => {
+  const navigate = useNavigate();
   const [auth] = createResource(getAuthApi);
 
   return (

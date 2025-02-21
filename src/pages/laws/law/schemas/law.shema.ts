@@ -21,7 +21,7 @@ export const LawSchema = object({
   ]),
   name: string([
     minLength(1, "ກະລຸນາໃສ່ຊື່ຂອງທ່ານ."),
-    maxLength(30, "ຊື່ຂອງທ່ານຍາວເກີນໄປ."),
+    maxLength(255, "ຊື່ຂອງທ່ານຍາວເກີນໄປ."),
   ]),
 });
 

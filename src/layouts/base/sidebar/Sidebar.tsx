@@ -11,6 +11,7 @@ import {
 import { createStore } from "solid-js/store";
 import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
+import Building from "../../../components/icons/Building";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
 import CheckpointIcon from "../../../components/icons/CheckpointIcon";
 import Contacts from "../../../components/icons/Contacts";
@@ -40,6 +41,18 @@ interface SidebarSubMenuType {
 
 export default function () {
   const auth = useAuth();
+
+  onMount(() => {
+    if (auth.hotel_id) {
+      const mainContent = document.getElementById("main-content");
+
+      if (mainContent) {
+        mainContent.classList.remove("md:ml-64");
+      }
+    }
+  });
+
+  if (auth.hotel_id) return;
 
   const [sidebarMenus, setSidebarMenus] = createStore<{
     menus: SidebarMenuType[];
@@ -151,13 +164,13 @@ export default function () {
       });
     }
 
-    // if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
-    //   preparedMenus.push({
-    //     icon: <Building />,
-    //     href: "/admin/hotels",
-    //     label: "ຈັດການໂຮງແຮມ",
-    //   });
-    // }
+    if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
+      preparedMenus.push({
+        icon: <Building />,
+        href: "/admin/hotels",
+        label: "ຈັດການໂຮງແຮມ",
+      });
+    }
 
     if (checkPermissionGroup(PermissionGroup.Countries, auth)) {
       preparedMenus.push({

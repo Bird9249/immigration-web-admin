@@ -291,7 +291,6 @@ export default () => {
         <Field name="link">
           {(field, props) => (
             <InputText
-              required
               label="ລິ້ງໂຮງແຮມ"
               {...props}
               value={field.value}
