@@ -1,6 +1,14 @@
 import { useParams } from "@solidjs/router";
 import { format } from "date-fns";
-import { createResource, createSignal, Match, Show, Switch } from "solid-js";
+import QRCode from "qrcode";
+import {
+  createEffect,
+  createResource,
+  createSignal,
+  Match,
+  Show,
+  Switch,
+} from "solid-js";
 import { Transition } from "solid-transition-group";
 import Button from "../../../components/button/Button";
 import BriefcaseIcon from "../../../components/icons/BriefcaseIcon";
@@ -50,6 +58,23 @@ export default () => {
       confirmColor: "primary",
     });
   }
+
+  createEffect(() => {
+    const qrArea = document.getElementById(
+      "arrival-qr"
+    ) as HTMLCanvasElement | null;
+
+    if (arrival() && qrArea && arrival()!.data.verification_code) {
+      QRCode.toCanvas(
+        qrArea,
+        arrival()!.data.verification_code as string,
+        { width: 200 },
+        (error) => {
+          if (error) console.error(error);
+        }
+      );
+    }
+  });
 
   return (
     <div class="relative">
@@ -243,6 +268,13 @@ export default () => {
                   )
                 }
               </Show>
+            </dd>
+
+            <dt class="text-gray-900 dark:text-white leading-4 font-normal mb-2">
+              QR Code
+            </dt>
+            <dd class="text-gray-500 dark:text-gray-400 font-light mb-4 sm:mb-5">
+              <canvas id="arrival-qr"></canvas>
             </dd>
           </dl>
         </div>
