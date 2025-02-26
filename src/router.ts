@@ -17,7 +17,7 @@ import visaCategoryRoutes from "./pages/visa-category/route";
 
 const routes: RouteDefinition[] = [
   {
-    path: "/",
+    path: "/admin/",
     component: lazy(() => import("./layouts/base/BaseLayout")),
     children: [
       {

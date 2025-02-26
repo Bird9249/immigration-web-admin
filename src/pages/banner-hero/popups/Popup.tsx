@@ -48,7 +48,7 @@ export default () => {
     if (checkPermission(Permission.Read, PermissionGroup.Banner, auth))
       menus[0].push({
         onClick() {
-          navigate(`/banner/popup/detail/${id}`);
+          navigate(`/admin/banner/popup/detail/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });
@@ -56,7 +56,7 @@ export default () => {
     if (checkPermission(Permission.Write, PermissionGroup.Banner, auth))
       menus[0].push({
         onClick() {
-          navigate(`/banner/popup/edit/${id}`);
+          navigate(`/admin/banner/popup/edit/${id}`);
         },
         label: "ແກ້ໄຂ",
       });
@@ -151,7 +151,7 @@ export default () => {
               class="w-full sm:w-fit"
               prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
               onClick={() => {
-                navigate("/banner/popup/create");
+                navigate("/admin/banner/popup/create");
               }}
             >
               ເພີ່ມຂໍ້ມູນ

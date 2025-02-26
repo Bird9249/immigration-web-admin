@@ -164,7 +164,7 @@ export default () => {
         //         )}
         //       >
         //         <A
-        //           href={`edit/${id}`}
+        //           href={`/admin/edit/${id}`}
         //           class="font-medium text-primary-600 dark:text-primary-500 hover:underline"
         //         >
         //           ແກ້ໄຂ

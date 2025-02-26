@@ -105,7 +105,7 @@ export default () => {
             color="primary"
             prefixIcon={<EditIcon />}
             onClick={() => {
-              navigator(`/users/roles/edit/${param.id}`);
+              navigator(`/admin/users/roles/edit/${param.id}`);
             }}
           >
             ແກ້ໄຂ

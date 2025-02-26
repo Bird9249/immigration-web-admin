@@ -89,7 +89,7 @@ export default () => {
   ) => {
     const res = await createVisaCategoryApi(values);
     actionMessage.showMessage({ level: "success", message: res.data.message });
-    navigator("/visa-category");
+    navigator("/admin/visa-category");
   };
 
   return (

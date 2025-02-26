@@ -45,7 +45,7 @@ export const AxiosProvider = (props: ParentProps<{}>) => {
           : err.message;
 
         if (err.response.status >= 400 && err.response.status < 500) {
-          if (err.response.status === 401) navigator("/login");
+          if (err.response.status === 401) navigator("/admin/login");
 
           setError(() => ({ message: checkErrorMessage, level: "warn" }));
         } else if (err.response.status >= 500) {
@@ -71,7 +71,7 @@ export const AxiosProvider = (props: ParentProps<{}>) => {
                 : err.message;
 
               if (err.response.status >= 400 && err.response.status < 500) {
-                if (err.response.status === 401) navigator("/login");
+                if (err.response.status === 401) navigator("/admin/login");
 
                 setError(() => ({ message: checkErrorMessage, level: "warn" }));
               } else if (err.response.status >= 500) {

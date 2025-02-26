@@ -47,7 +47,7 @@ export default () => {
     if (checkPermission(Permission.Read, PermissionGroup.Hotel, auth))
       menus[0].push({
         onClick() {
-          navigate(`/hotels/detail/${id}`);
+          navigate(`/admin/hotels/detail/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });
@@ -55,7 +55,7 @@ export default () => {
     if (checkPermission(Permission.Write, PermissionGroup.Hotel, auth))
       menus[0].push({
         onClick() {
-          navigate(`/hotels/edit/${id}`);
+          navigate(`/admin/hotels/edit/${id}`);
         },
         label: "ແກ້ໄຂ",
       });
@@ -134,7 +134,7 @@ export default () => {
                 class="w-full sm:w-fit"
                 prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
                 onClick={() => {
-                  navigate("/hotels/create");
+                  navigate("/admin/hotels/create");
                 }}
               >
                 ເພີ່ມຂໍ້ມູນໂຮງແຮມ

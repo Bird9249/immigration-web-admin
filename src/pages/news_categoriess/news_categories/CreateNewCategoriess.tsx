@@ -60,7 +60,7 @@ export default () => {
 
     actionMessage.showMessage({ level: "success", message: res.data.message });
 
-    navigator("newsCategoriess/list", { resolve: false });
+    navigator("/admin/newsCategoriess/list", { resolve: false });
   };
   return (
     <Form onSubmit={handleSubmit} class="relative">

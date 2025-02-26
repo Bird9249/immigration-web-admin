@@ -115,7 +115,7 @@ export default () => {
         message: res.data.message,
       });
     }
-    navigator("/checkpoint/province", { resolve: false });
+    navigator("/admin/checkpoint/province", { resolve: false });
   };
 
   return (
@@ -243,7 +243,7 @@ export default () => {
                     level: "success",
                     message: res.data.message,
                   });
-                  navigator("/checkpoint/province", { resolve: false });
+                  navigator("/admin/checkpoint/province", { resolve: false });
                 },
               });
             }}

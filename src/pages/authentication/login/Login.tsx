@@ -25,13 +25,18 @@ export default () => {
 
   async function handlerSubmit(values: LoginForm) {
     try {
-      await loginApi(values);
+      const res = await loginApi(values);
       actions.showMessage({
         level: "success",
         message: "ເຂົ້າສູ່ລະບົບສຳເລັດແລ້ວ",
       });
 
-      navigate("/dashboard");
+      if (res.user.hotel_id) {
+        navigate("/admin/admin-hotels");
+        return;
+      }
+
+      navigate("/admin/dashboard");
     } catch (error) {
       if (error instanceof AxiosError) {
         setError(error.response?.data.message);

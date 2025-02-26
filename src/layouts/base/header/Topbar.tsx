@@ -16,9 +16,9 @@ export default function () {
 
   if (
     auth.roles.includes("admin-hotel") &&
-    !loc.pathname.startsWith("/admin-hotels")
+    !loc.pathname.startsWith("/admin/admin-hotels")
   ) {
-    navigate("/admin-hotels");
+    navigate("/admin/admin-hotels");
   }
 
   return (

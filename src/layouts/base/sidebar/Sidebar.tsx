@@ -11,6 +11,7 @@ import {
 import { createStore } from "solid-js/store";
 import { PermissionGroup } from "../../../common/enum/permission.enum";
 import checkPermissionGroup from "../../../common/utils/check-permission-group";
+import Building from "../../../components/icons/Building";
 import BullhornIcon from "../../../components/icons/BullhornIcon";
 import CheckpointIcon from "../../../components/icons/CheckpointIcon";
 import Contacts from "../../../components/icons/Contacts";
@@ -41,6 +42,18 @@ interface SidebarSubMenuType {
 export default function () {
   const auth = useAuth();
 
+  onMount(() => {
+    if (auth.hotel_id) {
+      const mainContent = document.getElementById("main-content");
+
+      if (mainContent) {
+        mainContent.classList.remove("md:ml-64");
+      }
+    }
+  });
+
+  if (auth.hotel_id) return;
+
   const [sidebarMenus, setSidebarMenus] = createStore<{
     menus: SidebarMenuType[];
   }>({
@@ -53,7 +66,7 @@ export default function () {
     if (!auth.roles.includes("admin-hotel") && !auth.hotel_id) {
       preparedMenus.push({
         icon: <HomeIcon />,
-        href: "/dashboard",
+        href: "/admin/dashboard",
         label: "ໜ້າຫຼັກ",
       });
     }
@@ -61,13 +74,19 @@ export default function () {
     if (checkPermissionGroup(PermissionGroup.Registration, auth)) {
       preparedMenus.push({
         icon: <FilePenIcon />,
-        href: "/registrations",
+        href: "/admin/registrations",
         label: "ການລົງທະບຽນ",
         subMenus: {
           menus: [
-            { href: "/registrations/arrival", label: "ລົງທະບຽນເຂົ້າເມືອງ" },
-            { href: "/registrations/departure", label: "ລົງທະບຽນອອກເມືອງ" },
-            { href: "/registrations/number", label: "ຈຳນວນການລົງທະບຽນ" },
+            {
+              href: "/admin/registrations/arrival",
+              label: "ລົງທະບຽນເຂົ້າເມືອງ",
+            },
+            {
+              href: "/admin/registrations/departure",
+              label: "ລົງທະບຽນອອກເມືອງ",
+            },
+            { href: "/admin/registrations/number", label: "ຈຳນວນການລົງທະບຽນ" },
           ],
           isOpen: false,
         },
@@ -77,7 +96,7 @@ export default function () {
     if (checkPermissionGroup(PermissionGroup.Service, auth)) {
       preparedMenus.push({
         icon: <UserHeadsetIcon />,
-        href: "/service",
+        href: "/admin/service",
         label: "ບໍລິການ",
       });
     }
@@ -85,7 +104,7 @@ export default function () {
     if (checkPermissionGroup(PermissionGroup.VisaCategory, auth)) {
       preparedMenus.push({
         icon: <VisaIcon />,
-        href: "/visa-category",
+        href: "/admin/visa-category",
         label: "ປະເພດວີຊາ",
       });
     }
@@ -93,12 +112,12 @@ export default function () {
     if (checkPermissionGroup(PermissionGroup.Banner, auth)) {
       preparedMenus.push({
         icon: <BullhornIcon />,
-        href: "/banner",
+        href: "/admin/banner",
         label: "ຈັດການໂຄສະນາ",
         subMenus: {
           menus: [
-            { href: "/banner/list", label: "ຈັດການປ້າຍ" },
-            { href: "/banner/popup", label: "ຈັດການ popup" },
+            { href: "/admin/banner/list", label: "ຈັດການປ້າຍ" },
+            { href: "/admin/banner/popup", label: "ຈັດການ popup" },
           ],
           isOpen: false,
         },
@@ -108,13 +127,13 @@ export default function () {
     if (checkPermissionGroup(PermissionGroup.Checkpoint, auth)) {
       preparedMenus.push({
         icon: <CheckpointIcon />,
-        href: "/checkpoint",
+        href: "/admin/checkpoint",
         label: "ຈັດການດ່ານ",
         subMenus: {
           menus: [
-            { href: "/checkpoint/category", label: "ປະເພດດ່ານ" },
-            { href: "/checkpoint", label: "ຂໍ້ມູນດ່ານ" },
-            { href: "/checkpoint/province", label: "ຈັດການແຂວງ" },
+            { href: "/admin/checkpoint/category", label: "ປະເພດດ່ານ" },
+            { href: "/admin/checkpoint", label: "ຂໍ້ມູນດ່ານ" },
+            { href: "/admin/checkpoint/province", label: "ຈັດການແຂວງ" },
           ],
           isOpen: false,
         },
@@ -124,7 +143,7 @@ export default function () {
     if (checkPermissionGroup(PermissionGroup.Feedback, auth)) {
       preparedMenus.push({
         icon: <Message />,
-        href: "/feedback",
+        href: "/admin/feedback",
         label: "ຄຳຕິຊົມ",
       });
     }
@@ -132,7 +151,7 @@ export default function () {
     if (checkPermissionGroup(PermissionGroup.Contacts, auth)) {
       preparedMenus.push({
         icon: <Contacts />,
-        href: "/contacts",
+        href: "/admin/contacts",
         label: "ຂໍ້ມູນການຕິດຕໍ່",
       });
     }
@@ -140,23 +159,23 @@ export default function () {
     if (checkPermissionGroup(PermissionGroup.Law, auth)) {
       preparedMenus.push({
         icon: <Law />,
-        href: "/laws",
+        href: "/admin/laws",
         label: "ກົດໝາຍ",
       });
     }
 
-    // if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
-    //   preparedMenus.push({
-    //     icon: <Building />,
-    //     href: "/hotels",
-    //     label: "ຈັດການໂຮງແຮມ",
-    //   });
-    // }
+    if (checkPermissionGroup(PermissionGroup.Hotel, auth)) {
+      preparedMenus.push({
+        icon: <Building />,
+        href: "/admin/hotels",
+        label: "ຈັດການໂຮງແຮມ",
+      });
+    }
 
     if (checkPermissionGroup(PermissionGroup.Countries, auth)) {
       preparedMenus.push({
         icon: <Countries />,
-        href: "/countries",
+        href: "/admin/countries",
         label: "ປະເທດ",
       });
     }
@@ -164,12 +183,12 @@ export default function () {
     if (checkPermissionGroup(PermissionGroup.News, auth)) {
       preparedMenus.push({
         icon: <NewsIcon />,
-        href: "/newsCategoriess",
+        href: "/admin/newsCategoriess",
         label: "ຂ່າວສານ",
         subMenus: {
           menus: [
-            { href: "/newsCategoriess/list", label: "ປະເພດຂ່າວ" },
-            { href: "/newsCategoriess/news", label: "ຂ່າວ" },
+            { href: "/admin/newsCategoriess/list", label: "ປະເພດຂ່າວ" },
+            { href: "/admin/newsCategoriess/news", label: "ຂ່າວ" },
           ],
           isOpen: false,
         },
@@ -179,13 +198,13 @@ export default function () {
     if (checkPermissionGroup(PermissionGroup.User, auth)) {
       preparedMenus.push({
         icon: <UserIcon />,
-        href: "/users",
+        href: "/admin/users",
         label: "ຈັດການຜູ້ໃຊ້",
         subMenus: {
           menus: [
-            { href: "/users/list", label: "ຜູ້ໃຊ້" },
-            { href: "/users/roles", label: "ບົດບາດ" },
-            { href: "/users/permissions", label: "ການອະນຸຍາດ" },
+            { href: "/admin/users/list", label: "ຜູ້ໃຊ້" },
+            { href: "/admin/users/roles", label: "ບົດບາດ" },
+            { href: "/admin/users/permissions", label: "ການອະນຸຍາດ" },
           ],
           isOpen: false,
         },
@@ -195,7 +214,7 @@ export default function () {
     if (auth.roles.includes("admin-hotel") && auth.hotel_id) {
       preparedMenus.push({
         icon: <HomeIcon />,
-        href: "/admin-hotels",
+        href: "/admin/admin-hotels",
         label: "ໜ້າຫຼັກ",
       });
     }

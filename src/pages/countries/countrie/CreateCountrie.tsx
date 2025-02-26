@@ -71,7 +71,7 @@ export default () => {
   const handleSubmit: SubmitHandler<CountriesForm> = async (values) => {
     const res = await createCountriesApi(values);
     actionMessage.showMessage({ level: "success", message: res.data.message });
-    navigator("countries", { resolve: false });
+    navigator("/admin/countries", { resolve: false });
   };
 
   return (
@@ -112,7 +112,6 @@ export default () => {
                     >
                       {(field, props) => (
                         <Textarea
-                          required
                           label="ຄຳອະທິບາຍ"
                           {...props}
                           value={field.value}

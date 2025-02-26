@@ -96,7 +96,7 @@ export default () => {
     if (checkPermission(Permission.Read, PermissionGroup.Checkpoint, auth))
       menus[0].push({
         onClick() {
-          navigate(`/checkpoint/${id}`);
+          navigate(`/admin/checkpoint/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });
@@ -104,7 +104,7 @@ export default () => {
     if (checkPermission(Permission.Write, PermissionGroup.Checkpoint, auth))
       menus[0].push({
         onClick() {
-          navigate(`/checkpoint/edit/${id}`);
+          navigate(`/admin/checkpoint/edit/${id}`);
         },
         label: "ແກ້ໄຂ",
       });
@@ -184,7 +184,7 @@ export default () => {
                 class="w-full sm:w-fit"
                 prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
                 onClick={() => {
-                  navigate("/checkpoint/create");
+                  navigate("/admin/checkpoint/create");
                 }}
               >
                 ເພີ່ມຂໍ້ມູນ

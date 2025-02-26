@@ -155,7 +155,7 @@ export default () => {
               color="primary"
               prefixIcon={<EditIcon />}
               onClick={() => {
-                navigator(`/countries/edit/${param.id}`);
+                navigator(`/admin/countries/edit/${param.id}`);
               }}
             >
               ແກ້ໄຂ
@@ -186,7 +186,7 @@ export default () => {
                       message: res.data.message,
                     });
 
-                    navigator("countries", { resolve: false });
+                    navigator("/admin/countries", { resolve: false });
                   },
                 });
               }}

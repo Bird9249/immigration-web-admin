@@ -138,7 +138,7 @@ export default () => {
   ) => {
     const res = await updateServiceApi(param.id, values);
     actionMessage.showMessage({ level: "success", message: res.data.message });
-    navigator("/service");
+    navigator("/admin/service");
   };
 
   return (

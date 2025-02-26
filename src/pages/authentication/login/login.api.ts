@@ -10,6 +10,7 @@ export default async (form: LoginForm) => {
       email: string;
       created_at: string;
       updated_at: string;
+      hotel_id: number;
       profile: {
         id: number;
         first_name: string;

@@ -168,7 +168,7 @@ export default () => {
         message: res.data.message,
       });
     }
-    navigator("/newsCategoriess/news", { resolve: false });
+    navigator("/admin/newsCategoriess/news", { resolve: false });
   };
 
   return (
@@ -349,7 +349,7 @@ export default () => {
                     message: res.data.message,
                   });
 
-                  navigator("/newsCategoriess/news", { resolve: false });
+                  navigator("/admin/newsCategoriess/news", { resolve: false });
                 },
               });
             }}

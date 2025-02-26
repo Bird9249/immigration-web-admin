@@ -91,11 +91,9 @@ export default () => {
   const handleSubmit: SubmitHandler<CreateServiceSchemaType> = async (
     values
   ) => {
-    console.log(values);
-
     const res = await createServiceApi(values);
     actionMessage.showMessage({ level: "success", message: res.data.message });
-    navigator("/service");
+    navigator("/admin/service");
   };
 
   return (

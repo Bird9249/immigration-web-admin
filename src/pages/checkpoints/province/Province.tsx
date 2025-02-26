@@ -42,7 +42,7 @@ export default () => {
     if (checkPermission(Permission.Read, PermissionGroup.Checkpoint, auth))
       menus[0].push({
         onClick() {
-          navigate(`/checkpoint/province/detail/${id}`);
+          navigate(`/admin/checkpoint/province/detail/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });
@@ -50,7 +50,7 @@ export default () => {
     if (checkPermission(Permission.Write, PermissionGroup.Checkpoint, auth))
       menus[0].push({
         onClick() {
-          navigate(`/checkpoint/province/edit/${id}`);
+          navigate(`/admin/checkpoint/province/edit/${id}`);
         },
         label: "ແກ້ໄຂ",
       });
@@ -102,7 +102,7 @@ export default () => {
               class="w-full sm:w-fit"
               prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
               onClick={() => {
-                navigate("/checkpoint/province/create");
+                navigate("/admin/checkpoint/province/create");
               }}
             >
               ເພີ່ມຂໍ້ມູນ

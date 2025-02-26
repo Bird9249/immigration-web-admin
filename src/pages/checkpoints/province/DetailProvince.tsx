@@ -147,7 +147,7 @@ export default () => {
               color="primary"
               prefixIcon={<EditIcon />}
               onClick={() => {
-                navigator(`/checkpoint/province/edit/${param.id}`);
+                navigator(`/admin/checkpoint/province/edit/${param.id}`);
               }}
             >
               ແກ້ໄຂ

@@ -111,7 +111,7 @@ export default () => {
         message: res.data.message,
       });
     }
-    navigator("/newsCategoriess/list", { resolve: false });
+    navigator("/admin/newsCategoriess/list", { resolve: false });
   };
 
   return (
@@ -186,7 +186,7 @@ export default () => {
                     message: res.data.message,
                   });
 
-                  navigator("/newsCategoriess/list", { resolve: false });
+                  navigator("/admin/newsCategoriess/list", { resolve: false });
                 },
               });
             }}

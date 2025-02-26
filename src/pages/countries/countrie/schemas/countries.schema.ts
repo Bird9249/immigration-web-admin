@@ -12,16 +12,19 @@ import {
 } from "valibot";
 import { CountriesTranslateSchemas } from "./countries-translates.schema";
 
-const isFile = (input: unknown) => input instanceof File;
+const isFile = (input: unknown) =>
+  input !== undefined ? input instanceof File : true;
 
 export const CountriesSchema = object({
-  image: special<File>(isFile, "ຮູບພາບບໍ່ຄວນຫວ່າງເປົ່າ", [
-    mimeType(
-      ["image/jpeg", "image/png", "image/webp"],
-      "ກະລຸນາເລືອກໄຟລ໌ JPEG ຫຼື PNG ຫຼື Webp."
-    ),
-    maxSize(1024 * 1024 * 10, "ກະລຸນາເລືອກໄຟລ໌ທີ່ນ້ອຍກວ່າ 10 MB."),
-  ]),
+  image: optional(
+    special<File>(isFile, "ຮູບພາບບໍ່ຄວນຫວ່າງເປົ່າ", [
+      mimeType(
+        ["image/jpeg", "image/png", "image/webp"],
+        "ກະລຸນາເລືອກໄຟລ໌ JPEG ຫຼື PNG ຫຼື Webp."
+      ),
+      maxSize(1024 * 1024 * 10, "ກະລຸນາເລືອກໄຟລ໌ທີ່ນ້ອຍກວ່າ 10 MB."),
+    ])
+  ),
   is_except_visa: boolean(),
   translates: tuple([
     omit(CountriesTranslateSchemas, ["id"]),
@@ -31,17 +34,8 @@ export const CountriesSchema = object({
 });
 
 export const UpdateCountriesSchema = merge([
-  omit(CountriesSchema, ["image", "translates"]),
+  omit(CountriesSchema, ["translates"]),
   object({
-    image: optional(
-      special<File>(isFile, "ຮູບພາບບໍ່ຄວນຫວ່າງເປົ່າ", [
-        mimeType(
-          ["image/jpeg", "image/png", "image/webp"],
-          "ກະລຸນາເລືອກໄຟລ໌ JPEG ຫຼື PNG ຫຼື Webp."
-        ),
-        maxSize(1024 * 1024 * 10, "ກະລຸນາເລືອກໄຟລ໌ທີ່ນ້ອຍກວ່າ 10 MB."),
-      ])
-    ),
     translates: tuple([
       CountriesTranslateSchemas,
       CountriesTranslateSchemas,

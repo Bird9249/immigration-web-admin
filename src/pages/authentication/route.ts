@@ -3,7 +3,7 @@ import { lazy } from "solid-js";
 
 const authenticationRoutes: RouteDefinition[] = [
   {
-    path: "/",
+    path: "/admin/",
     component: lazy(() => import("./Authentication")),
     children: [
       {

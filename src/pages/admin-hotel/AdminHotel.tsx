@@ -161,7 +161,7 @@ export default () => {
           {
             body: ({ id }: AdminHotelResponse) => (
               <A
-                href={`/admin-hotels/${id}`}
+                href={`/admin/admin-hotels/${id}`}
                 class="font-medium text-primary-600 dark:text-primary-500 hover:underline ms-3"
               >
                 ລາຍລະອຽດ

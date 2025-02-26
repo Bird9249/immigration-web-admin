@@ -14,6 +14,7 @@ import {
   PermissionGroup,
 } from "../../../common/enum/permission.enum";
 import checkPermission from "../../../common/utils/check-permission";
+import Alert from "../../../components/alert/Alert";
 import Button from "../../../components/button/Button";
 import ImageDropzone from "../../../components/forms/image-dropzone/ImageDropzone";
 import InputText from "../../../components/forms/input-text/InputText";
@@ -21,10 +22,10 @@ import PasswordInput from "../../../components/forms/password-input/PasswordInpu
 import Toggle from "../../../components/forms/toggle/Toggle";
 import Tabs, { TabsItems } from "../../../components/tabs/Tabs";
 import { useAuth } from "../../../contexts/authentication/AuthContext";
+import { useAxios } from "../../../contexts/axios/AxiosContext";
 import { useMessage } from "../../../contexts/message/MessageContext";
 import createHotelApi from "./api/create-hotel.api";
 import { HotelForm, HotelSchema } from "./schemas/hotel.schemas";
-import { useAxios } from "../../../contexts/axios/AxiosContext";
 
 export default () => {
   const [, actionMessage] = useMessage();
@@ -89,7 +90,7 @@ export default () => {
 
     actionMessage.showMessage({ level: "success", message: res.data.message });
 
-    navigator("hotels", { resolve: false });
+    navigator("/admin/hotels", { resolve: false });
   };
   return (
     <Form onSubmit={handleSubmit} class="relative">
@@ -197,7 +198,6 @@ export default () => {
         <Field name="link">
           {(field, props) => (
             <InputText
-              required
               label="ລິ້ງໂຮງແຮມ"
               {...props}
               value={field.value}

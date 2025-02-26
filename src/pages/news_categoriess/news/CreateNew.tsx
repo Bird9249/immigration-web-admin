@@ -114,7 +114,7 @@ export default () => {
 
     actionMessage.showMessage({ level: "success", message: res.data.message });
 
-    navigator("newsCategoriess/news", { resolve: false });
+    navigator("/admin/newsCategoriess/news", { resolve: false });
   };
   return (
     <Form onSubmit={handleSubmit} class="relative">

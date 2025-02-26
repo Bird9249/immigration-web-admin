@@ -44,7 +44,7 @@ export default () => {
     if (checkPermission(Permission.Write, PermissionGroup.Service, auth))
       menus[0].push({
         onClick() {
-          navigate(`/service/edit/${id}`);
+          navigate(`/admin/service/edit/${id}`);
         },
         label: "ແກ້ໄຂ",
       });
@@ -117,7 +117,7 @@ export default () => {
                 class="w-full sm:w-fit"
                 prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
                 onClick={() => {
-                  navigate("/service/create");
+                  navigate("/admin/service/create");
                 }}
               >
                 ເພີ່ມບໍລິການ

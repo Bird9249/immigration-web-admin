@@ -49,7 +49,7 @@ export default () => {
     if (checkPermission(Permission.Write, PermissionGroup.News, auth))
       menus[0].push({
         onClick() {
-          navigate(`/newsCategoriess/edit/${id}`);
+          navigate(`/admin/newsCategoriess/edit/${id}`);
         },
         label: "ແກ້ໄຂ",
       });
@@ -97,7 +97,7 @@ export default () => {
               class="w-full sm:w-fit"
               prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
               onClick={() => {
-                navigate("/newsCategoriess/create");
+                navigate("/admin/newsCategoriess/create");
               }}
             >
               ເພີ່ມຂໍ້ມູນ

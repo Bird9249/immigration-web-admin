@@ -83,7 +83,7 @@ export default () => {
 
     actionMessage.showMessage({ level: "success", message: res.data.message });
 
-    navigator("/banner/popup", { resolve: false });
+    navigator("/admin/banner/popup", { resolve: false });
   };
 
   return (
@@ -187,7 +187,7 @@ export default () => {
                     message: res.data.message,
                   });
 
-                  navigator("/banner/popup", { resolve: false });
+                  navigator("/admin/banner/popup", { resolve: false });
                 },
               });
             }}

@@ -32,7 +32,7 @@ export default function () {
           message: res.data.message,
         });
 
-        navigator("/login", { resolve: false });
+        navigator("/admin/login", { resolve: false });
       },
     });
   }
@@ -43,15 +43,18 @@ export default function () {
         <span class="sr-only">Open user menu</span>
         <Avatar
           src={
-            auth.profile.image
-              ? `${
-                  (import.meta.env.VITE_IMG_URL as string) + auth.profile.image
-                }`
+            auth.profile
+              ? auth.profile.image
+                ? `${
+                    (import.meta.env.VITE_IMG_URL as string) +
+                    auth.profile.image
+                  }`
+                : undefined
               : undefined
           }
           alt="User Profile"
           size="sm"
-          text={auth.profile.first_name}
+          text={auth.profile ? auth.profile.first_name : auth.email}
         />
       </Menu.Trigger>
 
@@ -59,7 +62,9 @@ export default function () {
         <Menu.Content class="z-50 my-4 w-56 text-base list-none bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 rounded-xl">
           <div class="py-3 px-4">
             <span class="block text-sm font-semibold text-gray-900 dark:text-white">
-              {auth.profile.first_name} {auth.profile.last_name}
+              {auth.profile
+                ? `${auth.profile.first_name} ${auth.profile.last_name}`
+                : auth.email}
             </span>
             <span class="block text-sm text-gray-900 truncate dark:text-white">
               {auth.email}
@@ -72,7 +77,7 @@ export default function () {
           >
             <li>
               <A
-                href={`users/detail/${auth.id}`}
+                href={`/admin/users/detail/${auth.id}`}
                 class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
               >
                 ໂປຣໄຟລ໌ຂອງຂ້ອຍ

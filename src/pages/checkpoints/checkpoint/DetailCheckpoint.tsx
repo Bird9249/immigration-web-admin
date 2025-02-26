@@ -238,7 +238,7 @@ export default () => {
             color="primary"
             prefixIcon={<EditIcon />}
             onClick={() => {
-              navigator(`/checkpoint/edit/${param.id}`);
+              navigator(`/admin/checkpoint/edit/${param.id}`);
             }}
           >
             ແກ້ໄຂ

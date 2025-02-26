@@ -125,7 +125,7 @@ export default () => {
             color="primary"
             prefixIcon={<EditIcon />}
             onClick={() => {
-              navigator(`/banner/popup/edit/${param.id}`);
+              navigator(`/admin/banner/popup/edit/${param.id}`);
             }}
           >
             ແກ້ໄຂ

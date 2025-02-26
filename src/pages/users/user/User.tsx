@@ -44,7 +44,7 @@ export default () => {
     if (checkPermission(Permission.Read, PermissionGroup.User, auth))
       menus[0].push({
         onClick() {
-          navigate(`/users/detail/${id}`);
+          navigate(`/admin/users/detail/${id}`);
         },
         label: "ລາຍລະອຽດ",
       });
@@ -52,7 +52,7 @@ export default () => {
     if (checkPermission(Permission.Write, PermissionGroup.User, auth))
       menus[0].push({
         onClick() {
-          navigate(`/users/edit/${id}`);
+          navigate(`/admin/users/edit/${id}`);
         },
         label: "ແກ້ໄຂ",
       });
@@ -103,7 +103,7 @@ export default () => {
               class="w-full sm:w-fit"
               prefixIcon={<PlusIcon class="h-3.5 w-3.5" />}
               onClick={() => {
-                navigate("/users/create");
+                navigate("/admin/users/create");
               }}
             >
               ເພີ່ມຜູ້ໃຊ້

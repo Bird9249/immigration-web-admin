@@ -190,7 +190,7 @@ export default () => {
             color="primary"
             prefixIcon={<EditIcon />}
             onClick={() => {
-              navigator(`/newsCategoriess/news/edit/${param.id}`);
+              navigator(`/admin/newsCategoriess/news/edit/${param.id}`);
             }}
           >
             ແກ້ໄຂ

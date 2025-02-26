@@ -13,7 +13,10 @@ export default (props: RouteSectionProps) => {
           <div class="antialiased bg-gray-50 dark:bg-gray-900 transition-all">
             <Topbar />
             <Sidebar />
-            <main class="p-4 md:ml-64 h-auto min-h-screen pt-20">
+            <main
+              id="main-content"
+              class="p-4 md:ml-64 h-auto min-h-screen pt-20"
+            >
               <div class="mx-auto max-w-7xl">{props.children}</div>
             </main>
           </div>
