@@ -248,6 +248,7 @@ export default () => {
                 { label: "ໄທ", value: "thailand" },
                 { label: "ມຽນມ້າ", value: "myanmar" },
                 { label: "ຈີນ", value: "china" },
+                { label: "ສະໜາມບິນສາກົນ", value: "airport" },
               ]}
               error={field.error}
               value={field.value}
