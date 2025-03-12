@@ -125,17 +125,18 @@ export default () => {
         {
           header: "ຜູ້ໃຊ້",
           body: ({
-            profile: { image, first_name, last_name },
+            profile,
           }: UserResponse) => (
+            profile &&
             <div class="flex items-center">
               <Avatar
-                src={image ? import.meta.env.VITE_IMG_URL + image : undefined}
+                src={profile.image ? import.meta.env.VITE_IMG_URL + profile.image : undefined}
                 alt="image"
                 size="sm"
                 class="mr-3"
               />
               <span>
-                {first_name} {last_name}
+                {profile.first_name} {profile.last_name}
               </span>
             </div>
           ),
